@@ -1,20 +1,36 @@
 import React, { Component } from 'react';
-import { createStore, applyMiddleware } from 'redux';
-import { Provider } from 'react-redux';
-import thunk from 'redux-thunk';
+import { View } from 'react-native';
 
-import reducer from './redux';
-import Spreader from './Spreader';
+import { createAppContainer, createStackNavigator } from 'react-navigation';
+import Home from './screens/Home';
+import Chapter from './screens/Reader';
+import ChapterList from './screens/ChapterList';
 
-const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
-const store = createStoreWithMiddleware(reducer);
+const AppNavigator = createStackNavigator(
+  {
+    Home: Home,
+    Book: ChapterList,
+    Chapter: Chapter
+  },
+  {
+    initialRouteName: 'Home',
+    mode: 'card',
+    defaultNavigationOptions: {
+      headerStyle: {
+        borderBottomColor: "#fff"
+      },
+    }
+  }
+);
+
+const Spreader = createAppContainer(AppNavigator);
 
 export default class App extends Component {
   render() {
     return (
-      <Provider store={store}>
+      <View style={{ flex: 1 }}>
         <Spreader />
-      </Provider>
+      </View>
     );
   }
 }
