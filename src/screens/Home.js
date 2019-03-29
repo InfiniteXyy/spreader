@@ -8,7 +8,9 @@ import {
   Subtitle,
   Touchable,
   View,
-  Screen
+  Screen,
+  Button,
+  Icon
 } from '@shoutem/ui';
 
 function getBooks() {
@@ -17,7 +19,12 @@ function getBooks() {
 
 class Home extends Component {
   static navigationOptions = {
-    title: '书库'
+    title: '书库',
+    headerRight: (
+      <Button>
+        <Icon name="sidebar" />
+      </Button>
+    )
   };
 
   render() {

@@ -1,31 +1,42 @@
 const cheerio = require('react-native-cheerio');
 import agent from '../agent';
 
-export async function getList(url: string, query: string) {
+export async function getList(method) {
+  const { query, url, href_prefix } = method;
+
   let html = await agent.get(url);
   const $ = cheerio.load(html);
 
   const links = [];
-  $(query).each((index, element) => {
+  $(query.split('|')[0]).each((index, element) => {
     let temp = $(element);
     links[index] = {
-      title: temp.attr('title'),
-      href: temp.attr('href')
+      title: temp.text(),
+      href: (href_prefix || '') + temp.attr('href')
     };
   });
-  return links;
+
+  let range = Number(query.split('|')[1]);
+  if (range) {
+    if (range > 0) return links.slice(range);
+    else return links.slice(0, -range);
+  } else {
+    return links;
+  }
 }
 
-export async function getContent(url, query: string) {
+export async function getContent(url, method) {
+  const { query } = method;
+
   let html = await agent.get(url);
   const $ = cheerio.load(html);
 
   const contents = [];
+  console.log($(query).html());
   $(query).each((index, element) => {
     if (index !== 0) {
-      let temp = $(element);
-      contents[index] = temp.text();
+      contents.push($(element).text());
     }
   });
-  return contents;
+  return contents.map(i => i.trim()).filter(i => i !== '');
 }

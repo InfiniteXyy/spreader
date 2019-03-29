@@ -6,7 +6,7 @@
     "methods": {
       "getList": {
         "url": "http://www.nitianxieshen.com/",
-        "query": ".container ul li a"
+        "query": ".container ul li a | 6"
       },
       "getContent": {
         "query": ".post_entry p"
@@ -20,10 +20,25 @@
     "methods": {
       "getList": {
         "url": "http://www.nitianxieshen.com/shengwu/",
-        "query": ".container ul li a"
+        "query": ".container ul li a | 6"
       },
       "getContent": {
         "query": ".post_entry p"
+      }
+    }
+  },
+  {
+    "title": "龙族5",
+    "author": "江南",
+    "coverImg": "http://www.yunxs.com/uploads/allimg/3/3551/3551s.jpg",
+    "methods": {
+      "getList": {
+        "url": "http://www.yunxs.com/longzu5/",
+        "query": ".list_box ul li a",
+        "href_prefix": "http://www.yunxs.com/longzu5/"
+      },
+      "getContent": {
+        "query": ".box_box"
       }
     }
   }

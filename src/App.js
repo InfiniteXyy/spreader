@@ -6,6 +6,30 @@ import Home from './screens/Home';
 import Chapter from './screens/Reader';
 import ChapterList from './screens/ChapterList';
 
+export const ReaderThemes = {
+  theme1: {
+    root: {
+      backgroundColor: 'white'
+    },
+    title: {
+      color: '#4a4a4a'
+    },
+    content: {
+      color: 'black'
+    }
+  },
+  theme2: {
+    root: {
+      backgroundColor: 'black'
+    },
+    title: {
+      color: 'rgba(170,170,170,0.97)'
+    },
+    content: {
+      color: 'white'
+    }
+  }
+};
 const AppNavigator = createStackNavigator(
   {
     Home: Home,
@@ -17,8 +41,8 @@ const AppNavigator = createStackNavigator(
     mode: 'card',
     defaultNavigationOptions: {
       headerStyle: {
-        borderBottomColor: "#fff"
-      },
+        borderBottomColor: 'transparent'
+      }
     }
   }
 );
