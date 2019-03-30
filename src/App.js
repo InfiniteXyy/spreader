@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { View, StatusBar } from 'react-native';
 
 import { createAppContainer, createStackNavigator } from 'react-navigation';
 import Home from './screens/Home';
@@ -41,7 +41,8 @@ const AppNavigator = createStackNavigator(
     mode: 'card',
     defaultNavigationOptions: {
       headerStyle: {
-        borderBottomColor: 'transparent'
+        borderBottomColor: 'transparent',
+        elevation: 0
       }
     }
   }
@@ -53,6 +54,7 @@ export default class App extends Component {
   render() {
     return (
       <View style={{ flex: 1 }}>
+        <StatusBar backgroundColor="white" barStyle="dark-content" />
         <Spreader />
       </View>
     );

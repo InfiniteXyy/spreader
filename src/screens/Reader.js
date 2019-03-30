@@ -77,7 +77,8 @@ export default class Chapter extends Component {
       ),
       headerStyle: {
         backgroundColor: bgColor,
-        borderBottomWidth: 0
+        borderBottomWidth: 0,
+        elevation: 0
       }
     };
   };
