@@ -32,7 +32,6 @@ export async function getContent(url, method) {
   const $ = cheerio.load(html);
 
   const contents = [];
-  console.log($(query).html());
   $(query).each((index, element) => {
     if (index !== 0) {
       contents.push($(element).text());

@@ -9,13 +9,76 @@ import {
   Touchable,
   View
 } from '@shoutem/ui';
-
-import { FlatList } from 'react-native';
+import Modal from 'react-native-modal';
+import { FlatList, Picker } from 'react-native';
 import { getList } from '../spiders/SpiderPlatform';
+import { createPages } from '../utils';
 
-const GAP = 100;
+const GAP = 50;
 
-const Stack = { key: '-1' };
+const Stack = { key: '-1', href: '-1' };
+
+const getPageTitle = (start, end, reversed) => {
+  let startIndex, endIndex;
+  if (!reversed) {
+    startIndex = start + 1;
+    endIndex = end;
+  } else {
+    startIndex = end;
+    endIndex = start + 1;
+  }
+  return `第 ${startIndex} - ${endIndex} 章`;
+};
+
+class ChapterPicker extends React.PureComponent {
+  render() {
+    const {
+      page,
+      onPageChange,
+      open,
+      onClose,
+      pageList,
+      reversed
+    } = this.props;
+    let modalProps = {
+      isVisible: open,
+      backdropOpacity: 0.18,
+      onBackdropPress: onClose,
+      style: {
+        flex: 1,
+        margin: 0,
+        justifyContent: 'flex-end'
+      }
+    };
+
+    let data = reversed ? [...pageList].reverse() : pageList;
+
+    if (!pageList[page]) return <View />;
+
+    return (
+      <Modal {...modalProps}>
+        <Picker
+          style={styles.picker}
+          selectedValue={pageList[page].toString()}
+          onValueChange={(itemValue, itemIndex) =>
+            onPageChange(reversed ? pageList.length - itemIndex - 1 : itemIndex)
+          }
+        >
+          {data.map(i => {
+            let [start, end] = i;
+            return (
+              <Picker.Item
+                key={i.toString()}
+                label={getPageTitle(start, end, reversed)}
+                value={i.toString()}
+              />
+            );
+          })}
+        </Picker>
+      </Modal>
+    );
+  }
+}
 
 class ItemRow extends React.PureComponent {
   render() {
@@ -47,14 +110,15 @@ class ChapterList extends Component {
   constructor(props) {
     super(props);
     this.book = props.navigation.getParam('book');
-    console.log(this.book);
   }
 
   state = {
     chapters: [],
     isLoading: true,
     isReversed: false,
-    page: 0
+    page: 0,
+    pages: [],
+    selectorOpen: false
   };
 
   componentDidMount(): void {
@@ -65,32 +129,41 @@ class ChapterList extends Component {
     this.setState({ isLoading: true });
     const listMethod = this.book.methods.getList;
     getList(listMethod).then(chapters => {
-      this.setState({ chapters, isLoading: false });
+      this.setState({
+        chapters,
+        isLoading: false,
+        pages: createPages(chapters.length, GAP)
+      });
     });
   };
 
-  getRange = () => {
-    let { page } = this.state;
-    let start, end;
-    start = page * GAP;
-    end = page * GAP + GAP;
-    return [start, end];
-  };
-
   render() {
-    let [start, end] = this.getRange();
+    const { pages, page, chapters, isReversed } = this.state;
+    let [start, end] = pages[page] || [0, 0];
+    let data = chapters.slice(start, end);
+    if (isReversed) data.reverse();
+    data.unshift(Stack);
 
     return (
       <Screen styleName="">
         <FlatList
+          keyExtractor={(item, index) => item.href}
           stickyHeaderIndices={[1]}
           ListHeaderComponent={this.renderHeader}
           onRefresh={this.load}
           refreshing={this.state.isLoading}
-          data={[Stack, ...this.state.chapters.slice(start, end)]}
+          data={data}
           renderItem={this.renderRow}
           maxToRenderPerBatch={20}
           getItemLayout={this.getItemLayout}
+        />
+        <ChapterPicker
+          page={this.state.page}
+          onPageChange={this.togglePage}
+          open={this.state.selectorOpen}
+          onClose={this.toggleSelector(false)}
+          pageList={this.state.pages}
+          reversed={this.state.isReversed}
         />
       </Screen>
     );
@@ -114,38 +187,35 @@ class ChapterList extends Component {
   };
 
   renderSection = () => {
-    let [start, end] = this.getRange();
-    let length = this.state.chapters.length;
-    let indexStart = this.state.isReversed ? length - start : start + 1;
-    let indexEnd = this.state.isReversed
-      ? Math.max(1, length - end + 1)
-      : Math.min(length, end);
+    let {
+      chapters: { length },
+      pages,
+      page,
+      isReversed
+    } = this.state;
+    if (length < 1) return;
+    let [start, end] = pages[page];
+
     return (
-      length > 0 && (
-        <View
-          style={styles.section}
-          styleName="horizontal v-center space-between"
-        >
-          <Touchable
-            onPress={() => {
-              this.setState({ page: this.state.page + 1 });
-            }}
-          >
-            <View styleName="horizontal v-center">
-              <Text styleName="bold">{`第 ${indexStart} - ${indexEnd} 章`}</Text>
-              <Icon name="drop-down" />
-            </View>
-          </Touchable>
+      <View
+        style={styles.section}
+        styleName="horizontal v-center space-between"
+      >
+        <Touchable onPress={this.toggleSelector(true)}>
           <View styleName="horizontal v-center">
-            <Text style={{ color: '#9b9b9b' }}>{`共 ${length} 章`}</Text>
-            <View styleName="sm-gutter-left">
-              <Touchable onPress={this.toggleReverse}>
-                <Text>{this.state.isReversed ? '逆序' : '顺序'}</Text>
-              </Touchable>
-            </View>
+            <Text styleName="bold">{getPageTitle(start, end, isReversed)}</Text>
+            <Icon name="drop-down" />
+          </View>
+        </Touchable>
+        <View styleName="horizontal v-center">
+          <Text style={{ color: '#9b9b9b' }}>{`共 ${length} 章`}</Text>
+          <View styleName="sm-gutter-left">
+            <Touchable onPress={this.toggleReverse}>
+              <Text>{this.state.isReversed ? '逆序' : '顺序'}</Text>
+            </Touchable>
           </View>
         </View>
-      )
+      </View>
     );
   };
 
@@ -165,8 +235,16 @@ class ChapterList extends Component {
     this.setState(prevState => ({
       ...prevState,
       isReversed: !prevState.isReversed,
-      chapters: [...prevState.chapters.reverse()]
+      page: !prevState.isReversed ? prevState.pages.length - 1 : 0
     }));
+  };
+
+  toggleSelector = selectorOpen => () => {
+    this.setState({ selectorOpen });
+  };
+
+  togglePage = page => {
+    this.setState({ page });
   };
 
   getItemLayout = (data, index) => ({
@@ -210,6 +288,11 @@ const styles = {
     paddingHorizontal: 20,
     borderBottomWidth: 0.5,
     borderBottomColor: '#eeeeee'
+  },
+  picker: {
+    backgroundColor: 'rgba(255,255,255,0.9)',
+    borderTopRightRadius: 8,
+    borderTopLeftRadius: 8
   }
 };
 

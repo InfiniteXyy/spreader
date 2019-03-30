@@ -21,7 +21,6 @@ class ReaderEditModal extends Component {
       isVisible: this.props.open,
       backdropOpacity: 0.18,
       animationIn: 'fadeIn',
-      animationInTiming: 100,
       animationOut: 'fadeOut',
       onBackdropPress: this.props.onClose,
       style: {

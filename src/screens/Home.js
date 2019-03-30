@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import {
   Caption,
   Divider,
+  DropDownMenu,
   Image,
   ListView,
   Row,
+  Screen,
   Subtitle,
   Touchable,
   View,
-  Screen,
   Button,
   Icon
 } from '@shoutem/ui';
@@ -18,13 +19,21 @@ function getBooks() {
 }
 
 class Home extends Component {
-  static navigationOptions = {
-    title: '书库',
-    headerRight: (
-      <Button>
-        <Icon name="sidebar" />
-      </Button>
-    )
+  static navigationOptions = ({ navigation }) => {
+    let options = [{ title: '列表' }, { title: '书虫' }, { title: '设置' }];
+
+    return {
+      title: '书库',
+      headerRight: (
+        <DropDownMenu
+          options={options}
+          onOptionSelected={() => {}}
+          selectedOption={options[0]}
+          titleProperty="title"
+          valueProperty="title"
+        />
+      )
+    };
   };
 
   render() {
