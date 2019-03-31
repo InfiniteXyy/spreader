@@ -51,8 +51,12 @@ class ReaderEditModal extends Component {
             <Touchable onPress={handleColorTheme(ReaderThemes.theme2)}>
               <View style={{ ...styles.oval, backgroundColor: '#8E8E8E' }} />
             </Touchable>
-            <View style={{ ...styles.oval, backgroundColor: 'black' }} />
-            <View style={{ ...styles.oval, backgroundColor: '#FFF6F6' }} />
+            <Touchable onPress={handleColorTheme(ReaderThemes.theme3)}>
+              <View style={{ ...styles.oval, backgroundColor: 'black' }} />
+            </Touchable>
+            <Touchable onPress={handleColorTheme(ReaderThemes.theme4)}>
+              <View style={{ ...styles.oval, backgroundColor: 'rgb(241,229,201)' }} />
+            </Touchable>
           </View>
         </View>
       </Modal>

@@ -16,7 +16,7 @@ import { createPages } from '../utils';
 
 const GAP = 50;
 
-const Stack = { key: '-1', href: '-1' };
+const Stack = { key: '-1', title: '-1' };
 
 const getPageTitle = (start, end, reversed) => {
   let startIndex, endIndex;
@@ -147,7 +147,7 @@ class ChapterList extends Component {
     return (
       <Screen styleName="">
         <FlatList
-          keyExtractor={(item, index) => item.href}
+          keyExtractor={(item, index) => item.title}
           stickyHeaderIndices={[1]}
           ListHeaderComponent={this.renderHeader}
           onRefresh={this.load}
@@ -178,9 +178,16 @@ class ChapterList extends Component {
             <Text style={styles.title}>{this.book.title}</Text>
             <Text style={styles.subtitle}>{this.book.author}</Text>
           </View>
-          <Button styleName="secondary">
-            <Text>继续阅读</Text>
-          </Button>
+          <View>
+            <View styleName="horizontal">
+              <Text styleName="bold">上次读到：</Text>
+              <Text>第二章 情不自禁</Text>
+            </View>
+            <View styleName="horizontal">
+              <Text styleName="bold">最近更新：</Text>
+              <Text>第1023章 情不自禁</Text>
+            </View>
+          </View>
         </View>
       </View>
     );
@@ -220,7 +227,7 @@ class ChapterList extends Component {
   };
 
   renderRow = ({ item }) => {
-    if (!item.title) {
+    if (!item.href) {
       return this.renderSection();
     } else {
       return <ItemRow item={item} onPress={this.navigateChapter(item)} />;
@@ -232,11 +239,17 @@ class ChapterList extends Component {
   };
 
   toggleReverse = () => {
-    this.setState(prevState => ({
-      ...prevState,
-      isReversed: !prevState.isReversed,
-      page: !prevState.isReversed ? prevState.pages.length - 1 : 0
-    }));
+    this.setState(prevState => {
+      const {
+        isReversed,
+        pages: { length }
+      } = prevState;
+      return {
+        ...prevState,
+        isReversed: !isReversed,
+        page: !isReversed ? length - 1 : 0
+      };
+    });
   };
 
   toggleSelector = selectorOpen => () => {
@@ -290,7 +303,7 @@ const styles = {
     borderBottomColor: '#eeeeee'
   },
   picker: {
-    backgroundColor: 'rgba(255,255,255,0.9)',
+    backgroundColor: 'white',
     borderTopRightRadius: 8,
     borderTopLeftRadius: 8
   }

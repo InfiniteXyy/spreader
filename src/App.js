@@ -18,7 +18,18 @@ export const ReaderThemes = {
       color: 'black'
     }
   },
-  theme2: {
+  theme4: {
+    root: {
+      backgroundColor: 'rgb(241,229,201)'
+    },
+    title: {
+      color: '#4a4a4a'
+    },
+    content: {
+      color: 'black'
+    }
+  },
+  theme3: {
     root: {
       backgroundColor: 'black'
     },
@@ -27,6 +38,17 @@ export const ReaderThemes = {
     },
     content: {
       color: 'white'
+    }
+  },
+  theme2: {
+    root: {
+      backgroundColor: '#eeeeee'
+    },
+    title: {
+      color: '#4a4a4a'
+    },
+    content: {
+      color: 'black'
     }
   }
 };

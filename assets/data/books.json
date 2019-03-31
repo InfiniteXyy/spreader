@@ -33,12 +33,13 @@
     "coverImg": "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1554554388&di=59846e3b63edf9284e2b8696fa33246d&imgtype=jpg&er=1&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201502%2F25%2F20150225113331_KjJKh.thumb.700_0.jpeg",
     "methods": {
       "getList": {
-        "url": "http://www.yunxs.com/longzu5/",
-        "query": ".list_box ul li a",
-        "href_prefix": "http://www.yunxs.com/longzu5/"
+        "url": "http://longzu5.co/",
+        "query": ".booklist li a",
+        "href_prefix": "http://longzu5.co/",
+        "reverse": true
       },
       "getContent": {
-        "query": ".box_box"
+        "query": ".post-body p"
       }
     }
   }

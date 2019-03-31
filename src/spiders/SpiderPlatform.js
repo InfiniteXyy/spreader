@@ -2,27 +2,23 @@ const cheerio = require('react-native-cheerio');
 import agent from '../agent';
 
 export async function getList(method) {
-  const { query, url, href_prefix } = method;
-
-  let html = await agent.get(url);
+  const { query, url, href_prefix, reverse } = method;
+  const [q, range] = query.split('|');
+  const html = await agent.get(url);
   const $ = cheerio.load(html);
 
   const links = [];
-  $(query.split('|')[0]).each((index, element) => {
+  $(q).each((index, element) => {
     let temp = $(element);
-    links[index] = {
+    links.push({
       title: temp.text(),
       href: (href_prefix || '') + temp.attr('href')
-    };
+    });
   });
 
-  let range = Number(query.split('|')[1]);
-  if (range) {
-    if (range > 0) return links.slice(range);
-    else return links.slice(0, -range);
-  } else {
-    return links;
-  }
+  if (range) links.splice(range > 0 ? 0 : -range, range);
+  if (reverse) links.reverse();
+  return links;
 }
 
 export async function getContent(url, method) {
