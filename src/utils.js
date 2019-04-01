@@ -1,3 +1,4 @@
+import { Platform } from 'react-native';
 export function range(start, stop, step) {
   if (typeof stop == 'undefined') {
     stop = start;
@@ -49,3 +50,5 @@ export const getPageRange = (pageIndex, pageSize, maxLength) => {
     Math.min(pageIndex * pageSize + pageSize, maxLength)
   ];
 };
+
+export const ios = Platform.OS !== 'android';

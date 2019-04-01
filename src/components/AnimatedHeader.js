@@ -24,7 +24,7 @@ const styles = {
   navigation: {
     backgroundColor: 'transparent',
     position: 'absolute',
-    top: 36,
+    top: 30,
     left: 0,
     right: 0
   }

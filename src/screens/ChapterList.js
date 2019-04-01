@@ -71,7 +71,6 @@ class ChapterList extends Component {
     this.bookId = props.navigation.getParam('bookId');
     this.state = {
       isReversed: false,
-      selectorOpen: false,
       page: 0
     };
   }
@@ -101,36 +100,24 @@ class ChapterList extends Component {
           renderItem={this.renderRow}
           getItemLayout={this.getItemLayout}
         />
-        {data.length !== 0 && (
-          <ChapterPicker
-            page={this.state.page}
-            onPageChange={this.togglePage}
-            open={this.state.selectorOpen}
-            onClose={this.toggleSelector(false)}
-            maxLength={this.book.chapters.length}
-            reversed={this.state.isReversed}
-          />
-        )}
       </Screen>
     );
   }
 
   renderSection = () => {
-    let { page, isReversed } = this.state;
     let length = this.book.chapters.length;
     return (
       <View
         style={styles.section}
         styleName="horizontal v-center space-between"
       >
-        <Touchable onPress={this.toggleSelector(true)}>
-          <View styleName="horizontal v-center">
-            <Text styleName="bold">
-              {getPageTitle(page, PAGE_LENGTH, length, isReversed)}
-            </Text>
-            <Icon name="drop-down" />
-          </View>
-        </Touchable>
+        <ChapterPicker
+          page={this.state.page}
+          onPageChange={this.togglePage}
+          maxLength={this.book.chapters.length}
+          reversed={this.state.isReversed}
+        />
+
         <View styleName="horizontal v-center">
           <Text style={{ color: '#9b9b9b' }}>{`共 ${length} 章`}</Text>
           <View styleName="md-gutter-left">
@@ -170,11 +157,6 @@ class ChapterList extends Component {
       };
     });
   };
-
-  toggleSelector = selectorOpen => () => {
-    this.setState({ selectorOpen });
-  };
-
   togglePage = page => {
     this.setState({ page });
   };

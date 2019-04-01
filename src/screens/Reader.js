@@ -1,24 +1,21 @@
 import React, { Component } from 'react';
+import { Platform } from 'react-native';
 import { connect } from 'react-redux';
 import {
   Button,
   Heading,
-  Icon,
-  NavigationBar,
   Screen,
   ScrollView,
   Spinner,
   Text,
-  Title,
   Touchable,
   View
 } from '@shoutem/ui';
 import { getContent } from '../spiders/SpiderPlatform';
 import Modal from 'react-native-modal';
-import { ReaderThemes } from '../App';
 import { setTheme, ThemeNames } from '../reducers/appReducer';
-import { NavigationBars } from '@shoutem/ui/examples/components/NavigationBars';
 import AnimatedHeader from '../components/AnimatedHeader';
+import { ios } from '../utils';
 
 class ReaderEditModal extends Component {
   render() {
@@ -106,7 +103,7 @@ class Reader extends Component {
     return (
       <View style={{ flex: 1 }}>
         <Screen styleName="paper" style={{ ...styles.root, ...theme.root }}>
-          <ScrollView style={{ marginTop: 30 }}>
+          <ScrollView style={{ marginTop: ios ? 20 : 0 }}>
             <Heading
               styleName="bold"
               style={{ ...styles.header, ...theme.title }}
