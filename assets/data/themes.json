@@ -1,0 +1,46 @@
+{
+  "theme1": {
+    "root": {
+      "backgroundColor": "white"
+    },
+    "title": {
+      "color": "#4a4a4a"
+    },
+    "content": {
+      "color": "black"
+    }
+  },
+  "theme2": {
+    "root": {
+      "backgroundColor": "#eeeeee"
+    },
+    "title": {
+      "color": "#4a4a4a"
+    },
+    "content": {
+      "color": "black"
+    }
+  },
+  "theme3": {
+    "root": {
+      "backgroundColor": "black"
+    },
+    "title": {
+      "color": "rgba(170,170,170,0.97)"
+    },
+    "content": {
+      "color": "white"
+    }
+  },
+  "theme4": {
+    "root": {
+      "backgroundColor": "rgb(241,229,201)"
+    },
+    "title": {
+      "color": "#4a4a4a"
+    },
+    "content": {
+      "color": "black"
+    }
+  }
+}

@@ -1,60 +1,25 @@
 import React, { Component } from 'react';
-import { View, StatusBar } from 'react-native';
+import { StatusBar, View } from 'react-native';
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
+
+import reducers from './reducers';
 
 import { createAppContainer, createStackNavigator } from 'react-navigation';
 import Home from './screens/Home';
 import Chapter from './screens/Reader';
 import ChapterList from './screens/ChapterList';
 
-export const ReaderThemes = {
-  theme1: {
-    root: {
-      backgroundColor: 'white'
-    },
-    title: {
-      color: '#4a4a4a'
-    },
-    content: {
-      color: 'black'
-    }
-  },
-  theme4: {
-    root: {
-      backgroundColor: 'rgb(241,229,201)'
-    },
-    title: {
-      color: '#4a4a4a'
-    },
-    content: {
-      color: 'black'
-    }
-  },
-  theme3: {
-    root: {
-      backgroundColor: 'black'
-    },
-    title: {
-      color: 'rgba(170,170,170,0.97)'
-    },
-    content: {
-      color: 'white'
-    }
-  },
-  theme2: {
-    root: {
-      backgroundColor: '#eeeeee'
-    },
-    title: {
-      color: '#4a4a4a'
-    },
-    content: {
-      color: 'black'
-    }
-  }
-};
+export const ReaderThemes = require('../assets/data/themes.json');
 const AppNavigator = createStackNavigator(
   {
-    Home: Home,
+    Home: {
+      screen: Home,
+      navigationOptions: {
+        title: '书库'
+      }
+    },
     Book: ChapterList,
     Chapter: Chapter
   },
@@ -71,14 +36,17 @@ const AppNavigator = createStackNavigator(
 );
 
 const Spreader = createAppContainer(AppNavigator);
+const store = createStore(reducers, applyMiddleware(thunk));
 
 export default class App extends Component {
   render() {
     return (
-      <View style={{ flex: 1 }}>
-        <StatusBar backgroundColor="white" barStyle="dark-content" />
-        <Spreader />
-      </View>
+      <Provider store={store}>
+        <View style={{ flex: 1 }}>
+          <StatusBar backgroundColor="white" barStyle="dark-content" />
+          <Spreader />
+        </View>
+      </Provider>
     );
   }
 }
