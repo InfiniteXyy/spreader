@@ -1,5 +1,6 @@
 {
   "theme1": {
+    "mode": "light",
     "root": {
       "backgroundColor": "white"
     },
@@ -11,6 +12,7 @@
     }
   },
   "theme2": {
+    "mode": "light",
     "root": {
       "backgroundColor": "#eeeeee"
     },
@@ -22,6 +24,7 @@
     }
   },
   "theme3": {
+    "mode": "dark",
     "root": {
       "backgroundColor": "black"
     },
@@ -33,6 +36,7 @@
     }
   },
   "theme4": {
+    "mode": "light",
     "root": {
       "backgroundColor": "rgb(241,229,201)"
     },

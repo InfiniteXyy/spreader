@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StatusBar, View } from 'react-native';
-import { Provider } from 'react-redux';
+import { Provider, connect } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 
@@ -38,12 +38,27 @@ const AppNavigator = createStackNavigator(
 const Spreader = createAppContainer(AppNavigator);
 const store = createStore(reducers, applyMiddleware(thunk));
 
+class MyStatusBar extends React.Component {
+  render() {
+    let { theme } = this.props;
+    return (
+      <StatusBar
+        backgroundColor={this.props.theme.root.backgroundColor}
+        barStyle={theme.mode === 'light' ? 'dark-content' : 'light-content'}
+      />
+    );
+  }
+}
+
+MyStatusBar = connect(({ appReducer }) => ({ theme: appReducer.theme }))(
+  MyStatusBar
+);
 export default class App extends Component {
   render() {
     return (
       <Provider store={store}>
         <View style={{ flex: 1 }}>
-          <StatusBar backgroundColor="white" barStyle="dark-content" />
+          <MyStatusBar />
           <Spreader />
         </View>
       </Provider>

@@ -1,22 +1,28 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import {
   Button,
   Heading,
   Icon,
+  NavigationBar,
   Screen,
   ScrollView,
   Spinner,
   Text,
+  Title,
   Touchable,
   View
 } from '@shoutem/ui';
 import { getContent } from '../spiders/SpiderPlatform';
 import Modal from 'react-native-modal';
 import { ReaderThemes } from '../App';
+import { setTheme, ThemeNames } from '../reducers/appReducer';
+import { NavigationBars } from '@shoutem/ui/examples/components/NavigationBars';
+import AnimatedHeader from '../components/AnimatedHeader';
 
 class ReaderEditModal extends Component {
   render() {
-    const { addFontSize, handleColorTheme } = this.props;
+    const { handleColorTheme } = this.props;
     let modalProps = {
       isVisible: this.props.open,
       backdropOpacity: 0.18,
@@ -35,27 +41,29 @@ class ReaderEditModal extends Component {
       <Modal {...modalProps}>
         <View style={styles.editModal}>
           <View styleName="horizontal">
-            <Button styleName="full-width clear" onPress={addFontSize(false)}>
+            <Button styleName="full-width clear" onPress={() => {}}>
               <Text style={{ fontSize: 18, fontWeight: '300' }}>A</Text>
             </Button>
             <View style={styles.vDivider} />
-            <Button styleName="full-width clear" onPress={addFontSize(true)}>
+            <Button styleName="full-width clear" onPress={() => {}}>
               <Text style={{ fontSize: 24 }}>A</Text>
             </Button>
           </View>
           <View style={styles.divider} />
           <View styleName="horizontal sm-gutter md-gutter-top md-gutter-bottom space-around">
-            <Touchable onPress={handleColorTheme(ReaderThemes.theme1)}>
+            <Touchable onPress={handleColorTheme(ThemeNames.white)}>
               <View style={{ ...styles.oval, backgroundColor: 'white' }} />
             </Touchable>
-            <Touchable onPress={handleColorTheme(ReaderThemes.theme2)}>
+            <Touchable onPress={handleColorTheme(ThemeNames.gray)}>
               <View style={{ ...styles.oval, backgroundColor: '#8E8E8E' }} />
             </Touchable>
-            <Touchable onPress={handleColorTheme(ReaderThemes.theme3)}>
+            <Touchable onPress={handleColorTheme(ThemeNames.black)}>
               <View style={{ ...styles.oval, backgroundColor: 'black' }} />
             </Touchable>
-            <Touchable onPress={handleColorTheme(ReaderThemes.theme4)}>
-              <View style={{ ...styles.oval, backgroundColor: 'rgb(241,229,201)' }} />
+            <Touchable onPress={handleColorTheme(ThemeNames.yellow)}>
+              <View
+                style={{ ...styles.oval, backgroundColor: 'rgb(241,229,201)' }}
+              />
             </Touchable>
           </View>
         </View>
@@ -64,27 +72,9 @@ class ReaderEditModal extends Component {
   }
 }
 
-export default class Chapter extends Component {
-  static navigationOptions = ({ navigation }) => {
-    let bgColor = navigation.getParam('backgroundColor', 'white');
-    let tintColor = navigation.getParam('tintColor', 'black');
-    return {
-      headerLeft: (
-        <Button styleName="clear" onPress={() => navigation.goBack()}>
-          <Icon style={{ color: tintColor }} name="left-arrow" />
-        </Button>
-      ),
-      headerRight: (
-        <Button styleName="clear" onPress={navigation.getParam('toggleModal')}>
-          <Icon style={{ color: tintColor }} name="settings" />
-        </Button>
-      ),
-      headerStyle: {
-        backgroundColor: bgColor,
-        borderBottomWidth: 0,
-        elevation: 0
-      }
-    };
+class Reader extends Component {
+  static navigationOptions = {
+    header: null
   };
 
   constructor(props) {
@@ -93,8 +83,7 @@ export default class Chapter extends Component {
     this.chapter = props.navigation.getParam('chapter');
   }
 
-  componentDidMount(): void {
-    this.props.navigation.setParams({ toggleModal: this.toggleModal(true) });
+  componentDidMount() {
     getContent(this.chapter.href, this.book.methods.getContent).then(
       contents => {
         this.setState({ contents, isLoading: false });
@@ -103,12 +92,6 @@ export default class Chapter extends Component {
   }
 
   state = {
-    style: {
-      marginTop: 20,
-      fontSize: 18,
-      lineHeight: 34
-    },
-    colorTheme: ReaderThemes.theme1,
     contents: [],
     isLoading: true,
     modalOpen: false
@@ -119,52 +102,38 @@ export default class Chapter extends Component {
   };
 
   render() {
-    const { colorTheme } = this.state;
+    const { theme } = this.props;
     return (
-      <Screen styleName="paper" style={{ ...styles.root, ...colorTheme.root }}>
-        <ScrollView>
-          <Heading
-            styleName="bold"
-            style={{ ...styles.header, ...colorTheme.title }}
-          >
-            {this.chapter.title}
-          </Heading>
-          {this.state.isLoading ? (
-            <Spinner size="large" style={{ marginTop: 30 }} />
-          ) : (
-            this.renderContent()
-          )}
-        </ScrollView>
+      <View style={{ flex: 1 }}>
+        <Screen styleName="paper" style={{ ...styles.root, ...theme.root }}>
+          <ScrollView style={{ marginTop: 30 }}>
+            <Heading
+              styleName="bold"
+              style={{ ...styles.header, ...theme.title }}
+            >
+              {this.chapter.title}
+            </Heading>
+            {this.state.isLoading ? (
+              <Spinner size="large" style={{ marginTop: 30 }} />
+            ) : (
+              this.renderContent()
+            )}
+          </ScrollView>
+        </Screen>
+
+        <AnimatedHeader
+          goBack={() => this.props.navigation.goBack()}
+          openModal={this.toggleModal(true)}
+        />
+
         <ReaderEditModal
           open={this.state.modalOpen}
           onClose={this.toggleModal(false)}
-          addFontSize={this.addFontSize}
-          handleColorTheme={this.handleColorTheme}
+          handleColorTheme={this.props.onSelectTheme}
         />
-      </Screen>
+      </View>
     );
   }
-
-  addFontSize = add => () => {
-    this.setState(prevState => {
-      return {
-        ...prevState,
-        style: {
-          ...prevState.style,
-          fontSize: prevState.style.fontSize + (add ? 1 : -1),
-          lineHeight: prevState.style.lineHeight + (add ? 2 : -2)
-        }
-      };
-    });
-  };
-
-  handleColorTheme = colorTheme => () => {
-    this.setState({ colorTheme });
-    this.props.navigation.setParams({
-      tintColor: colorTheme.content.color,
-      backgroundColor: colorTheme.root.backgroundColor
-    });
-  };
 
   renderContent = () => {
     return this.state.contents.map((i, index) => (
@@ -172,8 +141,7 @@ export default class Chapter extends Component {
         key={index}
         style={{
           ...styles.content,
-          ...this.state.style,
-          ...this.state.colorTheme.content
+          ...this.props.theme.content
         }}
       >
         {'\t' + i}
@@ -184,12 +152,15 @@ export default class Chapter extends Component {
 
 const styles = {
   content: {
-    paddingHorizontal: 20
+    fontSize: 18,
+    lineHeight: 34,
+    paddingHorizontal: 20,
+    marginTop: 12
   },
   root: {},
   header: {
     marginHorizontal: 20,
-    marginTop: 16,
+    marginTop: 60,
     lineHeight: 30
   },
   editModal: {
@@ -216,3 +187,16 @@ const styles = {
     backgroundColor: '#eaeaea'
   }
 };
+
+const mapStateToProps = ({ appReducer }) => ({
+  theme: appReducer.theme
+});
+
+const mapDispatchToProps = dispatch => ({
+  onSelectTheme: themeName => () => dispatch(setTheme(themeName))
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Reader);
