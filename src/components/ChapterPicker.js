@@ -40,7 +40,7 @@ export default class ChapterPicker extends React.Component {
               <Text styleName="bold">
                 {getPageTitle(page, PAGE_LENGTH, maxLength, reversed)}
               </Text>
-              <Icon name="drop-down" />
+              <Icon name="drop-down" style={styles.icon} />
             </View>
           </Touchable>
           <Modal {...modalProps}>
@@ -64,22 +64,27 @@ export default class ChapterPicker extends React.Component {
       );
     } else {
       return (
-        <Picker
-          style={styles.pickerAndroid}
-          mode="dropdown"
-          selectedValue={page.toString()}
-          onValueChange={(itemValue, itemIndex) => onPageChange(itemValue)}
-        >
-          {data.map(i => {
-            return (
-              <Picker.Item
-                key={i.toString()}
-                label={getPageTitle(i, PAGE_LENGTH, maxLength, reversed)}
-                value={i.toString()}
-              />
-            );
-          })}
-        </Picker>
+        <View styleName="horizontal v-center">
+          <Icon name="drop-down" style={styles.icon} />
+          <Picker
+            ref={i => (this.picker = i)}
+            prompt="目录"
+            style={styles.pickerAndroid}
+            mode="dropdown"
+            selectedValue={page.toString()}
+            onValueChange={(itemValue, itemIndex) => onPageChange(itemValue)}
+          >
+            {data.map(i => {
+              return (
+                <Picker.Item
+                  key={i.toString()}
+                  label={getPageTitle(i, PAGE_LENGTH, maxLength, reversed)}
+                  value={i.toString()}
+                />
+              );
+            })}
+          </Picker>
+        </View>
       );
     }
   }
@@ -92,7 +97,12 @@ const styles = {
     borderTopLeftRadius: 8
   },
   pickerAndroid: {
-    height: 50,
-    width: 150
+    width: 200,
+    color: '#4a4a4a',
+    backgroundColor: 'transparent'
+  },
+  icon: {
+    color: '#757575',
+    marginRight: 0
   }
 };

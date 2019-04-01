@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Platform } from 'react-native';
 import { connect } from 'react-redux';
 import {
   Button,
@@ -9,7 +8,8 @@ import {
   Spinner,
   Text,
   Touchable,
-  View
+  View,
+  Html
 } from '@shoutem/ui';
 import { getContent } from '../spiders/SpiderPlatform';
 import Modal from 'react-native-modal';
@@ -26,6 +26,7 @@ class ReaderEditModal extends Component {
       animationIn: 'fadeIn',
       animationOut: 'fadeOut',
       onBackdropPress: this.props.onClose,
+      useNativeDriver: true,
       style: {
         flex: 1,
         margin: 0,
@@ -101,9 +102,9 @@ class Reader extends Component {
   render() {
     const { theme } = this.props;
     return (
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, marginTop: ios ? 20 : 0 }}>
         <Screen styleName="paper" style={{ ...styles.root, ...theme.root }}>
-          <ScrollView style={{ marginTop: ios ? 20 : 0 }}>
+          <ScrollView>
             <Heading
               styleName="bold"
               style={{ ...styles.header, ...theme.title }}
@@ -141,7 +142,7 @@ class Reader extends Component {
           ...this.props.theme.content
         }}
       >
-        {'\t' + i}
+        {'        ' + i}
       </Text>
     ));
   };

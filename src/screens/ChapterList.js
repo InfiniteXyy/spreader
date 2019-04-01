@@ -48,7 +48,7 @@ const Header = ({ book }) => {
         </View>
         <View>
           <Text styleName="bold">上次读到：</Text>
-          <Text style={{ color: 'tomato' }}>第146章 但为君故(50)</Text>
+          <Text style={{ color: '#007bbb' }}>第146章 但为君故(50)</Text>
         </View>
       </View>
     </View>
@@ -206,7 +206,8 @@ const styles = {
   smButton: {
     backgroundColor: '#cccccc',
     borderRadius: 5,
-    paddingHorizontal: 5
+    paddingHorizontal: 5,
+    paddingVertical: 3
   }
 };
 
