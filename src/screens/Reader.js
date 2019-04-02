@@ -1,21 +1,22 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { ScrollView } from 'react-native';
 import {
   Button,
   Heading,
   Screen,
-  ScrollView,
   Spinner,
   Text,
   Touchable,
-  View,
-  Html
+  View
 } from '@shoutem/ui';
 import { getContent } from '../spiders/SpiderPlatform';
 import Modal from 'react-native-modal';
 import { setTheme, ThemeNames } from '../reducers/appReducer';
 import AnimatedHeader from '../components/AnimatedHeader';
 import { ios } from '../utils';
+import { markAsRead } from '../reducers/bookReducer';
+import { FadeIn, ScrollDriver } from '@shoutem/animation';
 
 class ReaderEditModal extends Component {
   render() {
@@ -92,7 +93,8 @@ class Reader extends Component {
   state = {
     contents: [],
     isLoading: true,
-    modalOpen: false
+    modalOpen: false,
+    isNavBarHidden: false
   };
 
   toggleModal = modalOpen => () => {
@@ -102,9 +104,14 @@ class Reader extends Component {
   render() {
     const { theme } = this.props;
     return (
-      <View style={{ flex: 1, marginTop: ios ? 20 : 0 }}>
+      <View style={{ flex: 1 }}>
         <Screen styleName="paper" style={{ ...styles.root, ...theme.root }}>
-          <ScrollView>
+          <ScrollView
+            scrollEventThrottle={16}
+            style={{ marginTop: ios ? 20 : 0 }}
+            onScrollBeginDrag={this.onScrollBeginDrag}
+            onScroll={this.handleScroll}
+          >
             <Heading
               styleName="bold"
               style={{ ...styles.header, ...theme.title }}
@@ -120,8 +127,9 @@ class Reader extends Component {
         </Screen>
 
         <AnimatedHeader
-          goBack={() => this.props.navigation.goBack()}
+          goBack={this.handleBack}
           openModal={this.toggleModal(true)}
+          open={!this.state.isNavBarHidden}
         />
 
         <ReaderEditModal
@@ -132,6 +140,24 @@ class Reader extends Component {
       </View>
     );
   }
+
+  onScrollBeginDrag = event => {
+    this.scrollViewStartOffsetY = event.nativeEvent.contentOffset.y;
+  };
+
+  handleScroll = event => {
+    if (
+      !this.state.isNavBarHidden &&
+      event.nativeEvent.contentOffset.y > this.scrollViewStartOffsetY
+    ) {
+      this.setState({ isNavBarHidden: true });
+    } else if (
+      this.state.isNavBarHidden &&
+      event.nativeEvent.contentOffset.y < this.scrollViewStartOffsetY
+    ) {
+      this.setState({ isNavBarHidden: false });
+    }
+  };
 
   renderContent = () => {
     return this.state.contents.map((i, index) => (
@@ -145,6 +171,11 @@ class Reader extends Component {
         {'        ' + i}
       </Text>
     ));
+  };
+
+  handleBack = () => {
+    this.props.navigation.goBack();
+    this.props.markAsRead(this.book, this.chapter);
   };
 }
 
@@ -191,7 +222,8 @@ const mapStateToProps = ({ appReducer }) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onSelectTheme: themeName => () => dispatch(setTheme(themeName))
+  onSelectTheme: themeName => () => dispatch(setTheme(themeName)),
+  markAsRead: (book, chapter) => dispatch(markAsRead(book, chapter))
 });
 
 export default connect(

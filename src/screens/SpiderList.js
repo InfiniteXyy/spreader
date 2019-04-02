@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 import {
   Caption,
@@ -8,15 +8,20 @@ import {
   Screen,
   Subtitle,
   TouchableOpacity,
-  View,
-} from '@shoutem/ui'
-import { FlatList } from 'react-native'
-
-function getBooks() {
-  return require('../../assets/data/books.json');
-}
+  View
+} from '@shoutem/ui';
+import { FlatList } from 'react-native';
+import { connect } from 'react-redux';
+import { loadStore } from '../reducers/storeReducer';
 
 class SpiderList extends React.Component {
+  componentDidMount() {
+    for (let store of this.props.stores) {
+      console.log(store);
+      this.props.refreshStore(store);
+    }
+  }
+
   renderRow = ({ item }) => {
     const cellViews = item.map((book, id) => {
       return (
@@ -44,8 +49,7 @@ class SpiderList extends React.Component {
   };
 
   render() {
-    const books = getBooks();
-    const groupedData = GridRow.groupByRows(books, 2, () => 1);
+    const groupedData = GridRow.groupByRows(this.props.spiders, 2, () => 1);
     return (
       <Screen>
         <FlatList data={groupedData} renderItem={this.renderRow} />
@@ -54,4 +58,16 @@ class SpiderList extends React.Component {
   }
 }
 
-export default SpiderList;
+const mapStateToProps = ({ storeReducer }) => ({
+  spiders: storeReducer.spiders,
+  stores: storeReducer.stores
+});
+
+const mapDispatchToProps = dispatch => ({
+  refreshStore: store => dispatch(loadStore(store))
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SpiderList);

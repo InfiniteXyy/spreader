@@ -791,7 +791,7 @@
     react-native-safe-area-view "^0.13.0"
     react-native-screens "^1.0.0 || ^1.0.0-alpha"
 
-"@shoutem/animation@~0.12.3":
+"@shoutem/animation@^0.12.3", "@shoutem/animation@~0.12.3":
   version "0.12.3"
   resolved "https://registry.yarnpkg.com/@shoutem/animation/-/animation-0.12.3.tgz#fe2e2544167b991efcea0b6c2d4c51bc81753af3"
   integrity sha512-A2KM4W5acP8TkA/FqX08odRg/DVWVArwlERPnH8oo3v2uKjN7bLMiHmTng9KZ70aGzeDmMLpdvxsZ6143Ys15g==
@@ -6178,6 +6178,11 @@ realpath-native@^1.1.0:
   integrity sha512-wlgPA6cCIIg9gKz0fgAPjnzh4yR/LnXovwuo9hvyGvx3h8nX4+/iLZplfUWasXpqD8BdnGnP5njOFjkUwPzvjA==
   dependencies:
     util.promisify "^1.0.0"
+
+redux-persist@^5.10.0:
+  version "5.10.0"
+  resolved "https://registry.yarnpkg.com/redux-persist/-/redux-persist-5.10.0.tgz#5d8d802c5571e55924efc1c3a9b23575283be62b"
+  integrity sha512-sSJAzNq7zka3qVHKce1hbvqf0Vf5DuTVm7dr4GtsqQVOexnrvbV47RWFiPxQ8fscnyiuWyD2O92DOxPl0tGCRg==
 
 redux-thunk@^2.3.0:
   version "2.3.0"

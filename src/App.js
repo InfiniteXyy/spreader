@@ -1,15 +1,20 @@
-import React, { Component } from 'react';
-import { StatusBar, View } from 'react-native';
-import { Provider, connect } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
-import thunk from 'redux-thunk';
+import React, { Component } from 'react'
+import { applyMiddleware, createStore } from 'redux'
+import { connect, Provider } from 'react-redux'
+import thunk from 'redux-thunk'
+import { persistReducer, persistStore } from 'redux-persist'
+import { PersistGate } from 'redux-persist/integration/react'
 
-import reducers from './reducers';
+import storage from 'redux-persist/lib/storage'
 
-import { createAppContainer, createStackNavigator } from 'react-navigation';
-import Home from './screens/Home';
-import Chapter from './screens/Reader';
-import ChapterList from './screens/ChapterList';
+import { StatusBar } from 'react-native'
+import { createAppContainer, createStackNavigator } from 'react-navigation'
+
+import reducers from './reducers'
+
+import Home from './screens/Home'
+import Chapter from './screens/Reader'
+import ChapterList from './screens/ChapterList'
 
 export const ReaderThemes = require('../assets/data/themes.json');
 const AppNavigator = createStackNavigator(
@@ -35,8 +40,18 @@ const AppNavigator = createStackNavigator(
   }
 );
 
+const persistConfig = {
+  key: 'root',
+  storage
+};
+
 const Spreader = createAppContainer(AppNavigator);
-const store = createStore(reducers, applyMiddleware(thunk));
+const store = createStore(
+  persistReducer(persistConfig, reducers),
+  applyMiddleware(thunk)
+);
+const persistor = persistStore(store);
+
 
 class MyStatusBar extends React.Component {
   render() {
@@ -57,10 +72,10 @@ export default class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <View style={{ flex: 1 }}>
+        <PersistGate loading={null} persistor={persistor}>
           <MyStatusBar />
           <Spreader />
-        </View>
+        </PersistGate>
       </Provider>
     );
   }

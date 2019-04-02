@@ -6,6 +6,7 @@ import {
   Image,
   Row,
   Screen,
+  Spinner,
   Text,
   Touchable,
   View
@@ -17,7 +18,7 @@ import {
   loadChapters,
   PAGE_LENGTH
 } from '../reducers/bookReducer';
-import { getPageRange, getPageTitle } from '../utils';
+import { getPageRange } from '../utils';
 import ChapterPicker from '../components/ChapterPicker';
 
 const Stack = { key: '-1', title: '-1' };
@@ -43,17 +44,32 @@ const Header = ({ book }) => {
       <Image style={styles.coverImg} source={{ uri: book.coverImg }} />
       <View styleName="space-between stretch">
         <View>
-          <Text style={styles.title}>{book.title}</Text>
+          <Text style={styles.title} styleName="bold sm-gutter-bottom">
+            {book.title}
+          </Text>
           <Text style={styles.subtitle}>{book.author}</Text>
         </View>
-        <View>
-          <Text styleName="bold">上次读到：</Text>
-          <Text style={{ color: '#007bbb' }}>第146章 但为君故(50)</Text>
-        </View>
+        {book.lastRead && (
+          <View>
+            <Text styleName="bold sm-gutter-bottom">上次读到：</Text>
+            <Text style={{ color: '#007bbb' }}>{book.lastRead.title}</Text>
+          </View>
+        )}
       </View>
     </View>
   );
 };
+
+const MySpinner = connect(({ bookReducer }) => ({ books: bookReducer.books }))(
+  props => {
+    let { id, books } = props;
+    return currentBook(books, id).isFetching ? (
+      <Spinner style={{ marginRight: 8 }} />
+    ) : (
+      <View />
+    );
+  }
+);
 
 class ChapterList extends Component {
   static navigationOptions = ({ navigation }) => {
@@ -61,6 +77,11 @@ class ChapterList extends Component {
       headerLeft: (
         <Button styleName="clear" onPress={() => navigation.goBack()}>
           <Icon name="left-arrow" />
+        </Button>
+      ),
+      headerRight: (
+        <Button styleName="clear">
+          <MySpinner id={navigation.getParam('bookId')} />
         </Button>
       )
     };
@@ -95,7 +116,7 @@ class ChapterList extends Component {
           stickyHeaderIndices={[1]}
           ListHeaderComponent={<Header book={book} />}
           onRefresh={onLoad(book)}
-          refreshing={book.isFetching}
+          refreshing={false}
           data={data}
           renderItem={this.renderRow}
           getItemLayout={this.getItemLayout}

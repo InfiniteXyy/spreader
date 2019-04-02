@@ -8,7 +8,6 @@ export const ThemeNames = {
   yellow: 'theme4'
 };
 
-
 export function setTheme(themeName) {
   return {
     type: SET_THEME,
@@ -16,14 +15,23 @@ export function setTheme(themeName) {
   };
 }
 
+export function addNum() {
+  return {
+    type: 'NUM'
+  };
+}
+
 const defaultState = {
-  theme: ReaderThemes.theme1
+  theme: ReaderThemes.theme1,
+  num: 0
 };
 
 export default (state = defaultState, action) => {
   switch (action.type) {
     case SET_THEME:
       return { ...state, theme: ReaderThemes[action.themeName] };
+    case 'NUM':
+      return { ...state, num: state.num + 1 };
     default:
       return state;
   }

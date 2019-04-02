@@ -1,21 +1,25 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
+  Button,
   Caption,
   Divider,
+  Icon,
   Image,
   Row,
   Screen,
+  Spinner,
   Subtitle,
+  Title,
   Touchable,
   View
 } from '@shoutem/ui';
 import { FlatList } from 'react-native';
-import { loadBooks } from '../reducers/bookReducer';
+import { loadChapters } from '../reducers/bookReducer';
 
 class BookList extends Component {
   componentDidMount() {
-    this.props.load();
+    this.props.books.forEach(this.props.onLoad);
   }
 
   render() {
@@ -32,13 +36,32 @@ class BookList extends Component {
         <Touchable onPress={this.navigateBook(item)}>
           <Row>
             <Image
-              styleName="small rounded-corners"
+              styleName="rounded-corners"
+              style={{ width: 70, height: 95 }}
               source={{ uri: item.coverImg }}
             />
             <View styleName="vertical stretch space-between">
-              <Subtitle>{item.title}</Subtitle>
-              <Caption>{item.isFetching ? '加载中' : '加载完成'}</Caption>
+              <View>
+                <Title style={{ color: '#4a4a4a' }} styleName="bold">
+                  {item.title}
+                </Title>
+                <Subtitle>{item.author}</Subtitle>
+              </View>
+              {item.updatedNum === 0 ? (
+                <Caption>无更新</Caption>
+              ) : (
+                <Caption style={{ color: '#007bbb' }}>{`${
+                  item.updatedNum
+                } 个更新`}</Caption>
+              )}
             </View>
+            {item.isFetching ? (
+              <Button styleName="right-icon">
+                <Spinner />
+              </Button>
+            ) : (
+              <Icon styleName="disclosure" name="right-arrow" />
+            )}
           </Row>
         </Touchable>
         <Divider styleName="line" />
@@ -56,7 +79,7 @@ const mapStateToProps = ({ bookReducer }) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  load: () => dispatch(loadBooks())
+  onLoad: book => dispatch(loadChapters(book))
 });
 
 export default connect(
