@@ -1,10 +1,10 @@
-import React from 'react'
-import { Icon } from '@shoutem/ui'
-import { createBottomTabNavigator } from 'react-navigation'
+import React from 'react';
+import { Icon } from '@shoutem/ui';
+import { createBottomTabNavigator } from 'react-navigation';
 
-import Setting from './Setting'
-import SpiderList from './SpiderList'
-import BookList from './BookList'
+import Setting from './Setting';
+import SpiderList from './SpiderList';
+import BookList from './BookList';
 
 const HomeNavigator = createBottomTabNavigator(
   {
@@ -30,7 +30,12 @@ const HomeNavigator = createBottomTabNavigator(
     tabBarOptions: {
       activeTintColor: 'tomato',
       inactiveTintColor: 'gray',
-      showLabel: false
+      showLabel: false,
+      style: {
+        borderTopWidth: 0.5,
+        borderTopColor: '#eeeeee',
+        height: 60
+      }
     }
   }
 );

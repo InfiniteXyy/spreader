@@ -7,15 +7,16 @@ import {
   Icon,
   Image,
   Row,
-  Screen,
+  Text,
   Spinner,
   Subtitle,
   Title,
   Touchable,
   View
 } from '@shoutem/ui';
-import { FlatList } from 'react-native';
+import { FlatList, ScrollView } from 'react-native';
 import { loadChapters } from '../reducers/bookReducer';
+import { FadeOut, ScrollDriver, ZoomIn, ZoomOut } from '@shoutem/animation';
 
 class BookList extends Component {
   componentDidMount() {
@@ -23,16 +24,34 @@ class BookList extends Component {
   }
 
   render() {
+    const driver = new ScrollDriver();
+
     return (
-      <Screen>
-        <FlatList data={this.props.books} renderItem={this.renderRow} />
-      </Screen>
+      <View style={{ flex: 1 }}>
+        <ScrollView {...driver.scrollViewProps}>
+          <FadeOut driver={driver} inputRange={[0, 60]}>
+            <Text
+              style={{
+                fontSize: 40,
+                fontWeight: 'bold',
+                color: '#4a4a4a',
+                marginTop: 50,
+                marginBottom: 20,
+                marginLeft: 10
+              }}
+            >
+              书库
+            </Text>
+          </FadeOut>
+          {this.props.books.map(book => this.renderRow(book))}
+        </ScrollView>
+      </View>
     );
   }
 
-  renderRow = ({ item }) => {
+  renderRow = item => {
     return (
-      <View>
+      <View id={item.id}>
         <Touchable onPress={this.navigateBook(item)}>
           <Row>
             <Image

@@ -5,6 +5,8 @@ export const PAGE_LENGTH = 50;
 const LOAD_CHAPTERS = 'LOAD_CHAPTERS';
 const UPDATE_CHAPTERS = 'UPDATE_CHAPTERS';
 const MARK_READ = 'MARK_READ';
+const ADD_BOOK = 'ADD_BOOK';
+const REMOVE_BOOK = 'REMOVE_BOOK';
 
 export function loadChapters(book) {
   return async dispatch => {
@@ -32,6 +34,20 @@ export function markAsRead(book, chapter) {
   };
 }
 
+export function addBook(spider, source) {
+  return {
+    type: ADD_BOOK,
+    book: { ...spider, id: source + '/' + spider.key }
+  };
+}
+
+export function removeBook(bookId) {
+  return {
+    type: REMOVE_BOOK,
+    bookId: bookId
+  };
+}
+
 export function currentBook(books, bookId) {
   for (let i of books) {
     if (i.id === bookId) {
@@ -47,6 +63,16 @@ const defaultState = {
 
 export default (state = defaultState, action) => {
   switch (action.type) {
+    case ADD_BOOK:
+      return {
+        ...state,
+        books: [...state.books, action.book]
+      };
+    case REMOVE_BOOK:
+      return {
+        ...state,
+        books: state.books.filter(i => i.id !== action.bookId)
+      };
     case LOAD_CHAPTERS:
       // 开始加载章节
       return {

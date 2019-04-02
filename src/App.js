@@ -1,20 +1,20 @@
-import React, { Component } from 'react'
-import { applyMiddleware, createStore } from 'redux'
-import { connect, Provider } from 'react-redux'
-import thunk from 'redux-thunk'
-import { persistReducer, persistStore } from 'redux-persist'
-import { PersistGate } from 'redux-persist/integration/react'
+import React, { Component } from 'react';
+import { applyMiddleware, createStore } from 'redux';
+import { connect, Provider } from 'react-redux';
+import thunk from 'redux-thunk';
+import { persistReducer, persistStore } from 'redux-persist';
+import { PersistGate } from 'redux-persist/integration/react';
 
-import storage from 'redux-persist/lib/storage'
+import storage from 'redux-persist/lib/storage';
 
-import { StatusBar } from 'react-native'
-import { createAppContainer, createStackNavigator } from 'react-navigation'
+import { StatusBar } from 'react-native';
+import { createAppContainer, createStackNavigator } from 'react-navigation';
 
-import reducers from './reducers'
+import reducers from './reducers';
 
-import Home from './screens/Home'
-import Chapter from './screens/Reader'
-import ChapterList from './screens/ChapterList'
+import Home from './screens/Home';
+import Chapter from './screens/Reader';
+import ChapterList from './screens/ChapterList';
 
 export const ReaderThemes = require('../assets/data/themes.json');
 const AppNavigator = createStackNavigator(
@@ -22,7 +22,7 @@ const AppNavigator = createStackNavigator(
     Home: {
       screen: Home,
       navigationOptions: {
-        title: '书库'
+        header: null
       }
     },
     Book: ChapterList,
@@ -31,6 +31,9 @@ const AppNavigator = createStackNavigator(
   {
     initialRouteName: 'Home',
     mode: 'card',
+    cardStyle: {
+      backgroundColor: 'white'
+    },
     defaultNavigationOptions: {
       headerStyle: {
         borderBottomColor: 'transparent',
@@ -51,7 +54,6 @@ const store = createStore(
   applyMiddleware(thunk)
 );
 const persistor = persistStore(store);
-
 
 class MyStatusBar extends React.Component {
   render() {
