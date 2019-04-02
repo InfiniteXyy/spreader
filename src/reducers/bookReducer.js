@@ -34,10 +34,10 @@ export function markAsRead(book, chapter) {
   };
 }
 
-export function addBook(spider, source) {
+export function addBook(spider) {
   return {
     type: ADD_BOOK,
-    book: { ...spider, id: source + '/' + spider.key }
+    book: { ...spider, id: spider.source + '/' + spider.key }
   };
 }
 

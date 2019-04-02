@@ -20,7 +20,7 @@ export function loadStore(store) {
     data = JSON.parse(data);
     dispatch({
       type: ADD_SPIDERS,
-      payload: data
+      payload: data.map(i => ({ ...i, source: store.href }))
     });
   };
 }

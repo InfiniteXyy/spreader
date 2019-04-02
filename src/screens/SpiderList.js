@@ -24,9 +24,9 @@ class SpiderList extends React.Component {
     }
   }
 
-  toggleStatus = (book, source) => value => {
+  toggleStatus = spider => value => {
     if (value) {
-      this.props.addBook();
+      this.props.addBook(spider);
     } else {
     }
   };
@@ -39,10 +39,7 @@ class SpiderList extends React.Component {
             <Image styleName="medium" source={{ uri: book.coverImg }} />
             <View styleName="content md-gutter-top md-gutter-left">
               <Text>{book.title}</Text>
-              <Switch
-                onValueChange={this.toggleStatus(book, book.source)}
-                value={false}
-              />
+              <Switch onValueChange={this.toggleStatus(book)} value={false} />
             </View>
           </Card>
         </TouchableOpacity>
@@ -91,7 +88,7 @@ const mapStateToProps = ({ storeReducer, bookReducer }) => ({
 
 const mapDispatchToProps = dispatch => ({
   refreshStore: store => dispatch(loadStore(store)),
-  addBook: (spider, source) => dispatch(addBook(spider, source)),
+  addBook: spider => dispatch(addBook(spider)),
   removeBook: bookId => dispatch(removeBook(bookId))
 });
 
