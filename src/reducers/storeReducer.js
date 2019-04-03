@@ -1,17 +1,17 @@
 import agent from '../agent';
 
 const ADD_STORE = 'ADD_STORE';
-const ADD_SPIDERS = 'ADD_SPIDER';
+const UPDATE_SPIDERS = 'ADD_SPIDER';
 
 const defaultState = {
   stores: [
     {
       href:
         'https://raw.githubusercontent.com/InfiniteXyy/spreader/master/assets/data/books.json',
-      title: '官方仓库'
+      title: '默认仓库',
+      spiders: []
     }
-  ],
-  spiders: []
+  ]
 };
 
 export function loadStore(store) {
@@ -19,16 +19,25 @@ export function loadStore(store) {
     let data = await agent.get(store.href);
     data = JSON.parse(data);
     dispatch({
-      type: ADD_SPIDERS,
-      payload: data.map(i => ({ ...i, source: store.href }))
+      type: UPDATE_SPIDERS,
+      spiders: data,
+      store
     });
   };
 }
 
 export default (state = defaultState, action) => {
   switch (action.type) {
-    case ADD_SPIDERS:
-      return { ...state, spiders: [...action.payload] };
+    case UPDATE_SPIDERS:
+      return {
+        ...state,
+        stores: state.stores.map(store => {
+          if (store.href === action.store.href) {
+            return { ...store, spiders: action.spiders };
+          }
+          return store;
+        })
+      };
     default:
       return state;
   }

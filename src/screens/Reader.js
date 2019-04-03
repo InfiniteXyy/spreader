@@ -108,7 +108,6 @@ class Reader extends Component {
         <Screen styleName="paper" style={{ ...styles.root, ...theme.root }}>
           <ScrollView
             scrollEventThrottle={16}
-            style={{ marginTop: ios ? 20 : 0 }}
             onScrollBeginDrag={this.onScrollBeginDrag}
             onScroll={this.handleScroll}
           >

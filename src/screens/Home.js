@@ -33,7 +33,7 @@ const HomeNavigator = createBottomTabNavigator(
       showLabel: false,
       style: {
         borderTopWidth: 0.5,
-        borderTopColor: '#eeeeee',
+        borderTopColor: '#dddddd',
         height: 60
       }
     }

@@ -13,15 +13,20 @@ import {
 } from '@shoutem/ui';
 import { FlatList } from 'react-native';
 import { connect } from 'react-redux';
-import {
-  currentBook,
-  loadChapters,
-  PAGE_LENGTH
-} from '../reducers/bookReducer';
+import { loadChapters, PAGE_LENGTH } from '../reducers/bookReducer';
 import { getPageRange } from '../utils';
 import ChapterPicker from '../components/ChapterPicker';
 
 const Stack = { key: '-1', title: '-1' };
+
+function currentBook(books, bookId) {
+  for (let i of books) {
+    if (i.id === bookId) {
+      return i;
+    }
+  }
+  return null;
+}
 
 class ItemRow extends React.PureComponent {
   render() {

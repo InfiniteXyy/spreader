@@ -7,7 +7,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 
 import storage from 'redux-persist/lib/storage';
 
-import { StatusBar } from 'react-native';
+import { StatusBar, View } from 'react-native';
 import { createAppContainer, createStackNavigator } from 'react-navigation';
 
 import reducers from './reducers';
@@ -15,6 +15,7 @@ import reducers from './reducers';
 import Home from './screens/Home';
 import Chapter from './screens/Reader';
 import ChapterList from './screens/ChapterList';
+import { ios } from './utils';
 
 export const ReaderThemes = require('../assets/data/themes.json');
 const AppNavigator = createStackNavigator(
@@ -76,7 +77,9 @@ export default class App extends Component {
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <MyStatusBar />
-          <Spreader />
+          <View style={{ paddingTop: ios ? 20 : 0, flex: 1 }}>
+            <Spreader />
+          </View>
         </PersistGate>
       </Provider>
     );

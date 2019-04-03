@@ -23,16 +23,10 @@ class AnimatedHeader extends React.Component<Props> {
       >
         <View styleName="space-between horizontal">
           <Button styleName="clear" onPress={this.onBack}>
-            <Icon
-              style={{ color: this.props.tintColor }}
-              name="left-arrow"
-            />
+            <Icon style={{ color: this.props.tintColor }} name="left-arrow" />
           </Button>
           <Button styleName="clear" onPress={this.onOpen}>
-            <Icon
-              style={{ color: this.props.tintColor }}
-              name="settings"
-            />
+            <Icon style={{ color: this.props.tintColor }} name="settings" />
           </Button>
         </View>
       </Animated.View>
@@ -80,7 +74,7 @@ const styles = {
     position: 'absolute',
     paddingTop: 16,
     paddingBottom: 16,
-    top: ios ? 20 : 0,
+    top: 0,
     left: 0,
     right: 0
   }

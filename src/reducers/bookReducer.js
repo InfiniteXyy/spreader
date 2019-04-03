@@ -34,10 +34,14 @@ export function markAsRead(book, chapter) {
   };
 }
 
-export function addBook(spider) {
-  return {
-    type: ADD_BOOK,
-    book: { ...spider, id: spider.source + '/' + spider.key }
+export function addBook(spider, sourceHref) {
+  return dispatch => {
+    let book = { ...spider, id: sourceHref + '/' + spider.key };
+    dispatch({
+      type: ADD_BOOK,
+      book
+    });
+    dispatch(loadChapters(book));
   };
 }
 
@@ -46,15 +50,6 @@ export function removeBook(bookId) {
     type: REMOVE_BOOK,
     bookId: bookId
   };
-}
-
-export function currentBook(books, bookId) {
-  for (let i of books) {
-    if (i.id === bookId) {
-      return i;
-    }
-  }
-  return null;
 }
 
 const defaultState = {
