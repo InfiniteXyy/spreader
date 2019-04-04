@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { ScrollView } from 'react-native';
+import { ScrollView, StatusBar } from 'react-native';
 import {
   Button,
   Heading,
+  Icon,
   Screen,
   Spinner,
   Text,
@@ -16,7 +17,6 @@ import { setTheme, ThemeNames } from '../reducers/appReducer';
 import AnimatedHeader from '../components/AnimatedHeader';
 import { ios } from '../utils';
 import { markAsRead } from '../reducers/bookReducer';
-import { FadeIn, ScrollDriver } from '@shoutem/animation';
 
 class ReaderEditModal extends Component {
   render() {
@@ -33,7 +33,7 @@ class ReaderEditModal extends Component {
         margin: 0,
         alignItems: 'flex-end',
         justifyContent: 'flex-start',
-        paddingTop: 60
+        paddingTop: 80
       }
     };
     return (
@@ -105,8 +105,13 @@ class Reader extends Component {
     const { theme } = this.props;
     return (
       <View style={{ flex: 1 }}>
+        <StatusBar
+          backgroundColor={theme.root.backgroundColor}
+          barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'}
+        />
         <Screen styleName="paper" style={{ ...styles.root, ...theme.root }}>
           <ScrollView
+            style={{ marginTop: ios ? 20 : 0 }}
             scrollEventThrottle={16}
             onScrollBeginDrag={this.onScrollBeginDrag}
             onScroll={this.handleScroll}
@@ -127,8 +132,14 @@ class Reader extends Component {
 
         <AnimatedHeader
           goBack={this.handleBack}
-          openModal={this.toggleModal(true)}
-          open={!this.state.isNavBarHidden}
+          rightComponent={
+            <Button styleName="clear" onPress={this.toggleModal(true)}>
+              <Icon style={{ color: theme.content.color }} name="settings" />
+            </Button>
+          }
+          visible={!this.state.isNavBarHidden}
+          bgColor={this.props.theme.root.backgroundColor}
+          tintColor={theme.content.color}
         />
 
         <ReaderEditModal

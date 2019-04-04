@@ -1,10 +1,28 @@
 import React from 'react';
-import { Icon } from '@shoutem/ui';
-import { createBottomTabNavigator } from 'react-navigation';
+import { connect } from 'react-redux';
+import { Icon, View } from '@shoutem/ui';
+import { createBottomTabNavigator, BottomTabBar } from 'react-navigation';
 
 import Setting from './Setting';
 import SpiderList from './SpiderList';
 import BookList from './BookList';
+import { darkBg, dividerColor, dividerColorLight } from '../theme';
+
+const mapStateToProps = ({ appReducer }) => ({ dark: appReducer.darkMode });
+const TabBarComponent = props => (
+  <BottomTabBar
+    {...props}
+    showLabel={false}
+    activeTintColor="tomato"
+    style={{
+      backgroundColor: props.dark ? darkBg : '#fff',
+      borderTopWidth: 0.5,
+      borderTopColor: props.dark ? dividerColorLight : dividerColor,
+      height: 60
+    }}
+  />
+);
+const StyledTabBar = connect(mapStateToProps)(TabBarComponent);
 
 const HomeNavigator = createBottomTabNavigator(
   {
@@ -27,16 +45,7 @@ const HomeNavigator = createBottomTabNavigator(
         return <Icon name={iconName} style={{ color: tintColor }} />;
       }
     }),
-    tabBarOptions: {
-      activeTintColor: 'tomato',
-      inactiveTintColor: 'gray',
-      showLabel: false,
-      style: {
-        borderTopWidth: 0.5,
-        borderTopColor: '#dddddd',
-        height: 60
-      }
-    }
+    tabBarComponent: StyledTabBar
   }
 );
 

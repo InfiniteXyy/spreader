@@ -1,21 +1,25 @@
 import React, { Component } from 'react';
+import classNames from 'classnames';
 import { connect } from 'react-redux';
 import {
   Button,
-  Caption,
+  Text,
   Divider,
   Icon,
   Image,
   Row,
+  Screen,
   Spinner,
   Subtitle,
   Title,
   Touchable,
-  View
+  View,
+  Caption
 } from '@shoutem/ui';
 import { ScrollView } from 'react-native';
 import { loadChapters } from '../reducers/bookReducer';
 import HomeTitle from '../components/HomeTitle';
+import { ios } from '../utils';
 
 class BookList extends Component {
   componentDidMount() {
@@ -24,51 +28,55 @@ class BookList extends Component {
 
   render() {
     return (
-      <View style={{ flex: 1 }}>
-        <ScrollView>
+      <Screen styleName={classNames({ dark: this.props.darkMode })}>
+        <ScrollView style={{ marginTop: ios ? 20 : 0 }}>
           <HomeTitle title="列表" />
           {this.props.books.map(book => this.renderRow(book))}
         </ScrollView>
-      </View>
+      </Screen>
     );
   }
 
   renderRow = item => {
+    let latestTitle = '暂无内容';
+    if (item.chapters && item.chapters.length !== 0) {
+      latestTitle = item.chapters[item.chapters.length - 1].title;
+    }
+    let dark = this.props.darkMode;
     return (
-      <View id={item.id}>
-        <Touchable onPress={this.navigateBook(item)}>
-          <Row>
-            <Image
-              styleName="rounded-corners"
-              style={{ width: 70, height: 95 }}
-              source={{ uri: item.coverImg }}
-            />
-            <View styleName="vertical stretch space-between">
-              <View>
-                <Title style={{ color: '#4a4a4a' }} styleName="bold">
-                  {item.title}
-                </Title>
-                <Subtitle>{item.author}</Subtitle>
-              </View>
-              {item.updatedNum === 0 ? (
-                <Caption>无更新</Caption>
-              ) : (
-                <Caption style={{ color: '#007bbb' }}>{`${
-                  item.updatedNum
-                } 个更新`}</Caption>
-              )}
+      <Touchable id={item.id} onPress={this.navigateBook(item)}>
+        <Row styleName={classNames({ dark })}>
+          <Image
+            styleName="rounded-corners"
+            style={{ width: 80, height: 110 }}
+            source={{ uri: item.coverImg }}
+          />
+          <View styleName="vertical stretch space-between">
+            <View>
+              <Title styleName={classNames('bold', { dark })}>
+                {item.title}
+              </Title>
+              <Subtitle>{item.author}</Subtitle>
             </View>
-            {item.isFetching ? (
-              <Button styleName="right-icon">
-                <Spinner />
-              </Button>
-            ) : (
-              <Icon styleName="disclosure" name="right-arrow" />
-            )}
-          </Row>
-        </Touchable>
-        <Divider styleName="line" />
-      </View>
+            <View styleName="vertical v-end">
+              <Caption styleName={classNames('bold', { dark })}>
+                最新章节
+              </Caption>
+              <Caption styleName={classNames({ dark })} numberOfLines={1}>
+                {latestTitle}
+              </Caption>
+            </View>
+          </View>
+          {item.isFetching ? (
+            <Button styleName="right-icon">
+              <Spinner />
+            </Button>
+          ) : (
+            <Icon styleName="disclosure" name="right-arrow" />
+          )}
+        </Row>
+        <Divider styleName={classNames('line', { dark })} />
+      </Touchable>
     );
   };
 
@@ -77,7 +85,8 @@ class BookList extends Component {
   };
 }
 
-const mapStateToProps = ({ bookReducer }) => ({
+const mapStateToProps = ({ bookReducer, appReducer: { darkMode } }) => ({
+  darkMode,
   books: bookReducer.books
 });
 

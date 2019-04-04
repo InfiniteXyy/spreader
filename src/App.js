@@ -1,21 +1,23 @@
-import React, { Component } from 'react';
-import { applyMiddleware, createStore } from 'redux';
-import { connect, Provider } from 'react-redux';
-import thunk from 'redux-thunk';
-import { persistReducer, persistStore } from 'redux-persist';
-import { PersistGate } from 'redux-persist/integration/react';
+import React, { Component } from 'react'
+import { applyMiddleware, createStore } from 'redux'
+import { connect, Provider } from 'react-redux'
+import thunk from 'redux-thunk'
+import { persistReducer, persistStore } from 'redux-persist'
+import { PersistGate } from 'redux-persist/integration/react'
 
-import storage from 'redux-persist/lib/storage';
+import storage from 'redux-persist/lib/storage'
 
-import { StatusBar, View } from 'react-native';
-import { createAppContainer, createStackNavigator } from 'react-navigation';
+import { StatusBar } from 'react-native'
+import { createAppContainer, createStackNavigator } from 'react-navigation'
 
-import reducers from './reducers';
+import reducers from './reducers'
 
-import Home from './screens/Home';
-import Chapter from './screens/Reader';
-import ChapterList from './screens/ChapterList';
-import { ios } from './utils';
+import Home from './screens/Home'
+import Chapter from './screens/Reader'
+import ChapterList from './screens/ChapterList'
+import { StyleProvider } from '@shoutem/theme'
+import theme, { darkBg } from './theme'
+import { View } from '@shoutem/ui'
 
 export const ReaderThemes = require('../assets/data/themes.json');
 const AppNavigator = createStackNavigator(
@@ -32,9 +34,6 @@ const AppNavigator = createStackNavigator(
   {
     initialRouteName: 'Home',
     mode: 'card',
-    cardStyle: {
-      backgroundColor: 'white'
-    },
     defaultNavigationOptions: {
       headerStyle: {
         borderBottomColor: 'transparent',
@@ -56,32 +55,32 @@ const store = createStore(
 );
 const persistor = persistStore(store);
 
-class MyStatusBar extends React.Component {
+class Root extends React.Component {
   render() {
-    let { theme } = this.props;
+    let { dark } = this.props;
     return (
-      <StatusBar
-        backgroundColor={this.props.theme.root.backgroundColor}
-        barStyle={theme.mode === 'light' ? 'dark-content' : 'light-content'}
-      />
+      <View style={{ flex: 1 }}>
+        <StatusBar
+          backgroundColor={dark ? darkBg : '#fff'}
+          barStyle={dark ? 'light-content' : 'dark-content'}
+        />
+        <Spreader />
+      </View>
     );
   }
 }
 
-MyStatusBar = connect(({ appReducer }) => ({ theme: appReducer.theme }))(
-  MyStatusBar
-);
+Root = connect(({ appReducer }) => ({ dark: appReducer.darkMode }))(Root);
 export default class App extends Component {
   render() {
     return (
-      <Provider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
-          <MyStatusBar />
-          <View style={{ paddingTop: ios ? 20 : 0, flex: 1 }}>
-            <Spreader />
-          </View>
-        </PersistGate>
-      </Provider>
+      <StyleProvider style={theme}>
+        <Provider store={store}>
+          <PersistGate loading={null} persistor={persistor}>
+            <Root />
+          </PersistGate>
+        </Provider>
+      </StyleProvider>
     );
   }
 }

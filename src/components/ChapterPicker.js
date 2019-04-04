@@ -1,11 +1,14 @@
 import React from 'react';
 import Modal from 'react-native-modal';
+import { connect } from 'react-redux';
 import { Picker } from 'react-native';
 import { getPageTitle, ios, range } from '../utils';
 import { PAGE_LENGTH } from '../reducers/bookReducer';
-import { Icon, Text, Touchable, View } from '@shoutem/ui';
+import { Icon, Title, Touchable, View } from '@shoutem/ui';
+import classNames from 'classnames';
+import { darkBg, primaryText, primaryTextLight } from '../theme';
 
-export default class ChapterPicker extends React.Component {
+class ChapterPicker extends React.Component {
   state = {
     sectionOpen: false
   };
@@ -15,7 +18,7 @@ export default class ChapterPicker extends React.Component {
   };
 
   render() {
-    const { page, onPageChange, reversed, maxLength } = this.props;
+    const { page, onPageChange, reversed, maxLength, dark } = this.props;
     let modalProps = {
       isVisible: this.state.sectionOpen,
       backdropOpacity: 0.24,
@@ -37,28 +40,44 @@ export default class ChapterPicker extends React.Component {
         <View>
           <Touchable onPress={this.toggleSection(true)}>
             <View styleName="horizontal v-center">
-              <Text styleName="bold">
+              <Title
+                style={{ fontSize: 15, lineHeight: 18 }}
+                styleName={classNames('bold', { dark })}
+              >
                 {getPageTitle(page, PAGE_LENGTH, maxLength, reversed)}
-              </Text>
-              <Icon name="drop-down" style={styles.icon} />
+              </Title>
+              <Icon
+                styleName={classNames({ dark })}
+                name="drop-down"
+                style={styles.icon}
+              />
             </View>
           </Touchable>
           <Modal {...modalProps}>
-            <Picker
-              style={styles.picker}
-              selectedValue={page.toString()}
-              onValueChange={(itemValue, itemIndex) => onPageChange(itemValue)}
+            <View
+              style={{
+                ...styles.picker,
+                backgroundColor: dark ? darkBg : '#fff'
+              }}
             >
-              {data.map(i => {
-                return (
-                  <Picker.Item
-                    key={i.toString()}
-                    label={getPageTitle(i, PAGE_LENGTH, maxLength, reversed)}
-                    value={i.toString()}
-                  />
-                );
-              })}
-            </Picker>
+              <Picker
+                selectedValue={page.toString()}
+                onValueChange={(itemValue, itemIndex) =>
+                  onPageChange(itemValue)
+                }
+              >
+                {data.map(i => {
+                  return (
+                    <Picker.Item
+                      color={dark ? primaryTextLight : primaryText}
+                      key={i.toString()}
+                      label={getPageTitle(i, PAGE_LENGTH, maxLength, reversed)}
+                      value={i.toString()}
+                    />
+                  );
+                })}
+              </Picker>
+            </View>
           </Modal>
         </View>
       );
@@ -69,7 +88,10 @@ export default class ChapterPicker extends React.Component {
           <Picker
             ref={i => (this.picker = i)}
             prompt="目录"
-            style={styles.pickerAndroid}
+            style={{
+              ...styles.pickerAndroid,
+              backgroundColor: dark ? darkBg : '#fff'
+            }}
             mode="dropdown"
             selectedValue={page.toString()}
             onValueChange={(itemValue, itemIndex) => onPageChange(itemValue)}
@@ -77,6 +99,7 @@ export default class ChapterPicker extends React.Component {
             {data.map(i => {
               return (
                 <Picker.Item
+                  color={dark ? primaryTextLight : primaryText}
                   key={i.toString()}
                   label={getPageTitle(i, PAGE_LENGTH, maxLength, reversed)}
                   value={i.toString()}
@@ -90,15 +113,17 @@ export default class ChapterPicker extends React.Component {
   }
 }
 
+export default connect(({ appReducer: { darkMode } }) => ({ dark: darkMode }))(
+  ChapterPicker
+);
+
 const styles = {
   picker: {
-    backgroundColor: 'white',
     borderTopRightRadius: 8,
     borderTopLeftRadius: 8
   },
   pickerAndroid: {
     width: 200,
-    color: '#4a4a4a',
     backgroundColor: 'transparent'
   },
   icon: {

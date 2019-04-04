@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import {
   Button,
+  Caption,
   Divider,
-  Icon,
   Image,
   Row,
   Screen,
   Spinner,
+  Subtitle,
   Text,
+  Title,
   Touchable,
   View
 } from '@shoutem/ui';
@@ -16,6 +18,16 @@ import { connect } from 'react-redux';
 import { loadChapters, PAGE_LENGTH } from '../reducers/bookReducer';
 import { getPageRange } from '../utils';
 import ChapterPicker from '../components/ChapterPicker';
+import classNames from 'classnames';
+import AnimatedHeader from '../components/AnimatedHeader';
+import {
+  darkBg,
+  dividerColor,
+  dividerColorLight,
+  secondaryTextLight,
+  tintColor,
+  tintColorLight
+} from '../theme';
 
 const Stack = { key: '-1', title: '-1' };
 
@@ -30,34 +42,47 @@ function currentBook(books, bookId) {
 
 class ItemRow extends React.PureComponent {
   render() {
+    const { onPress, item, dark } = this.props;
     return (
-      <Touchable onPress={this.props.onPress}>
-        <Row style={styles.listItem}>
+      <Touchable onPress={onPress}>
+        <Row style={styles.listItem} styleName={classNames({ dark })}>
           <Text numberOfLines={1} style={styles.itemText}>
-            {this.props.item.title}
+            {item.title}
           </Text>
+          <Divider styleName="line" />
         </Row>
-        <Divider styleName="line" />
       </Touchable>
     );
   }
 }
 
-const Header = ({ book }) => {
+const Header = ({ book, dark }) => {
   return (
-    <View style={styles.headerContainer} styleName="horizontal v-start">
+    <View
+      styleName={classNames('horizontal', 'v-center', { dark })}
+      style={{ paddingLeft: 20, paddingBottom: 20 }}
+    >
       <Image style={styles.coverImg} source={{ uri: book.coverImg }} />
       <View styleName="space-between stretch">
         <View>
-          <Text style={styles.title} styleName="bold sm-gutter-bottom">
+          <Title style={styles.title} styleName={classNames({ dark })}>
             {book.title}
-          </Text>
-          <Text style={styles.subtitle}>{book.author}</Text>
+          </Title>
+          <Subtitle styleName={classNames({ dark })} style={styles.subtitle}>
+            {book.author}
+          </Subtitle>
         </View>
         {book.lastRead && (
           <View>
-            <Text styleName="bold sm-gutter-bottom">上次读到：</Text>
-            <Text style={{ color: '#007bbb' }}>{book.lastRead.title}</Text>
+            <Caption
+              style={styles.decoration}
+              styleName={classNames('bold', { dark })}
+            >
+              上次读到
+            </Caption>
+            <Caption style={styles.decoration} styleName={classNames({ dark })}>
+              {book.lastRead.title}
+            </Caption>
           </View>
         )}
       </View>
@@ -77,19 +102,12 @@ const MySpinner = connect(({ bookReducer }) => ({ books: bookReducer.books }))(
 );
 
 class ChapterList extends Component {
-  static navigationOptions = ({ navigation }) => {
-    return {
-      headerLeft: (
-        <Button styleName="clear" onPress={() => navigation.goBack()}>
-          <Icon name="left-arrow" />
-        </Button>
-      ),
-      headerRight: (
-        <Button styleName="clear">
-          <MySpinner id={navigation.getParam('bookId')} />
-        </Button>
-      )
-    };
+  static navigationOptions = {
+    header: null
+  };
+
+  onBack = () => {
+    this.props.navigation.goBack();
   };
 
   constructor(props) {
@@ -102,10 +120,9 @@ class ChapterList extends Component {
   }
 
   render() {
-    const { books, onLoad } = this.props;
-    const book = currentBook(books, this.bookId);
-    this.book = book;
-    const { chapters } = book;
+    const { books, onLoad, dark } = this.props;
+    this.book = currentBook(books, this.bookId);
+    const { chapters } = this.book;
     const { page, isReversed } = this.state;
     let data = [];
     if (chapters !== undefined) {
@@ -116,15 +133,27 @@ class ChapterList extends Component {
     }
 
     return (
-      <Screen styleName="">
+      <Screen styleName={classNames({ dark })}>
         <FlatList
+          style={{ marginTop: 76 }}
           stickyHeaderIndices={[1]}
-          ListHeaderComponent={<Header book={book} />}
-          onRefresh={onLoad(book)}
+          ListHeaderComponent={<Header book={this.book} dark={dark} />}
+          onRefresh={onLoad(this.book)}
           refreshing={false}
           data={data}
           renderItem={this.renderRow}
           getItemLayout={this.getItemLayout}
+        />
+        <AnimatedHeader
+          visible={true}
+          goBack={this.onBack}
+          rightComponent={
+            <Button styleName="clear">
+              <MySpinner id={this.bookId} />
+            </Button>
+          }
+          bgColor={dark ? darkBg : '#fff'}
+          tintColor={dark ? tintColorLight : tintColor}
         />
       </Screen>
     );
@@ -132,9 +161,14 @@ class ChapterList extends Component {
 
   renderSection = () => {
     let length = this.book.chapters.length;
+    let dark = this.props.dark;
     return (
       <View
-        style={styles.section}
+        style={{
+          ...styles.section,
+          backgroundColor: dark ? darkBg : '#fff',
+          borderBottomColor: dark ? dividerColorLight : dividerColor
+        }}
         styleName="horizontal v-center space-between"
       >
         <ChapterPicker
@@ -145,11 +179,22 @@ class ChapterList extends Component {
         />
 
         <View styleName="horizontal v-center">
-          <Text style={{ color: '#9b9b9b' }}>{`共 ${length} 章`}</Text>
+          <Subtitle
+            style={{ fontSize: 15, lineHeight: 18 }}
+            styleName={classNames('small', { dark })}
+          >{`共 ${length} 章`}</Subtitle>
           <View styleName="md-gutter-left">
             <Touchable onPress={this.toggleReverse}>
-              <View style={styles.smButton}>
-                <Text style={{ color: 'white' }}>
+              <View
+                style={{
+                  ...styles.smButton,
+                  backgroundColor: dark ? '#656565' : '#cccccc'
+                }}
+              >
+                <Text
+                  styleName="bold"
+                  style={{ color: dark ? secondaryTextLight : '#fff' }}
+                >
                   {this.state.isReversed ? '逆序' : '顺序'}
                 </Text>
               </View>
@@ -164,7 +209,13 @@ class ChapterList extends Component {
     if (!item.href) {
       return this.renderSection();
     } else {
-      return <ItemRow item={item} onPress={this.navigateChapter(item)} />;
+      return (
+        <ItemRow
+          dark={this.props.dark}
+          item={item}
+          onPress={this.navigateChapter(item)}
+        />
+      );
     }
   };
 
@@ -197,8 +248,8 @@ class ChapterList extends Component {
 const styles = {
   listItem: {
     justifyContent: 'center',
-    backgroundColor: 'white',
     height: 50,
+    paddingVertical: 0,
     paddingHorizontal: 20
   },
   itemText: {
@@ -210,35 +261,29 @@ const styles = {
     borderRadius: 4,
     marginRight: 20
   },
-  headerContainer: {
-    backgroundColor: 'white',
-    padding: 20
-  },
   title: {
-    fontSize: 26,
-    fontWeight: 'bold',
-    color: '#4a4a4a'
+    lineHeight: 35,
+    fontSize: 26
   },
   subtitle: {
     fontSize: 18
   },
+  decoration: { fontSize: 14, lineHeight: 20 },
   section: {
-    backgroundColor: 'white',
     height: 36,
     paddingHorizontal: 20,
-    borderBottomWidth: 0.5,
-    borderBottomColor: '#eeeeee'
+    borderBottomWidth: 0.5
   },
   smButton: {
-    backgroundColor: '#cccccc',
     borderRadius: 5,
     paddingHorizontal: 5,
     paddingVertical: 3
   }
 };
 
-const mapStateToProps = ({ bookReducer }) => ({
-  books: bookReducer.books
+const mapStateToProps = ({ bookReducer, appReducer: { darkMode } }) => ({
+  books: bookReducer.books,
+  dark: darkMode
 });
 
 const mapDispatchToProps = dispatch => ({

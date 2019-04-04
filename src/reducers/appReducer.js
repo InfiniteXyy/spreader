@@ -1,4 +1,5 @@
 const SET_THEME = 'SET_THEME';
+const TOGGLE_MODE = 'TOGGLE_MODE';
 const ReaderThemes = require('../../assets/data/themes.json');
 
 export const ThemeNames = {
@@ -15,23 +16,24 @@ export function setTheme(themeName) {
   };
 }
 
-export function addNum() {
+export function toggleMode(isDark) {
   return {
-    type: 'NUM'
+    type: TOGGLE_MODE,
+    isDark
   };
 }
 
 const defaultState = {
   theme: ReaderThemes.theme1,
-  num: 0
+  darkMode: false
 };
 
 export default (state = defaultState, action) => {
   switch (action.type) {
     case SET_THEME:
       return { ...state, theme: ReaderThemes[action.themeName] };
-    case 'NUM':
-      return { ...state, num: state.num + 1 };
+    case TOGGLE_MODE:
+      return { ...state, darkMode: action.isDark };
     default:
       return state;
   }

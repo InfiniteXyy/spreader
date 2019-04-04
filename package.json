@@ -9,7 +9,10 @@
   },
   "dependencies": {
     "@shoutem/animation": "^0.12.3",
+    "@shoutem/theme": "^0.11.3",
     "@shoutem/ui": "^0.23.20",
+    "classnames": "^2.2.6",
+    "lodash.merge": "^4.6.1",
     "react": "^16.8.6",
     "react-native": "0.57.1",
     "react-native-cheerio": "^1.0.0-rc.4",

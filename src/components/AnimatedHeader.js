@@ -1,12 +1,15 @@
 import React from 'react';
 import { Button, Icon, View } from '@shoutem/ui';
 import { connect } from 'react-redux';
+import { Animated, ScrollView } from 'react-native';
 import { ios } from '../utils';
-import { Animated } from 'react-native';
 
 type Props = {
   goBack: Function,
-  openModal: Function
+  visible: boolean,
+  rightComponent: React.Component,
+  bgColor: string,
+  tintColor: string
 };
 class AnimatedHeader extends React.Component<Props> {
   state = {
@@ -25,28 +28,20 @@ class AnimatedHeader extends React.Component<Props> {
           <Button styleName="clear" onPress={this.onBack}>
             <Icon style={{ color: this.props.tintColor }} name="left-arrow" />
           </Button>
-          <Button styleName="clear" onPress={this.onOpen}>
-            <Icon style={{ color: this.props.tintColor }} name="settings" />
-          </Button>
+          {this.props.rightComponent}
         </View>
       </Animated.View>
     );
   }
 
   onBack = () => {
-    if (this.props.open) {
+    if (this.props.visible) {
       this.props.goBack();
     }
   };
 
-  onOpen = () => {
-    if (this.props.open) {
-      this.props.openModal();
-    }
-  };
-
   componentWillReceiveProps(nextProps) {
-    if (nextProps.open) {
+    if (nextProps.visible) {
       this.toggleOpacity(true);
     } else {
       this.toggleOpacity(false);
@@ -74,13 +69,10 @@ const styles = {
     position: 'absolute',
     paddingTop: 16,
     paddingBottom: 16,
-    top: 0,
+    top: ios ? 20 : 0,
     left: 0,
     right: 0
   }
 };
-const mapStateToProps = ({ appReducer }) => ({
-  tintColor: appReducer.theme.content.color,
-  bgColor: appReducer.theme.root.backgroundColor
-});
-export default connect(mapStateToProps)(AnimatedHeader);
+
+export default AnimatedHeader;

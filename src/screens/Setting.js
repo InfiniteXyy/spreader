@@ -1,25 +1,33 @@
 import React from 'react';
-import { Button, View, Text } from 'react-native';
+import { Screen, Button, Text, View } from '@shoutem/ui';
 import { connect } from 'react-redux';
-import { addNum } from '../reducers/appReducer';
+import { toggleMode } from '../reducers/appReducer';
+import classNames from 'classnames';
 
 class Setting extends React.Component {
   render() {
     return (
-      <View style={{ marginTop: 30 }}>
-        <Text style={{ fontSize: 100 }}>{this.props.num}</Text>
-        <Button title="click" onPress={this.props.add} />
-      </View>
+      <Screen styleName={classNames({ dark: this.props.darkMode })}>
+        <View styleName="vertical v-center h-center fill-parent">
+          <Button
+            styleName={this.props.darkMode ? 'default' : 'secondary'}
+            onPress={this.props.toggle(!this.props.darkMode)}
+            style={{ width: 100 }}
+          >
+            <Text>{this.props.darkMode ? 'dark' : 'light'}</Text>
+          </Button>
+        </View>
+      </Screen>
     );
   }
 }
 
 const mapStateToProps = ({ appReducer }) => ({
-  num: appReducer.num
+  darkMode: appReducer.darkMode
 });
 
 const mapDispatchToProps = dispatch => ({
-  add: () => dispatch(addNum())
+  toggle: darkMode => () => dispatch(toggleMode(darkMode))
 });
 
 export default connect(

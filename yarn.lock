@@ -799,7 +799,7 @@
     hoist-non-react-statics "^1.2.0"
     lodash "~4.17.4"
 
-"@shoutem/theme@~0.11.3":
+"@shoutem/theme@^0.11.3", "@shoutem/theme@~0.11.3":
   version "0.11.3"
   resolved "https://registry.yarnpkg.com/@shoutem/theme/-/theme-0.11.3.tgz#f90e2d4a3e13647c0d32b825aac5bcf1341bf609"
   integrity sha512-2soc/w0QYWjvm+vFOemSAuDpRAzBW/sTtNkkqwwZfz0VcNH78FWnUfyMOJetmr1aiulFoE87JYeyHlfOhxKbbw==
@@ -1995,6 +1995,11 @@ class-utils@^0.3.5:
     define-property "^0.2.5"
     isobject "^3.0.0"
     static-extend "^0.1.1"
+
+classnames@^2.2.6:
+  version "2.2.6"
+  resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.6.tgz#43935bffdd291f326dad0a205309b38d00f650ce"
+  integrity sha512-JR/iSQOSt+LQIWwrwEzJ9uk0xfN3mTVYMwt1Ir5mUcSN6pU+V4zQFFaJsclJbPuAUQH+yfWef6tm7l1quW3C8Q==
 
 cli-cursor@^2.1.0:
   version "2.1.0"
@@ -4548,6 +4553,11 @@ locate-path@^3.0.0:
   dependencies:
     p-locate "^3.0.0"
     path-exists "^3.0.0"
+
+lodash.merge@^4.6.1:
+  version "4.6.1"
+  resolved "https://registry.yarnpkg.com/lodash.merge/-/lodash.merge-4.6.1.tgz#adc25d9cb99b9391c59624f379fbba60d7111d54"
+  integrity sha512-AOYza4+Hf5z1/0Hztxpm2/xiPZgi/cjMqdnKTUWTBSKchJlxXXuUSxCCl8rJlf4g6yww/j6mA8nC8Hw/EZWxKQ==
 
 lodash.pad@^4.1.0:
   version "4.5.1"
