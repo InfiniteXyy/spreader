@@ -19,7 +19,7 @@ import { connect } from 'react-redux';
 import { loadStore } from '../reducers/storeReducer';
 import { addBook, removeBook } from '../reducers/bookReducer';
 import HomeTitle from '../components/HomeTitle';
-import { ios } from '../utils';
+import { statusBarOffset } from '../utils';
 import classNames from 'classnames';
 import { primaryText, primaryTextLight } from '../theme';
 
@@ -101,7 +101,7 @@ class SpiderList extends React.Component {
     return (
       <Screen styleName={classNames({ dark: this.props.darkMode })}>
         <FlatList
-          style={{ marginTop: ios ? 20 : 0 }}
+          style={{ marginTop: statusBarOffset() }}
           ListHeaderComponent={
             <View>
               <HomeTitle title="书虫" />
@@ -110,6 +110,8 @@ class SpiderList extends React.Component {
                   underlineColorAndroid="transparent"
                   placeholder="搜索"
                   style={{
+                    paddingVertical: 0,
+                    height: 40,
                     backgroundColor: 'rgba(0,0,0,0.08)',
                     borderRadius: 4,
                     selectionColor: this.props.darkMode

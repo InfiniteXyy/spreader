@@ -1,4 +1,4 @@
-import { Platform } from 'react-native';
+import { Platform, Dimensions } from 'react-native';
 export function range(start, stop, step) {
   if (typeof stop == 'undefined') {
     stop = start;
@@ -52,3 +52,20 @@ export const getPageRange = (pageIndex, pageSize, maxLength) => {
 };
 
 export const ios = Platform.OS !== 'android';
+
+const X_WIDTH = 375;
+const X_HEIGHT = 812;
+
+const { height: D_HEIGHT, width: D_WIDTH } = Dimensions.get('window');
+
+const isIphoneX =
+  (D_HEIGHT === X_HEIGHT && D_WIDTH === X_WIDTH) ||
+  (D_HEIGHT === X_WIDTH && D_WIDTH === X_HEIGHT);
+
+export function statusBarOffset(offset = 0) {
+  if (ios) {
+    if (isIphoneX) return offset + 44;
+    return offset + 20;
+  }
+  return offset;
+}

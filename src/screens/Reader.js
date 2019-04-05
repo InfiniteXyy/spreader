@@ -8,19 +8,19 @@ import {
   Screen,
   Spinner,
   Text,
-  Touchable,
+  TouchableOpacity,
   View
 } from '@shoutem/ui';
 import { getContent } from '../spiders/SpiderPlatform';
 import Modal from 'react-native-modal';
 import { setTheme, ThemeNames } from '../reducers/appReducer';
 import AnimatedHeader from '../components/AnimatedHeader';
-import { ios } from '../utils';
+import { statusBarOffset } from '../utils';
 import { markAsRead } from '../reducers/bookReducer';
 
 class ReaderEditModal extends Component {
   render() {
-    const { handleColorTheme } = this.props;
+    const { handleColorTheme, dark } = this.props;
     let modalProps = {
       isVisible: this.props.open,
       backdropOpacity: 0.18,
@@ -38,6 +38,10 @@ class ReaderEditModal extends Component {
     };
     return (
       <Modal {...modalProps}>
+        <StatusBar
+          backgroundColor="rgba(0,0,0,0.18)"
+          barStyle={dark ? 'light-content' : 'dark-content'}
+        />
         <View style={styles.editModal}>
           <View styleName="horizontal">
             <Button styleName="full-width clear" onPress={() => {}}>
@@ -50,20 +54,20 @@ class ReaderEditModal extends Component {
           </View>
           <View style={styles.divider} />
           <View styleName="horizontal sm-gutter md-gutter-top md-gutter-bottom space-around">
-            <Touchable onPress={handleColorTheme(ThemeNames.white)}>
+            <TouchableOpacity onPress={handleColorTheme(ThemeNames.white)}>
               <View style={{ ...styles.oval, backgroundColor: 'white' }} />
-            </Touchable>
-            <Touchable onPress={handleColorTheme(ThemeNames.gray)}>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleColorTheme(ThemeNames.gray)}>
               <View style={{ ...styles.oval, backgroundColor: '#8E8E8E' }} />
-            </Touchable>
-            <Touchable onPress={handleColorTheme(ThemeNames.black)}>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleColorTheme(ThemeNames.black)}>
               <View style={{ ...styles.oval, backgroundColor: 'black' }} />
-            </Touchable>
-            <Touchable onPress={handleColorTheme(ThemeNames.yellow)}>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleColorTheme(ThemeNames.yellow)}>
               <View
                 style={{ ...styles.oval, backgroundColor: 'rgb(241,229,201)' }}
               />
-            </Touchable>
+            </TouchableOpacity>
           </View>
         </View>
       </Modal>
@@ -111,7 +115,7 @@ class Reader extends Component {
         />
         <Screen styleName="paper" style={{ ...styles.root, ...theme.root }}>
           <ScrollView
-            style={{ marginTop: ios ? 20 : 0 }}
+            style={{ marginTop: statusBarOffset() }}
             scrollEventThrottle={16}
             onScrollBeginDrag={this.onScrollBeginDrag}
             onScroll={this.handleScroll}
@@ -143,6 +147,7 @@ class Reader extends Component {
         />
 
         <ReaderEditModal
+          dark={theme.mode === 'dark'}
           open={this.state.modalOpen}
           onClose={this.toggleModal(false)}
           handleColorTheme={this.props.onSelectTheme}

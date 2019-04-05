@@ -1,23 +1,24 @@
-import React, { Component } from 'react'
-import { applyMiddleware, createStore } from 'redux'
-import { connect, Provider } from 'react-redux'
-import thunk from 'redux-thunk'
-import { persistReducer, persistStore } from 'redux-persist'
-import { PersistGate } from 'redux-persist/integration/react'
+import React, { Component } from 'react';
+import { applyMiddleware, createStore } from 'redux';
+import { connect, Provider } from 'react-redux';
+import thunk from 'redux-thunk';
+import { persistReducer, persistStore } from 'redux-persist';
+import { PersistGate } from 'redux-persist/integration/react';
 
-import storage from 'redux-persist/lib/storage'
+import storage from 'redux-persist/lib/storage';
 
-import { StatusBar } from 'react-native'
-import { createAppContainer, createStackNavigator } from 'react-navigation'
+import { StatusBar } from 'react-native';
+import { createAppContainer, createStackNavigator } from 'react-navigation';
 
-import reducers from './reducers'
+import reducers from './reducers';
 
-import Home from './screens/Home'
-import Chapter from './screens/Reader'
-import ChapterList from './screens/ChapterList'
-import { StyleProvider } from '@shoutem/theme'
-import theme, { darkBg } from './theme'
-import { View } from '@shoutem/ui'
+import Home from './screens/Home';
+import Chapter from './screens/Reader';
+import ChapterList from './screens/ChapterList';
+import { StyleProvider } from '@shoutem/theme';
+import theme, { darkBg } from './theme';
+import { View } from '@shoutem/ui';
+import { ios } from './utils';
 
 export const ReaderThemes = require('../assets/data/themes.json');
 const AppNavigator = createStackNavigator(
@@ -39,7 +40,8 @@ const AppNavigator = createStackNavigator(
         borderBottomColor: 'transparent',
         elevation: 0
       }
-    }
+    },
+    transparentCard: !ios
   }
 );
 

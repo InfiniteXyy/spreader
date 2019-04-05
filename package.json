@@ -19,6 +19,7 @@
     "react-native-gesture-handler": "1.0.12",
     "react-native-modal": "^9.0.0",
     "react-native-share": "^1.1.3",
+    "react-native-wheel-picker-android": "^2.0.5",
     "react-navigation": "^3.5.1",
     "react-redux": "^5.1.1",
     "redux": "^4.0.1",

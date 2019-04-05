@@ -4,7 +4,7 @@ import merge from 'lodash.merge';
 export const darkBg = '#202124';
 export const primaryText = '#4a4a4a';
 export const secondaryText = '#9b9b9b';
-export const primaryTextLight = '#fff';
+export const primaryTextLight = '#FFFFFF';
 export const secondaryTextLight = 'rgba(255,255,255,0.70)';
 export const tintColor = '#757575';
 export const tintColorLight = '#CACACA';
@@ -33,13 +33,16 @@ const myTheme = {
       backgroundColor: darkBg
     }
   },
-  'shoutem.ui.Caption': {
-    lineHeight: 17,
+  'shoutem.ui.Text': {
+    color: primaryText,
+    '.secondary': {
+      color: secondaryText
+    },
     '.dark': {
       color: secondaryTextLight
     },
     '.bold': {
-      fontWeight: 'bold'
+      fontWeight: '500'
     }
   },
   'shoutem.ui.Title': {

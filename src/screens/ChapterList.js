@@ -16,7 +16,7 @@ import {
 import { FlatList } from 'react-native';
 import { connect } from 'react-redux';
 import { loadChapters, PAGE_LENGTH } from '../reducers/bookReducer';
-import { getPageRange } from '../utils';
+import { getPageRange, statusBarOffset } from '../utils';
 import ChapterPicker from '../components/ChapterPicker';
 import classNames from 'classnames';
 import AnimatedHeader from '../components/AnimatedHeader';
@@ -74,15 +74,13 @@ const Header = ({ book, dark }) => {
         </View>
         {book.lastRead && (
           <View>
-            <Caption
-              style={styles.decoration}
-              styleName={classNames('bold', { dark })}
+            <Text
+              styleName={classNames({ dark })}
+              style={{ fontWeight: 'bold', marginBottom: 6 }}
             >
               上次读到
-            </Caption>
-            <Caption style={styles.decoration} styleName={classNames({ dark })}>
-              {book.lastRead.title}
-            </Caption>
+            </Text>
+            <Text style={{ color: 'tomato' }}>{book.lastRead.title}</Text>
           </View>
         )}
       </View>
@@ -135,7 +133,7 @@ class ChapterList extends Component {
     return (
       <Screen styleName={classNames({ dark })}>
         <FlatList
-          style={{ marginTop: 76 }}
+          style={{ marginTop: statusBarOffset(56) }}
           stickyHeaderIndices={[1]}
           ListHeaderComponent={<Header book={this.book} dark={dark} />}
           onRefresh={onLoad(this.book)}
@@ -176,13 +174,13 @@ class ChapterList extends Component {
           onPageChange={this.togglePage}
           maxLength={this.book.chapters.length}
           reversed={this.state.isReversed}
+          dark={dark}
         />
 
         <View styleName="horizontal v-center">
-          <Subtitle
-            style={{ fontSize: 15, lineHeight: 18 }}
-            styleName={classNames('small', { dark })}
-          >{`共 ${length} 章`}</Subtitle>
+          <Text
+            styleName={classNames('secondary', { dark })}
+          >{`共 ${length} 章`}</Text>
           <View styleName="md-gutter-left">
             <Touchable onPress={this.toggleReverse}>
               <View
@@ -268,7 +266,6 @@ const styles = {
   subtitle: {
     fontSize: 18
   },
-  decoration: { fontSize: 14, lineHeight: 20 },
   section: {
     height: 36,
     paddingHorizontal: 20,

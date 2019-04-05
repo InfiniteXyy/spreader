@@ -3,7 +3,6 @@ import classNames from 'classnames';
 import { connect } from 'react-redux';
 import {
   Button,
-  Text,
   Divider,
   Icon,
   Image,
@@ -11,15 +10,15 @@ import {
   Screen,
   Spinner,
   Subtitle,
+  Text,
   Title,
   Touchable,
-  View,
-  Caption
+  View
 } from '@shoutem/ui';
 import { ScrollView } from 'react-native';
 import { loadChapters } from '../reducers/bookReducer';
 import HomeTitle from '../components/HomeTitle';
-import { ios } from '../utils';
+import { statusBarOffset } from '../utils';
 
 class BookList extends Component {
   componentDidMount() {
@@ -29,7 +28,7 @@ class BookList extends Component {
   render() {
     return (
       <Screen styleName={classNames({ dark: this.props.darkMode })}>
-        <ScrollView style={{ marginTop: ios ? 20 : 0 }}>
+        <ScrollView style={{ marginTop: statusBarOffset() }}>
           <HomeTitle title="列表" />
           {this.props.books.map(book => this.renderRow(book))}
         </ScrollView>
@@ -59,12 +58,15 @@ class BookList extends Component {
               <Subtitle>{item.author}</Subtitle>
             </View>
             <View styleName="vertical v-end">
-              <Caption styleName={classNames('bold', { dark })}>
+              <Text
+                styleName={classNames('bold', { dark })}
+                style={{ marginBottom: 6 }}
+              >
                 最新章节
-              </Caption>
-              <Caption styleName={classNames({ dark })} numberOfLines={1}>
+              </Text>
+              <Text style={{ color: 'tomato' }} numberOfLines={1}>
                 {latestTitle}
-              </Caption>
+              </Text>
             </View>
           </View>
           {item.isFetching ? (

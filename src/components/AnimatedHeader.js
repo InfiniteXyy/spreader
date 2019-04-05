@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Icon, View } from '@shoutem/ui';
 import { connect } from 'react-redux';
 import { Animated, ScrollView } from 'react-native';
-import { ios } from '../utils';
+import { statusBarOffset } from '../utils';
 
 type Props = {
   goBack: Function,
@@ -69,7 +69,7 @@ const styles = {
     position: 'absolute',
     paddingTop: 16,
     paddingBottom: 16,
-    top: ios ? 20 : 0,
+    top: statusBarOffset(),
     left: 0,
     right: 0
   }

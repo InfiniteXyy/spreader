@@ -1,20 +1,76 @@
 import React from 'react';
 import Modal from 'react-native-modal';
 import { connect } from 'react-redux';
-import { Picker } from 'react-native';
+import { Picker, StatusBar } from 'react-native';
 import { getPageTitle, ios, range } from '../utils';
 import { PAGE_LENGTH } from '../reducers/bookReducer';
-import { Icon, Title, Touchable, View } from '@shoutem/ui';
+import { Icon, Spinner, Text, Touchable, View } from '@shoutem/ui';
 import classNames from 'classnames';
-import { darkBg, primaryText, primaryTextLight } from '../theme';
+import {
+  darkBg,
+  primaryText,
+  primaryTextLight,
+  secondaryText,
+  secondaryTextLight
+} from '../theme';
+import { WheelPicker } from 'react-native-wheel-picker-android';
 
 class ChapterPicker extends React.Component {
   state = {
-    sectionOpen: false
+    sectionOpen: false,
+    pickerShow: true
   };
+
+  constructor(props) {
+    super(props);
+    this.picker = <Spinner />;
+  }
 
   toggleSection = sectionOpen => () => {
     this.setState({ sectionOpen });
+  };
+
+  visualizePicker = (visible = true) => () => {
+    const { page, onPageChange, reversed, maxLength, dark } = this.props;
+
+    let pageCount = Math.ceil(maxLength / PAGE_LENGTH);
+
+    let data = reversed ? range(pageCount - 1, -1, -1) : range(0, pageCount);
+
+    if (ios) {
+      this.picker = (
+        <Picker
+          selectedValue={page.toString()}
+          onValueChange={(itemValue, itemIndex) => onPageChange(itemValue)}
+        >
+          {data.map(i => {
+            return (
+              <Picker.Item
+                color={dark ? primaryTextLight : primaryText}
+                key={i.toString()}
+                label={getPageTitle(i, PAGE_LENGTH, maxLength, reversed)}
+                value={i.toString()}
+              />
+            );
+          })}
+        </Picker>
+      );
+    } else {
+      this.picker = (
+        <WheelPicker
+          selectedItem={page}
+          data={data.map(i =>
+            getPageTitle(i, PAGE_LENGTH, maxLength, reversed)
+          )}
+          itemTextColor={dark ? secondaryTextLight : secondaryText}
+          selectedItemTextColor={dark ? primaryTextLight : primaryText}
+          indicatorWidth={0.5}
+          selectedItemTextSize={20}
+          onItemSelected={itemValue => onPageChange(itemValue)}
+        />
+      );
+    }
+    this.setState({ pickerShow: true });
   };
 
   render() {
@@ -29,87 +85,47 @@ class ChapterPicker extends React.Component {
         flex: 1,
         margin: 0,
         justifyContent: 'flex-end'
-      }
+      },
+      useNativeDriver: true
     };
-    let pageCount = Math.ceil(maxLength / PAGE_LENGTH);
 
-    let data = reversed ? range(pageCount - 1, -1, -1) : range(0, pageCount);
+    let pickerStyle = {
+      justifyContent: 'center',
+      ...styles.picker,
+      backgroundColor: dark ? darkBg : '#fff'
+    };
 
-    if (ios) {
-      return (
-        <View>
-          <Touchable onPress={this.toggleSection(true)}>
-            <View styleName="horizontal v-center">
-              <Title
-                style={{ fontSize: 15, lineHeight: 18 }}
-                styleName={classNames('bold', { dark })}
-              >
-                {getPageTitle(page, PAGE_LENGTH, maxLength, reversed)}
-              </Title>
-              <Icon
-                styleName={classNames({ dark })}
-                name="drop-down"
-                style={styles.icon}
-              />
-            </View>
-          </Touchable>
-          <Modal {...modalProps}>
-            <View
-              style={{
-                ...styles.picker,
-                backgroundColor: dark ? darkBg : '#fff'
-              }}
-            >
-              <Picker
-                selectedValue={page.toString()}
-                onValueChange={(itemValue, itemIndex) =>
-                  onPageChange(itemValue)
-                }
-              >
-                {data.map(i => {
-                  return (
-                    <Picker.Item
-                      color={dark ? primaryTextLight : primaryText}
-                      key={i.toString()}
-                      label={getPageTitle(i, PAGE_LENGTH, maxLength, reversed)}
-                      value={i.toString()}
-                    />
-                  );
-                })}
-              </Picker>
-            </View>
-          </Modal>
-        </View>
-      );
-    } else {
-      return (
-        <View styleName="horizontal v-center">
-          <Icon name="drop-down" style={styles.icon} />
-          <Picker
-            ref={i => (this.picker = i)}
-            prompt="目录"
-            style={{
-              ...styles.pickerAndroid,
-              backgroundColor: dark ? darkBg : '#fff'
-            }}
-            mode="dropdown"
-            selectedValue={page.toString()}
-            onValueChange={(itemValue, itemIndex) => onPageChange(itemValue)}
-          >
-            {data.map(i => {
-              return (
-                <Picker.Item
-                  color={dark ? primaryTextLight : primaryText}
-                  key={i.toString()}
-                  label={getPageTitle(i, PAGE_LENGTH, maxLength, reversed)}
-                  value={i.toString()}
-                />
-              );
-            })}
-          </Picker>
-        </View>
-      );
-    }
+    if (!ios) pickerStyle.alignItems = 'center';
+
+    return (
+      <View>
+        <Touchable onPress={this.toggleSection(true)}>
+          <View styleName="horizontal v-center">
+            <Text styleName={classNames('bold', { dark })}>
+              {getPageTitle(page, PAGE_LENGTH, maxLength, reversed)}
+            </Text>
+            <Icon
+              styleName={classNames({ dark })}
+              name="drop-down"
+              style={styles.icon}
+            />
+          </View>
+        </Touchable>
+        <Modal
+          {...modalProps}
+          onModalShow={this.visualizePicker()}
+          onModalHide={this.visualizePicker(false)}
+        >
+          <StatusBar
+            backgroundColor="rgba(0,0,0,0.24)"
+            barStyle={dark ? 'light-content' : 'dark-content'}
+          />
+          <View style={pickerStyle}>
+            {this.state.pickerShow && this.picker}
+          </View>
+        </Modal>
+      </View>
+    );
   }
 }
 
@@ -119,12 +135,9 @@ export default connect(({ appReducer: { darkMode } }) => ({ dark: darkMode }))(
 
 const styles = {
   picker: {
-    borderTopRightRadius: 8,
-    borderTopLeftRadius: 8
-  },
-  pickerAndroid: {
-    width: 200,
-    backgroundColor: 'transparent'
+    height: 200,
+    borderTopRightRadius: 16,
+    borderTopLeftRadius: 16
   },
   icon: {
     color: '#757575',

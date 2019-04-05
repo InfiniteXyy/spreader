@@ -1,6 +1,7 @@
 {
   "theme1": {
     "mode": "light",
+    "display": "#dddddd",
     "root": {
       "backgroundColor": "white"
     },
@@ -12,19 +13,21 @@
     }
   },
   "theme2": {
-    "mode": "light",
+    "mode": "dark",
+    "display": "gray",
     "root": {
-      "backgroundColor": "#eeeeee"
+      "backgroundColor": "#202124"
     },
     "title": {
-      "color": "#4a4a4a"
+      "color": "rgba(255,255,255,0.70)"
     },
     "content": {
-      "color": "black"
+      "color": "#FFFFFF"
     }
   },
   "theme3": {
     "mode": "dark",
+    "display": "#4a4a4a",
     "root": {
       "backgroundColor": "black"
     },
@@ -37,6 +40,7 @@
   },
   "theme4": {
     "mode": "light",
+    "display": "rgb(241,229,201)",
     "root": {
       "backgroundColor": "rgb(241,229,201)"
     },

@@ -25,13 +25,18 @@ export function toggleMode(isDark) {
 
 const defaultState = {
   theme: ReaderThemes.theme1,
-  darkMode: false
+  darkMode: false,
+  themeName: ThemeNames.white
 };
 
 export default (state = defaultState, action) => {
   switch (action.type) {
     case SET_THEME:
-      return { ...state, theme: ReaderThemes[action.themeName] };
+      return {
+        ...state,
+        theme: ReaderThemes[action.themeName],
+        themeName: action.themeName
+      };
     case TOGGLE_MODE:
       return { ...state, darkMode: action.isDark };
     default:
