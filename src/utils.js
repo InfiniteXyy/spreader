@@ -1,4 +1,5 @@
-import { Platform, Dimensions } from 'react-native';
+import { Dimensions, Platform } from 'react-native'
+
 export function range(start, stop, step) {
   if (typeof stop == 'undefined') {
     stop = start;

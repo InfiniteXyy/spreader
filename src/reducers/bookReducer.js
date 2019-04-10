@@ -7,6 +7,7 @@ const UPDATE_CHAPTERS = 'UPDATE_CHAPTERS';
 const MARK_READ = 'MARK_READ';
 const ADD_BOOK = 'ADD_BOOK';
 const REMOVE_BOOK = 'REMOVE_BOOK';
+const TOGGLE_BOOK_MENU_INDEX = 'TOGGLE_BOOK_MENU_INDEX';
 
 export function loadChapters(book) {
   return async dispatch => {
@@ -52,6 +53,15 @@ export function removeBook(bookId) {
   };
 }
 
+export function togglePage(bookId, reverse, page) {
+  return {
+    type: TOGGLE_BOOK_MENU_INDEX,
+    reverse,
+    page,
+    bookId
+  };
+}
+
 const defaultState = {
   books: []
 };
@@ -84,12 +94,17 @@ export default (state = defaultState, action) => {
       // 章节加载完成
       let books = state.books.map(i => {
         let originLength = i.chapters ? i.chapters.length : 0;
+        let chapters = action.payload.chapters.map((i, index) => {
+          if (index >= originLength) {
+            return { ...i, isNew: true };
+          }
+          return i;
+        });
         if (action.payload.id === i.id) {
           return {
             ...i,
             isFetching: false,
-            chapters: action.payload.chapters,
-            updatedNum: action.payload.chapters.length - originLength
+            chapters: chapters
           };
         }
         return i;
@@ -107,6 +122,17 @@ export default (state = defaultState, action) => {
             };
           }
           return i;
+        })
+      };
+    case TOGGLE_BOOK_MENU_INDEX:
+      // 设置上次阅读到的页面
+      return {
+        ...state,
+        books: state.books.map(book => {
+          if (book.id !== action.bookId) {
+            return book;
+          }
+          return { ...book, page: action.page, reverse: action.reverse };
         })
       };
     default:

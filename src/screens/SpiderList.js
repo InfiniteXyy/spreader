@@ -3,18 +3,16 @@ import React from 'react';
 import {
   GridRow,
   Icon,
-  Image,
   ImageBackground,
   Overlay,
   Screen,
   Subtitle,
-  Text,
   TextInput,
   Title,
   TouchableOpacity,
   View
 } from '@shoutem/ui';
-import { FlatList, ScrollView } from 'react-native';
+import { FlatList } from 'react-native';
 import { connect } from 'react-redux';
 import { loadStore } from '../reducers/storeReducer';
 import { addBook, removeBook } from '../reducers/bookReducer';
@@ -98,13 +96,21 @@ class SpiderList extends React.Component {
   };
 
   render() {
+    let dark = this.props.darkMode;
     return (
       <Screen styleName={classNames({ dark: this.props.darkMode })}>
         <FlatList
           style={{ marginTop: statusBarOffset() }}
           ListHeaderComponent={
             <View>
-              <HomeTitle title="书虫" />
+              <HomeTitle
+                title="书虫"
+                right={
+                  <TouchableOpacity>
+                    <Icon name="settings" styleName={classNames({ dark })} />
+                  </TouchableOpacity>
+                }
+              />
               <View style={{ paddingHorizontal: 20 }}>
                 <TextInput
                   underlineColorAndroid="transparent"

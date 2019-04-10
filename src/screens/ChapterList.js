@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import {
   Button,
-  Caption,
   Divider,
   Image,
   Row,
@@ -15,7 +14,7 @@ import {
 } from '@shoutem/ui';
 import { FlatList } from 'react-native';
 import { connect } from 'react-redux';
-import { loadChapters, PAGE_LENGTH } from '../reducers/bookReducer';
+import { loadChapters, PAGE_LENGTH, togglePage } from '../reducers/bookReducer';
 import { getPageRange, statusBarOffset } from '../utils';
 import ChapterPicker from '../components/ChapterPicker';
 import classNames from 'classnames';
@@ -24,6 +23,7 @@ import {
   darkBg,
   dividerColor,
   dividerColorLight,
+  secondaryText,
   secondaryTextLight,
   tintColor,
   tintColorLight
@@ -46,6 +46,14 @@ class ItemRow extends React.PureComponent {
     return (
       <Touchable onPress={onPress}>
         <Row style={styles.listItem} styleName={classNames({ dark })}>
+          {item.isNew && (
+            <View
+              styleName="notification-dot"
+              style={{
+                backgroundColor: dark ? secondaryTextLight : secondaryText
+              }}
+            />
+          )}
           <Text numberOfLines={1} style={styles.itemText}>
             {item.title}
           </Text>
@@ -108,25 +116,28 @@ class ChapterList extends Component {
     this.props.navigation.goBack();
   };
 
+  getRealPage = pageIndex => {
+    if (!this.book.reverse) return pageIndex;
+    return Math.ceil(this.book.chapters.length / PAGE_LENGTH) - pageIndex - 1;
+  };
+
   constructor(props) {
     super(props);
     this.bookId = props.navigation.getParam('bookId');
-    this.state = {
-      isReversed: false,
-      page: 0
-    };
   }
 
   render() {
     const { books, onLoad, dark } = this.props;
     this.book = currentBook(books, this.bookId);
-    const { chapters } = this.book;
-    const { page, isReversed } = this.state;
+    const { chapters, reverse, page } = this.book;
+    let pageIndex = page;
+    if (page === undefined) pageIndex = 0;
     let data = [];
     if (chapters !== undefined) {
-      let [start, end] = getPageRange(page, PAGE_LENGTH, chapters.length);
+      let realPage = this.getRealPage(pageIndex);
+      let [start, end] = getPageRange(realPage, PAGE_LENGTH, chapters.length);
       data = chapters.slice(start, end);
-      if (isReversed) data.reverse();
+      if (reverse) data.reverse();
       data.unshift(Stack);
     }
 
@@ -160,6 +171,10 @@ class ChapterList extends Component {
   renderSection = () => {
     let length = this.book.chapters.length;
     let dark = this.props.dark;
+    let page = this.book.page;
+    let pageIndex = page;
+    if (page === undefined) pageIndex = 0;
+
     return (
       <View
         style={{
@@ -170,10 +185,10 @@ class ChapterList extends Component {
         styleName="horizontal v-center space-between"
       >
         <ChapterPicker
-          page={this.state.page}
+          page={this.getRealPage(pageIndex)}
           onPageChange={this.togglePage}
-          maxLength={this.book.chapters.length}
-          reversed={this.state.isReversed}
+          maxLength={length}
+          reversed={this.book.reverse}
           dark={dark}
         />
 
@@ -193,7 +208,7 @@ class ChapterList extends Component {
                   styleName="bold"
                   style={{ color: dark ? secondaryTextLight : '#fff' }}
                 >
-                  {this.state.isReversed ? '逆序' : '顺序'}
+                  {this.book.reverse ? '逆序' : '顺序'}
                 </Text>
               </View>
             </Touchable>
@@ -222,18 +237,12 @@ class ChapterList extends Component {
   };
 
   toggleReverse = () => {
-    let maxPage = Math.ceil(this.book.chapters.length / PAGE_LENGTH);
-    this.setState(prevState => {
-      const { isReversed } = prevState;
-      return {
-        ...prevState,
-        isReversed: !isReversed,
-        page: !isReversed ? maxPage - 1 : 0
-      };
-    });
+    this.props.togglePage(this.bookId, !this.book.reverse, 0);
   };
+
   togglePage = page => {
-    this.setState({ page });
+    let realPage = this.book.reverse ? this.getRealPage(page) : page;
+    this.props.togglePage(this.bookId, this.book.reverse, realPage);
   };
 
   getItemLayout = (data, index) => ({
@@ -284,7 +293,9 @@ const mapStateToProps = ({ bookReducer, appReducer: { darkMode } }) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onLoad: book => () => dispatch(loadChapters(book))
+  onLoad: book => () => dispatch(loadChapters(book)),
+  togglePage: (bookId, reverse, page) =>
+    dispatch(togglePage(bookId, reverse, page))
 });
 
 export default connect(

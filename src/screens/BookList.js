@@ -12,24 +12,47 @@ import {
   Subtitle,
   Text,
   Title,
-  Touchable,
+  TouchableOpacity,
   View
 } from '@shoutem/ui';
 import { ScrollView } from 'react-native';
 import { loadChapters } from '../reducers/bookReducer';
 import HomeTitle from '../components/HomeTitle';
 import { statusBarOffset } from '../utils';
+import { secondaryText, secondaryTextLight } from '../theme';
 
 class BookList extends Component {
   componentDidMount() {
-    this.props.books.forEach(this.props.onLoad);
+    this.refreshList();
   }
 
+  refreshList = () => {
+    this.props.books.forEach(this.props.onLoad);
+  };
+
   render() {
+    let dark = this.props.darkMode;
     return (
-      <Screen styleName={classNames({ dark: this.props.darkMode })}>
+      <Screen styleName={classNames({ dark })}>
         <ScrollView style={{ marginTop: statusBarOffset() }}>
-          <HomeTitle title="列表" />
+          <HomeTitle
+            title="列表"
+            right={
+              <TouchableOpacity onPress={this.refreshList}>
+                <View styleName="horizontal v-center">
+                  <Icon
+                    name="refresh"
+                    style={{
+                      fontSize: 16,
+                      marginRight: 4,
+                      color: dark ? secondaryTextLight : secondaryText
+                    }}
+                  />
+                  <Text styleName={classNames({ dark })}>刷新</Text>
+                </View>
+              </TouchableOpacity>
+            }
+          />
           {this.props.books.map(book => this.renderRow(book))}
         </ScrollView>
       </Screen>
@@ -43,7 +66,7 @@ class BookList extends Component {
     }
     let dark = this.props.darkMode;
     return (
-      <Touchable id={item.id} onPress={this.navigateBook(item)}>
+      <TouchableOpacity key={item.id} onPress={this.navigateBook(item)}>
         <Row styleName={classNames({ dark })}>
           <Image
             styleName="rounded-corners"
@@ -78,7 +101,7 @@ class BookList extends Component {
           )}
         </Row>
         <Divider styleName={classNames('line', { dark })} />
-      </Touchable>
+      </TouchableOpacity>
     );
   };
 

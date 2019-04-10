@@ -17,28 +17,23 @@ import { WheelPicker } from 'react-native-wheel-picker-android';
 
 class ChapterPicker extends React.Component {
   state = {
-    sectionOpen: false,
-    pickerShow: true
+    sectionOpen: false
   };
-
-  constructor(props) {
-    super(props);
-    this.picker = <Spinner />;
-  }
 
   toggleSection = sectionOpen => () => {
     this.setState({ sectionOpen });
   };
 
-  visualizePicker = (visible = true) => () => {
+  visualizePicker = () => {
     const { page, onPageChange, reversed, maxLength, dark } = this.props;
 
     let pageCount = Math.ceil(maxLength / PAGE_LENGTH);
 
     let data = reversed ? range(pageCount - 1, -1, -1) : range(0, pageCount);
 
+    console.log(page);
     if (ios) {
-      this.picker = (
+      return (
         <Picker
           selectedValue={page.toString()}
           onValueChange={(itemValue, itemIndex) => onPageChange(itemValue)}
@@ -56,7 +51,7 @@ class ChapterPicker extends React.Component {
         </Picker>
       );
     } else {
-      this.picker = (
+      return (
         <WheelPicker
           selectedItem={page}
           data={data.map(i =>
@@ -70,11 +65,10 @@ class ChapterPicker extends React.Component {
         />
       );
     }
-    this.setState({ pickerShow: true });
   };
 
   render() {
-    const { page, onPageChange, reversed, maxLength, dark } = this.props;
+    const { page, reversed, maxLength, dark } = this.props;
     let modalProps = {
       isVisible: this.state.sectionOpen,
       backdropOpacity: 0.24,
@@ -111,18 +105,12 @@ class ChapterPicker extends React.Component {
             />
           </View>
         </Touchable>
-        <Modal
-          {...modalProps}
-          onModalShow={this.visualizePicker()}
-          onModalHide={this.visualizePicker(false)}
-        >
+        <Modal {...modalProps}>
           <StatusBar
             backgroundColor="rgba(0,0,0,0.24)"
             barStyle={dark ? 'light-content' : 'dark-content'}
           />
-          <View style={pickerStyle}>
-            {this.state.pickerShow && this.picker}
-          </View>
+          <View style={pickerStyle}>{this.visualizePicker()}</View>
         </Modal>
       </View>
     );

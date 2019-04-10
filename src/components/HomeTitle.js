@@ -3,17 +3,23 @@ import { View, Text } from '@shoutem/ui';
 import { connect } from 'react-redux';
 
 type Props = {
-  title: string
+  title: string,
+  right: React.Component
 };
+
 class HomeTitle extends Component<Props> {
   render() {
     return (
-      <View style={styles.titleContainer}>
+      <View
+        style={styles.titleContainer}
+        styleName="horizontal v-center space-between"
+      >
         <Text
           style={{ ...styles.title, color: this.props.dark ? '#fff' : '#000' }}
         >
           {this.props.title}
         </Text>
+        {this.props.right || null}
       </View>
     );
   }
@@ -21,7 +27,7 @@ class HomeTitle extends Component<Props> {
 
 const styles = {
   titleContainer: {
-    marginLeft: 25,
+    marginHorizontal: 25,
     marginTop: 25,
     marginBottom: 20
   },
