@@ -99,7 +99,7 @@ const myTheme = {
           color: secondaryTextLight
         },
         borderWidth: 1,
-        borderColor: '#1d1d1d'
+        borderColor: '#0f0f0f'
       }
     }
   }

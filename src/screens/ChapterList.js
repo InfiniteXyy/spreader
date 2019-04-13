@@ -145,6 +145,10 @@ class ChapterList extends Component {
   readNext = () => {
     let last = this.book.lastRead;
     let hasFound = false;
+
+    if (last === undefined) {
+      hasFound = true;
+    }
     for (let i of this.book.chapters) {
       if (hasFound) {
         this.navigateChapter(i)();

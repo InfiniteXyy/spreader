@@ -1,14 +1,15 @@
-import { Image, Row, Switch, Text, Title, View } from '@shoutem/ui'
-import React from 'react'
-import { ScrollView } from 'react-native'
-import { connect } from 'react-redux'
-import { statusBarOffset } from '../utils'
-import AnimatedHeader from '../components/AnimatedHeader'
-import { darkBg, tintColor, tintColorLight } from '../theme'
-import { toggleStore } from '../reducers/storeReducer'
+import { Image, Row, Screen, Switch, Text, Title, View } from '@shoutem/ui';
+import React from 'react';
+import { ScrollView } from 'react-native';
+import { connect } from 'react-redux';
+import { statusBarOffset } from '../utils';
+import AnimatedHeader from '../components/AnimatedHeader';
+import { darkBg, tintColor, tintColorLight } from '../theme';
+import { toggleStore } from '../reducers/storeReducer';
+import classNames from 'classnames';
 
-const StoreRow = ({ store, toggleStore }) => (
-  <Row>
+const StoreRow = ({ store, toggleStore, dark }) => (
+  <Row styleName={classNames({ dark })}>
     <Image
       styleName="small rounded-corners"
       source={{
@@ -16,9 +17,11 @@ const StoreRow = ({ store, toggleStore }) => (
       }}
     />
     <View styleName="vertical stretch space-between">
-      <Title style={{ fontSize: 16 }}>{store.title}</Title>
+      <Title styleName={classNames({ dark })} style={{ fontSize: 16 }}>
+        {store.title}
+      </Title>
       <View styleName="horizontal space-between">
-        <Text style={{ fontSize: 12 }}>
+        <Text styleName={classNames({ dark })} style={{ fontSize: 12 }}>
           {store.spiders.length === 0
             ? `暂未读取`
             : `${store.spiders.length} 本小说`}
@@ -37,7 +40,7 @@ class AllStores extends React.Component {
   render() {
     let { dark } = this.props;
     return (
-      <View>
+      <Screen styleName={classNames({ dark: this.props.dark })}>
         <AnimatedHeader
           goBack={this.props.navigation.goBack}
           visible={true}
@@ -48,13 +51,14 @@ class AllStores extends React.Component {
         <ScrollView style={{ marginTop: statusBarOffset(56), height: '100%' }}>
           {this.props.stores.map((i, index) => (
             <StoreRow
+              dark={this.props.dark}
               store={i}
               key={index}
               toggleStore={this.props.toggleStore}
             />
           ))}
         </ScrollView>
-      </View>
+      </Screen>
     );
   }
 }
