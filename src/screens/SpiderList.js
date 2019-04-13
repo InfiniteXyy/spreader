@@ -33,6 +33,7 @@ function hasSpiderInList(books, key) {
 class SpiderList extends React.Component {
   componentDidMount() {
     for (let store of this.props.stores) {
+      if (!store.visible) continue;
       this.props.refreshStore(store);
     }
   }
@@ -46,6 +47,7 @@ class SpiderList extends React.Component {
   };
 
   renderStore = ({ item }) => {
+    if (!item.visible) return <View />;
     let dark = this.props.darkMode;
     const spiders = item.spiders.map((spider, id) => {
       let bookId = item.href + '/' + spider.key;
@@ -106,7 +108,9 @@ class SpiderList extends React.Component {
               <HomeTitle
                 title="书虫"
                 right={
-                  <TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => this.props.navigation.navigate('AllStores')}
+                  >
                     <Icon name="settings" styleName={classNames({ dark })} />
                   </TouchableOpacity>
                 }

@@ -24,7 +24,7 @@ class Setting extends React.Component {
       let name = ThemeNames[i];
       let selected = name === this.props.themeName;
       themes.push(
-        <TouchableOpacity onPress={handleColorTheme(name)}>
+        <TouchableOpacity key={i} onPress={handleColorTheme(name)}>
           <View
             style={{
               ...styles.oval,

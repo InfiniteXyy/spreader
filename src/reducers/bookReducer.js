@@ -1,4 +1,5 @@
 import { getList } from '../spiders/SpiderPlatform';
+import merge from 'lodash.merge';
 
 export const PAGE_LENGTH = 50;
 
@@ -8,6 +9,7 @@ const MARK_READ = 'MARK_READ';
 const ADD_BOOK = 'ADD_BOOK';
 const REMOVE_BOOK = 'REMOVE_BOOK';
 const TOGGLE_BOOK_MENU_INDEX = 'TOGGLE_BOOK_MENU_INDEX';
+const MARK_ALL_READ = 'MARK_ALL_READ';
 
 export function loadChapters(book) {
   return async dispatch => {
@@ -32,6 +34,13 @@ export function markAsRead(book, chapter) {
     type: MARK_READ,
     bookId: book.id,
     chapter
+  };
+}
+export function markAllRead(bookId) {
+  console.log(bookId);
+  return {
+    type: MARK_ALL_READ,
+    bookId: bookId
   };
 }
 
@@ -93,18 +102,11 @@ export default (state = defaultState, action) => {
     case UPDATE_CHAPTERS:
       // 章节加载完成
       let books = state.books.map(i => {
-        let originLength = i.chapters ? i.chapters.length : 0;
-        let chapters = action.payload.chapters.map((i, index) => {
-          if (index >= originLength) {
-            return { ...i, isNew: true };
-          }
-          return i;
-        });
         if (action.payload.id === i.id) {
           return {
             ...i,
             isFetching: false,
-            chapters: chapters
+            chapters: merge(action.payload.chapters, i.chapters)
           };
         }
         return i;
@@ -118,7 +120,13 @@ export default (state = defaultState, action) => {
           if (action.bookId === i.id) {
             return {
               ...i,
-              lastRead: { ...action.chapter }
+              lastRead: { ...action.chapter },
+              chapters: i.chapters.map(chapter => {
+                if (chapter.href === action.chapter.href) {
+                  return { ...chapter, hasRead: true };
+                }
+                return chapter;
+              })
             };
           }
           return i;
@@ -133,6 +141,23 @@ export default (state = defaultState, action) => {
             return book;
           }
           return { ...book, page: action.page, reverse: action.reverse };
+        })
+      };
+    case MARK_ALL_READ:
+      // 设置全部阅读
+      return {
+        ...state,
+        books: state.books.map(book => {
+          if (book.id !== action.bookId) {
+            return book;
+          }
+          return {
+            ...book,
+            chapters: book.chapters.map(chapter => ({
+              ...chapter,
+              hasRead: true
+            }))
+          };
         })
       };
     default:

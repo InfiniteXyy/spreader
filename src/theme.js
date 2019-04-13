@@ -77,6 +77,31 @@ const myTheme = {
         color: secondaryTextLight
       }
     }
+  },
+  'shoutem.ui.Button': {
+    '.small': {
+      paddingHorizontal: 8,
+      borderRadius: 4,
+      borderWidth: 1,
+      paddingVertical: 8,
+      marginLeft: 16,
+      borderColor: dividerColor,
+      backgroundColor: '#fafafa',
+      'shoutem.ui.Text': {
+        margin: 0,
+        fontWeight: '500',
+        fontSize: 13,
+        color: primaryText
+      },
+      '.dark': {
+        backgroundColor: '#1d1e21',
+        'shoutem.ui.Text': {
+          color: secondaryTextLight
+        },
+        borderWidth: 1,
+        borderColor: '#1d1d1d'
+      }
+    }
   }
 };
 

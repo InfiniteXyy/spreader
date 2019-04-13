@@ -1,7 +1,6 @@
 import React from 'react';
-import { Button, Icon, View } from '@shoutem/ui';
-import { connect } from 'react-redux';
-import { Animated, ScrollView } from 'react-native';
+import { Button, Icon, View, Text } from '@shoutem/ui';
+import { Animated } from 'react-native';
 import { statusBarOffset } from '../utils';
 
 type Props = {

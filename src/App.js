@@ -19,6 +19,8 @@ import { StyleProvider } from '@shoutem/theme';
 import theme, { darkBg } from './theme';
 import { View } from '@shoutem/ui';
 import { ios } from './utils';
+import FlashMessage from 'react-native-flash-message';
+import AllStores from './screens/AllStores';
 
 export const ReaderThemes = require('../assets/data/themes.json');
 const AppNavigator = createStackNavigator(
@@ -30,7 +32,13 @@ const AppNavigator = createStackNavigator(
       }
     },
     Book: ChapterList,
-    Chapter: Chapter
+    Chapter,
+    AllStores: {
+      screen: AllStores,
+      navigationOptions: {
+        header: null
+      }
+    }
   },
   {
     initialRouteName: 'Home',
@@ -67,6 +75,7 @@ class Root extends React.Component {
           barStyle={dark ? 'light-content' : 'dark-content'}
         />
         <Spreader />
+        <FlashMessage floating={true} />
       </View>
     );
   }

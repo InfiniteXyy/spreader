@@ -31,7 +31,6 @@ class ChapterPicker extends React.Component {
 
     let data = reversed ? range(pageCount - 1, -1, -1) : range(0, pageCount);
 
-    console.log(page);
     if (ios) {
       return (
         <Picker
@@ -53,7 +52,7 @@ class ChapterPicker extends React.Component {
     } else {
       return (
         <WheelPicker
-          selectedItem={page}
+          selectedItem={reversed ? pageCount - page - 1 : page}
           data={data.map(i =>
             getPageTitle(i, PAGE_LENGTH, maxLength, reversed)
           )}
@@ -61,7 +60,9 @@ class ChapterPicker extends React.Component {
           selectedItemTextColor={dark ? primaryTextLight : primaryText}
           indicatorWidth={0.5}
           selectedItemTextSize={20}
-          onItemSelected={itemValue => onPageChange(itemValue)}
+          onItemSelected={itemValue =>
+            onPageChange(reversed ? pageCount - itemValue - 1 : itemValue)
+          }
         />
       );
     }

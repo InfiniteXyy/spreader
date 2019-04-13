@@ -14,11 +14,18 @@ import {
 } from '@shoutem/ui';
 import { FlatList } from 'react-native';
 import { connect } from 'react-redux';
-import { loadChapters, PAGE_LENGTH, togglePage } from '../reducers/bookReducer';
+import {
+  loadChapters,
+  markAllRead,
+  PAGE_LENGTH,
+  togglePage
+} from '../reducers/bookReducer';
 import { getPageRange, statusBarOffset } from '../utils';
 import ChapterPicker from '../components/ChapterPicker';
 import classNames from 'classnames';
 import AnimatedHeader from '../components/AnimatedHeader';
+import { showMessage } from 'react-native-flash-message';
+
 import {
   darkBg,
   dividerColor,
@@ -46,7 +53,7 @@ class ItemRow extends React.PureComponent {
     return (
       <Touchable onPress={onPress}>
         <Row style={styles.listItem} styleName={classNames({ dark })}>
-          {item.isNew && (
+          {item.hasRead || (
             <View
               styleName="notification-dot"
               style={{
@@ -64,33 +71,47 @@ class ItemRow extends React.PureComponent {
   }
 }
 
-const Header = ({ book, dark }) => {
+const Header = props => {
+  let { book, dark, markAllRead, readNext } = props;
   return (
-    <View
-      styleName={classNames('horizontal', 'v-center', { dark })}
-      style={{ paddingLeft: 20, paddingBottom: 20 }}
-    >
-      <Image style={styles.coverImg} source={{ uri: book.coverImg }} />
-      <View styleName="space-between stretch">
-        <View>
-          <Title style={styles.title} styleName={classNames({ dark })}>
-            {book.title}
-          </Title>
-          <Subtitle styleName={classNames({ dark })} style={styles.subtitle}>
-            {book.author}
-          </Subtitle>
-        </View>
-        {book.lastRead && (
+    <View>
+      <View
+        styleName={classNames('horizontal', 'v-center', { dark })}
+        style={{ paddingLeft: 20, paddingBottom: 20 }}
+      >
+        <Image style={styles.coverImg} source={{ uri: book.coverImg }} />
+        <View styleName="space-between stretch">
           <View>
-            <Text
-              styleName={classNames({ dark })}
-              style={{ fontWeight: 'bold', marginBottom: 6 }}
-            >
-              上次读到
-            </Text>
-            <Text style={{ color: 'tomato' }}>{book.lastRead.title}</Text>
+            <Title style={styles.title} styleName={classNames({ dark })}>
+              {book.title}
+            </Title>
+            <Subtitle styleName={classNames({ dark })} style={styles.subtitle}>
+              {book.author}
+            </Subtitle>
           </View>
-        )}
+          {book.lastRead && (
+            <View>
+              <Text
+                styleName={classNames({ dark })}
+                style={{ fontWeight: 'bold', marginBottom: 6 }}
+              >
+                上次读到
+              </Text>
+              <Text style={{ color: 'tomato' }}>{book.lastRead.title}</Text>
+            </View>
+          )}
+        </View>
+      </View>
+      <View
+        styleName={classNames('horizontal', 'v-center', { dark })}
+        style={{ marginBottom: 10 }}
+      >
+        <Button styleName={classNames('small', { dark })} onPress={readNext}>
+          <Text>继续阅读</Text>
+        </Button>
+        <Button styleName={classNames('small', { dark })} onPress={markAllRead}>
+          <Text>全部已读</Text>
+        </Button>
       </View>
     </View>
   );
@@ -121,6 +142,20 @@ class ChapterList extends Component {
     return Math.ceil(this.book.chapters.length / PAGE_LENGTH) - pageIndex - 1;
   };
 
+  readNext = () => {
+    let last = this.book.lastRead;
+    let hasFound = false;
+    for (let i of this.book.chapters) {
+      if (hasFound) {
+        this.navigateChapter(i)();
+        return;
+      }
+      if (i.href === last.href) {
+        hasFound = true;
+      }
+    }
+    showMessage({ message: '没有新的章节了', type: 'default', icon: 'info' });
+  };
   constructor(props) {
     super(props);
     this.bookId = props.navigation.getParam('bookId');
@@ -146,7 +181,14 @@ class ChapterList extends Component {
         <FlatList
           style={{ marginTop: statusBarOffset(56) }}
           stickyHeaderIndices={[1]}
-          ListHeaderComponent={<Header book={this.book} dark={dark} />}
+          ListHeaderComponent={
+            <Header
+              book={this.book}
+              dark={dark}
+              markAllRead={this.props.markAllRead(this.bookId)}
+              readNext={this.readNext}
+            />
+          }
           onRefresh={onLoad(this.book)}
           refreshing={false}
           data={data}
@@ -295,7 +337,8 @@ const mapStateToProps = ({ bookReducer, appReducer: { darkMode } }) => ({
 const mapDispatchToProps = dispatch => ({
   onLoad: book => () => dispatch(loadChapters(book)),
   togglePage: (bookId, reverse, page) =>
-    dispatch(togglePage(bookId, reverse, page))
+    dispatch(togglePage(bookId, reverse, page)),
+  markAllRead: bookId => () => dispatch(markAllRead(bookId))
 });
 
 export default connect(
