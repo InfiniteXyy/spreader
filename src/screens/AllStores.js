@@ -1,4 +1,13 @@
-import { Image, Row, Screen, Switch, Text, Title, View } from '@shoutem/ui';
+import {
+  Image,
+  Row,
+  Screen,
+  Switch,
+  Text,
+  Title,
+  View,
+  Divider
+} from '@shoutem/ui';
 import React from 'react';
 import { ScrollView } from 'react-native';
 import { connect } from 'react-redux';
@@ -33,6 +42,7 @@ const StoreRow = ({ store, toggleStore, dark }) => (
       onValueChange={value => toggleStore(store, value)}
       styleName="right-icon"
     />
+    <Divider styleName="line"> </Divider>
   </Row>
 );
 
