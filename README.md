@@ -14,11 +14,11 @@
 
 ### 截图
 
-![夜间模式主页](https://raw.githubusercontent.com/InfiniteXyy/spreader/master/screenshots/sc1.PNG)
-![主页](https://raw.githubusercontent.com/InfiniteXyy/spreader/master/screenshots/sc2.PNG)
-![夜间模式爬虫仓库](https://raw.githubusercontent.com/InfiniteXyy/spreader/master/screenshots/sc4.PNG)
-![爬虫仓库](https://raw.githubusercontent.com/InfiniteXyy/spreader/master/screenshots/sc3.PNG)
-![目录](https://raw.githubusercontent.com/InfiniteXyy/spreader/master/screenshots/sc5.PNG)
-![theme1](https://raw.githubusercontent.com/InfiniteXyy/spreader/master/screenshots/sc6.PNG)
-![theme2](https://raw.githubusercontent.com/InfiniteXyy/spreader/master/screenshots/sc7.PNG)
-![theme3](https://raw.githubusercontent.com/InfiniteXyy/spreader/master/screenshots/sc8.PNG)
+<img src="https://raw.githubusercontent.com/InfiniteXyy/spreader/master/screenshots/sc1.PNG" alt="夜间模式主页" width="250" style="margin: 10px; border: 1px solid #eaeaea"/>
+<img src="https://raw.githubusercontent.com/InfiniteXyy/spreader/master/screenshots/sc2.PNG" alt="主页" width="250" style="margin: 10px; border: 1px solid #eaeaea"/>
+<img src="https://raw.githubusercontent.com/InfiniteXyy/spreader/master/screenshots/sc4.PNG" alt="夜间模式爬虫仓库" width="250" style="margin: 10px; border: 1px solid #eaeaea"/>
+<img src="https://raw.githubusercontent.com/InfiniteXyy/spreader/master/screenshots/sc3.PNG" alt="爬虫仓库" width="250" style="margin: 10px; border: 1px solid #eaeaea"/>
+<img src="https://raw.githubusercontent.com/InfiniteXyy/spreader/master/screenshots/sc5.PNG" alt="目录" width="250" style="margin: 10px; border: 1px solid #eaeaea"/>
+<img src="https://raw.githubusercontent.com/InfiniteXyy/spreader/master/screenshots/sc6.PNG" alt="theme1" width="250" style="margin: 10px; border: 1px solid #eaeaea"/>
+<img src="https://raw.githubusercontent.com/InfiniteXyy/spreader/master/screenshots/sc7.PNG" alt="theme2" width="250" style="margin: 10px; border: 1px solid #eaeaea"/>
+<img src="https://raw.githubusercontent.com/InfiniteXyy/spreader/master/screenshots/sc8.PNG" alt="theme3" width="250" style="margin: 10px; border: 1px solid #eaeaea"/>
