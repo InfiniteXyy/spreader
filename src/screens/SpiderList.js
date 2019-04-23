@@ -7,8 +7,7 @@ import {
   Overlay,
   Screen,
   Subtitle,
-  TextInput,
-  Title,
+  Text,
   TouchableOpacity,
   View
 } from '@shoutem/ui';
@@ -19,7 +18,6 @@ import { addBook, removeBook } from '../reducers/bookReducer';
 import HomeTitle from '../components/HomeTitle';
 import { statusBarOffset } from '../utils';
 import classNames from 'classnames';
-import { primaryText, primaryTextLight } from '../theme';
 
 function hasSpiderInList(books, key) {
   for (let book of books) {
@@ -70,9 +68,9 @@ class SpiderList extends React.Component {
                   </Overlay>
                 )}
               </ImageBackground>
-              <Title styleName={classNames({ dark })} style={styles.bookName}>
+              <Text styleName={classNames({ dark })} style={styles.bookName}>
                 {spider.title}
-              </Title>
+              </Text>
               <Subtitle
                 styleName={classNames({ dark })}
                 style={styles.authorName}
@@ -87,9 +85,9 @@ class SpiderList extends React.Component {
 
     return (
       <View>
-        <Title styleName={classNames({ dark })} style={styles.storeName}>
+        <Text styleName={classNames({ dark })} style={styles.storeName}>
           {item.title}
-        </Title>
+        </Text>
         <GridRow columns={3} style={{ marginHorizontal: 4 }}>
           {spiders}
         </GridRow>
@@ -115,22 +113,6 @@ class SpiderList extends React.Component {
                   </TouchableOpacity>
                 }
               />
-              <View style={{ paddingHorizontal: 20 }}>
-                <TextInput
-                  underlineColorAndroid="transparent"
-                  placeholder="搜索"
-                  style={{
-                    paddingVertical: 0,
-                    height: 40,
-                    backgroundColor: 'rgba(0,0,0,0.08)',
-                    borderRadius: 4,
-                    selectionColor: this.props.darkMode
-                      ? primaryTextLight
-                      : primaryText,
-                    color: this.props.darkMode ? primaryTextLight : primaryText
-                  }}
-                />
-              </View>
             </View>
           }
           data={this.props.stores}
@@ -147,6 +129,7 @@ const styles = {
     width: 100
   },
   bookName: {
+    fontWeight: '500',
     marginTop: 6,
     fontSize: 14
   },
@@ -155,6 +138,8 @@ const styles = {
     fontSize: 12
   },
   storeName: {
+    fontSize: 20,
+    fontWeight: 'bold',
     marginLeft: 25,
     marginVertical: 20
   }

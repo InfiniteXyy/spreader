@@ -20,12 +20,22 @@ const defaultState = {
 export function loadStore(store) {
   return async dispatch => {
     let data = await agent.get(store.href);
-    data = JSON.parse(data);
-    dispatch({
-      type: UPDATE_SPIDERS,
-      data,
-      store
-    });
+    try {
+      data = JSON.parse(data);
+      dispatch({
+        type: UPDATE_SPIDERS,
+        data,
+        store
+      });
+    } catch (e) {}
+  };
+}
+
+export function addStore(store, storeHref) {
+  return {
+    type: ADD_STORE,
+    store,
+    storeHref
   };
 }
 
@@ -71,6 +81,17 @@ export default (state = defaultState, action) => {
           }
           return store;
         })
+      };
+    case ADD_STORE:
+      if (state.stores.filter(i => i.href === action.storeHref).length === 1) {
+        return state;
+      }
+      return {
+        ...state,
+        stores: [
+          ...state.stores,
+          { ...action.store, href: action.storeHref, visible: true }
+        ]
       };
     default:
       return state;

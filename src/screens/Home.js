@@ -1,12 +1,12 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { Icon, View } from '@shoutem/ui';
-import { createBottomTabNavigator, BottomTabBar } from 'react-navigation';
+import React from 'react'
+import { connect } from 'react-redux'
+import { Icon } from '@shoutem/ui'
+import { BottomTabBar, createBottomTabNavigator } from 'react-navigation'
 
-import Setting from './Setting';
-import SpiderList from './SpiderList';
-import BookList from './BookList';
-import { darkBg, dividerColor, dividerColorLight } from '../theme';
+import Setting from './Setting'
+import SpiderList from './SpiderList'
+import BookList from './BookList'
+import { darkBg, dividerColor, dividerColorLight } from '../theme'
 
 const mapStateToProps = ({ appReducer }) => ({ dark: appReducer.darkMode });
 const TabBarComponent = props => (
