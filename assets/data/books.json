@@ -42,7 +42,6 @@
         "getList": {
           "url": "http://longzu5.co/",
           "query": ".booklist li a",
-          "href_prefix": "http://longzu5.co/",
           "reverse": true
         },
         "getContent": {
