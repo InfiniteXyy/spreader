@@ -1,7 +1,7 @@
 import React from 'react';
 import { Chapter } from '../../model/Chapter';
-import { FlatList, TouchableOpacity } from 'react-native';
-import { Dot, HStack, Text } from '../../components';
+import { FlatList } from 'react-native';
+import { HStack, Text } from '../../components';
 import { SavedBook } from '../../model/Book';
 import { Banner } from './Banner';
 import { createPageItems } from '../../utils';
@@ -10,6 +10,7 @@ import { Dispatch } from 'redux';
 import { BookAction, BookChangeIndex, BookMarkAsRead } from '../../reducers/book/book.action';
 import { connect } from 'react-redux';
 import { NavigationInjectedProps, withNavigation } from 'react-navigation';
+import { ChapterListItemContainer, ChapterListItemDot } from './components';
 
 interface IChapterListProps {
   book: SavedBook;
@@ -64,12 +65,12 @@ function _ChapterList(props: IChapterListProps & IChapterListDispatchProps & Nav
 function ChapterItem(props: IChapterItemProps) {
   const { chapter, onPress } = props;
   return (
-    <TouchableOpacity onPress={onPress}>
+    <ChapterListItemContainer onPress={onPress}>
+      {chapter.hasRead || <ChapterListItemDot />}
       <HStack>
-        {chapter.hasRead || <Dot />}
         <Text numberOfLines={1}>{chapter.title}</Text>
       </HStack>
-    </TouchableOpacity>
+    </ChapterListItemContainer>
   );
 }
 
