@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Header, Text } from '../../components';
+import { Container, Header } from '../../components';
 import { connect } from 'react-redux';
 import { NavigationInjectedProps, withNavigation } from 'react-navigation';
 import { IState } from '../../reducers';
 import { SavedBook } from '../../model/Book';
 import { Chapter } from '../../model/Chapter';
 import { getContent } from '../../agents/spider';
-import { ScrollView } from 'react-native';
+import { ReaderContainer, StyledContent } from './components';
 
 interface IStateProps {
   book?: SavedBook;
@@ -21,24 +21,18 @@ function _Reader(props: NavigationInjectedProps & IStateProps) {
   }
 
   useEffect(() => {
-    async function fetch() {
-      if (book && chapter) {
-        const result = await getContent(chapter.href, book.methods.getContent);
-        setContents(result);
-      }
-    }
-    fetch().then();
-  }, []);
+    getContent(chapter.href, book.methods.getContent).then(result => {
+      setContents(result);
+    });
+  }, [chapter]);
 
   return (
     <Container>
-      <ScrollView>
+      <ReaderContainer>
         {contents.map((i, index) => (
-          <Text key={index} style={{}}>
-            {'        ' + i}
-          </Text>
+          <StyledContent key={index}>{'        ' + i}</StyledContent>
         ))}
-      </ScrollView>
+      </ReaderContainer>
       <Header visible={true} goBack={navigation.goBack} absolute />
     </Container>
   );

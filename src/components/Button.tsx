@@ -12,6 +12,7 @@ const FlatButtonWrapper = styled.TouchableOpacity`
   padding: 6px 10px;
   border: 0.5px solid ${props => props.theme.tintColor};
   background-color: ${props => props.theme.dividerColor};
+  margin-right: 10px;
 `;
 
 export function Button(props: IButtonProps) {

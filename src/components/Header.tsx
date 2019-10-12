@@ -3,6 +3,7 @@ import { Animated, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { HStack } from './index';
 import { ThemeContext } from 'styled-components';
+import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 
 interface IHeaderProps {
   goBack(): void;
@@ -43,13 +44,15 @@ function Header(props: IHeaderProps) {
 const styles = StyleSheet.create({
   absoluteHeader: {
     position: 'absolute',
-    top: 20,
+    top: 0,
     left: 0,
     right: 0,
+    paddingTop: getStatusBarHeight(true),
   },
   icon: {
-    fontSize: 16,
-    padding: 8,
+    fontSize: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
   },
 });
 

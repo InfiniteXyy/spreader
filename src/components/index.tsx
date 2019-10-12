@@ -23,13 +23,6 @@ export const HStack = styled.View<{ expand?: boolean }>`
   justify-content: ${props => (props.expand ? 'space-between' : 'flex-start')};
 `;
 
-export const Dot = styled.View`
-  height: 4px;
-  width: 4px;
-  background-color: ${props => props.theme.primaryColor};
-  border-radius: 4px;
-`;
-
 export { BottomBar } from './BottomBar';
 export { Text } from './Text';
 export { Header } from './Header';
