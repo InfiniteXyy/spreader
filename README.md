@@ -12,6 +12,19 @@
 - 自由设置自己的仓库
 - 跨平台支持
 
+
+
+### 技术栈
+
+- React (with hooks)
+- React Native
+- Redux
+- Redux-thunk
+- styled-components
+- cheerio
+
+
+
 ### 截图
 
 <p float="left">
