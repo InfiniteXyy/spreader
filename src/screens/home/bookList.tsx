@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { CardSubTitle, CardTitle, CardWrapper, CoverImg } from './components';
-import { View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { SavedBook } from '../../model/Book';
 import { getLastOf } from '../../utils';
 import { Chapter } from '../../model/Chapter';
@@ -15,12 +15,11 @@ export function BookList(props: IBookListProps) {
   const { onNavigate, books } = props;
 
   return (
-    <View>
-      <SearchBar />
+    <ScrollView>
       {books.map(i => (
         <BookItem book={i} key={i.key} onPress={onNavigate(i)} />
       ))}
-    </View>
+    </ScrollView>
   );
 }
 

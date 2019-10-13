@@ -32,7 +32,7 @@ function Header(props: IHeaderProps) {
   return (
     <Animated.View style={[absolute && styles.absoluteHeader, { opacity: opacityAnimate }]}>
       <HStack center expand style={{ paddingHorizontal: 20 }}>
-        <TouchableOpacity onPress={onBack}>
+        <TouchableOpacity onPress={onBack} style={styles.iconContainer}>
           <Icon name="ios-arrow-back" style={[styles.icon, { color: theme.tintColor }]} />
         </TouchableOpacity>
         {rightComponent}
@@ -52,7 +52,10 @@ const styles = StyleSheet.create({
   },
   icon: {
     fontSize: 20,
+  },
+  iconContainer: {
     paddingVertical: 10,
+    paddingRight: 10,
   },
 });
 

@@ -3,7 +3,7 @@ import { Text } from '../../components';
 import { colors } from '../../theme';
 
 export const BannerContainer = styled.View`
-  padding: 0 20px;
+  padding: 10px 20px 0 20px;
 `;
 
 export const BannerImg = styled.Image`
