@@ -14,7 +14,9 @@ export const CardTitle = styled(Text).attrs({
 export const CardSubTitle = styled(Text).attrs({
   secondary: true,
   variant: 'body',
-})``;
+})`
+  margin-top: 6px;
+`;
 
 export const CoverImg = styled.Image`
   width: 55px;
