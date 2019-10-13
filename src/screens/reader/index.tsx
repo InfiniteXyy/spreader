@@ -31,7 +31,7 @@ function _Reader(props: NavigationInjectedProps & IStateProps) {
   const [editorVisible, setEditorVisible] = useState(false);
   const theme = useContext(ThemeContext);
   const { book, chapter, navigation, readerStyle } = props;
-  const { lineHeight, titleAlign, bgColor, fontColor, fontSize, titleSize, paragraphSpace } = readerStyle;
+  const { lineHeightRatio, titleAlign, readerTheme, fontSize, titleSize, paragraphSpace } = readerStyle;
   if (!book || !chapter) {
     return <Container />;
   }
@@ -61,36 +61,36 @@ function _Reader(props: NavigationInjectedProps & IStateProps) {
 
   const textStyle = useMemo(
     () => ({
-      fontSize: readerStyle.fontSize,
-      lineHeight: readerStyle.lineHeight,
-      color: readerStyle.fontColor,
-      marginTop: readerStyle.paragraphSpace,
+      fontSize: fontSize,
+      lineHeight: Math.round(lineHeightRatio * fontSize),
+      color: readerTheme.fontColor,
+      marginTop: Math.round(paragraphSpace * fontSize),
     }),
-    [fontSize, lineHeight, fontColor, paragraphSpace],
+    [fontSize, lineHeightRatio, readerTheme.fontColor, paragraphSpace],
   );
 
   const titleStyle = useMemo<TextStyle>(
     () => ({
       fontSize: titleSize,
-      color: fontColor,
+      color: readerTheme.titleColor,
       marginTop: 50,
       marginBottom: 10,
       alignSelf: titleAlign,
       fontWeight: '500',
     }),
-    [titleSize, fontColor, titleAlign],
+    [titleSize, readerTheme.titleColor, titleAlign],
   );
 
   const backgroundStyle = useMemo(
     () => ({
-      backgroundColor: bgColor,
+      backgroundColor: readerTheme.bgColor,
     }),
-    [bgColor],
+    [readerTheme.bgColor],
   );
 
   return (
-    <Container>
-      <View style={backgroundStyle}>
+    <Container style={backgroundStyle}>
+      <View>
         <ReaderScroll
           scrollEnabled={!isLoading}
           onScroll={handleScroll}

@@ -1,26 +1,22 @@
 import { FlexAlignType } from 'react-native';
+import { DefaultReaderThemes, ReaderTheme } from '../../model/Theme';
 
 export type TitleAlign = FlexAlignType;
 
 export interface ReaderState {
   fontSize: number;
   titleSize: number;
-
   titleAlign: TitleAlign;
-  lineHeight: number;
-
+  lineHeightRatio: number;
   paragraphSpace: number;
-
-  fontColor: string;
-  bgColor: string;
+  readerTheme: ReaderTheme;
 }
 
 export const readerInitialState: ReaderState = {
-  bgColor: '#FFF',
-  fontColor: '#4a4a4a',
   fontSize: 18,
-  lineHeight: 34,
-  paragraphSpace: 12,
   titleAlign: 'flex-start',
   titleSize: 22,
+  lineHeightRatio: 1.8,
+  paragraphSpace: 0.7,
+  readerTheme: DefaultReaderThemes[0],
 };
