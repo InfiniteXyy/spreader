@@ -8,7 +8,7 @@ import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 interface IHeaderProps {
   goBack(): void;
   visible: boolean;
-  rightComponent?: React.Component;
+  rightComponent?: JSX.Element;
   absolute?: boolean;
 }
 
@@ -31,7 +31,7 @@ function Header(props: IHeaderProps) {
 
   return (
     <Animated.View style={[absolute && styles.absoluteHeader, { opacity: opacityAnimate }]}>
-      <HStack>
+      <HStack center expand style={{ paddingHorizontal: 20 }}>
         <TouchableOpacity onPress={onBack}>
           <Icon name="ios-arrow-back" style={[styles.icon, { color: theme.tintColor }]} />
         </TouchableOpacity>
@@ -51,7 +51,6 @@ const styles = StyleSheet.create({
   },
   icon: {
     fontSize: 20,
-    paddingHorizontal: 20,
     paddingVertical: 10,
   },
 });

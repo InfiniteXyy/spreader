@@ -38,3 +38,4 @@ export { Text } from './Text';
 export { Header } from './Header';
 export { Button } from './Button';
 export { SearchBar } from './SearchBar';
+export { Spinner } from './Spinner';

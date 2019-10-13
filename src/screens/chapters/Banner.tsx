@@ -2,7 +2,7 @@ import React from 'react';
 import { SavedBook } from '../../model/Book';
 import { BannerContainer, BannerImg, BannerSubtitle, BannerTitle } from './components';
 import { View } from 'react-native';
-import { Button, HStack } from '../../components';
+import { Button, HStack, VStack, Text } from '../../components';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { BookAction, BookMarkAllAsRead } from '../../reducers/book/book.action';
@@ -21,12 +21,24 @@ function _Banner(props: IBannerProps & IDispatchProps) {
     <BannerContainer>
       <HStack>
         <BannerImg source={{ uri: book.coverImg }} />
-        <View>
-          <BannerTitle bold>{book.title}</BannerTitle>
-          <BannerSubtitle>{book.author}</BannerSubtitle>
-        </View>
+        <VStack expand style={{ height: 140 }}>
+          <View>
+            <BannerTitle>{book.title}</BannerTitle>
+            <BannerSubtitle>{book.author}</BannerSubtitle>
+          </View>
+          {book.lastRead && (
+            <View>
+              <Text variant="tip" style={{ marginBottom: 4 }}>
+                上次读到
+              </Text>
+              <Text variant="tip" color="colonel" bold>
+                {book.lastRead.title}
+              </Text>
+            </View>
+          )}
+        </VStack>
       </HStack>
-      <HStack style={{ marginTop: 10 }}>
+      <HStack style={{ marginTop: 20, marginBottom: 10 }}>
         <Button title="继续阅读" />
         <Button title="全部已读" onPress={() => markAllAsRead(book)} />
       </HStack>

@@ -4,7 +4,7 @@ import { Picker, StyleSheet, View } from 'react-native';
 import { getPageTitle, PAGE_LENGTH, range } from '../../utils';
 import { ThemeContext } from 'styled-components';
 import { SavedBook } from '../../model/Book';
-import { Button, Text } from '../../components';
+import { HStack, Text } from '../../components';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {
   ChapterPickerContainer,
@@ -62,9 +62,12 @@ export function ChapterPicker(props: IChapterPickerProps) {
           <Text bold>{getPageTitle(currentPage, PAGE_LENGTH, maxLength, !!reverse)}</Text>
           <Icon name="caretdown" style={styles.icon} />
         </ChapterPickerDropDown>
-        <ChapterPickerSmallBtn onPress={onReverseMenu}>
-          <ChapterPickerSmallBtnText>{reverse ? '逆序' : '顺序'}</ChapterPickerSmallBtnText>
-        </ChapterPickerSmallBtn>
+        <HStack center>
+          <Text secondary>共 {chapters.length} 章</Text>
+          <ChapterPickerSmallBtn onPress={onReverseMenu}>
+            <ChapterPickerSmallBtnText>{reverse ? '逆序' : '顺序'}</ChapterPickerSmallBtnText>
+          </ChapterPickerSmallBtn>
+        </HStack>
       </ChapterPickerContainer>
       <Modal
         isVisible={modalOpen}
@@ -91,6 +94,7 @@ const styles = StyleSheet.create({
   },
   icon: {
     color: '#757575',
-    marginLeft: 10,
+    marginLeft: 4,
+    fontSize: 10,
   },
 });

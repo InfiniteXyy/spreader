@@ -14,11 +14,17 @@ export const BannerImg = styled.Image`
 `;
 
 export const BannerTitle = styled(Text).attrs({
-  variant: 'title',
-})``;
+  bold: true,
+})`
+  font-size: 26px;
+  line-height: 34px;
+`;
 export const BannerSubtitle = styled(Text).attrs({
-  variant: 'subtitle',
-})``;
+  secondary: true,
+})`
+  font-size: 18px;
+  line-height: 25px;
+`;
 
 export const ChapterPickerContainer = styled.View`
   flex-direction: row;
@@ -33,6 +39,7 @@ export const ChapterPickerContainer = styled.View`
 export const ChapterPickerDropDown = styled.TouchableOpacity`
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
   padding: 10px 0;
   background-color: ${props => props.theme.bgColor};
 `;
@@ -40,6 +47,7 @@ export const ChapterPickerDropDown = styled.TouchableOpacity`
 export const ChapterPickerSmallBtn = styled.TouchableOpacity`
   border-radius: 5px;
   padding: 3px 5px;
+  margin-left: 10px;
   background-color: ${props => (props.theme.dark ? '#656565' : '#cccccc')};
 `;
 
@@ -56,10 +64,10 @@ export const ChapterListItemContainer = styled.TouchableOpacity`
 `;
 
 export const ChapterListItemDot = styled.View`
-  height: 6px;
-  width: 6px;
+  height: 4px;
+  width: 4px;
   background-color: ${props => props.theme.tintColor};
-  border-radius: 6px;
+  border-radius: 4px;
   position: absolute;
-  left: 6px;
+  left: 11px;
 `;

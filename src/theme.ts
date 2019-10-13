@@ -10,6 +10,8 @@ declare module 'styled-components' {
     tintColor: string;
     dividerColor: string;
 
+    containerColor: string;
+
     primaryColor: string;
     warningColor: string;
     successColor: string;
@@ -34,6 +36,10 @@ const colors = {
   // for dividers
   dividerColor: '#dddddd',
   dividerColorLight: '#383838',
+
+  // for containers
+  container: '#EEEEEE',
+  containerLight: '#000',
 
   primary: {
     default: '#1543D9',
@@ -61,11 +67,10 @@ function getTheme(darkMode: boolean): DefaultTheme {
     bgColor: defaultMode ? colors.bg : colors.darkBg,
 
     primaryText: defaultMode ? colors.primaryText : colors.primaryTextLight,
-    secondaryText: defaultMode
-      ? colors.secondaryText
-      : colors.secondaryTextLight,
+    secondaryText: defaultMode ? colors.secondaryText : colors.secondaryTextLight,
     tintColor: defaultMode ? colors.tintColor : colors.tintColorLight,
     dividerColor: defaultMode ? colors.dividerColor : colors.dividerColorLight,
+    containerColor: defaultMode ? colors.container : colors.containerLight,
 
     primaryColor: colors.primary.default,
     warningColor: colors.warning.default,

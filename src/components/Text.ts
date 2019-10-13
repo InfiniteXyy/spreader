@@ -2,7 +2,7 @@ import styled from 'styled-components/native';
 import { colors } from '../theme';
 
 type TextVariant = 'title' | 'subtitle' | 'body' | 'tip';
-type TextColor = 'star' | 'pin';
+type TextColor = 'star' | 'pin' | 'colonel';
 export interface IText {
   secondary?: boolean;
   variant?: TextVariant;
@@ -20,7 +20,7 @@ const styles: { [K in TextVariant]: { lineHeight: number; fontSize: number } } =
     fontSize: 16,
   },
   tip: {
-    lineHeight: 16,
+    lineHeight: 17,
     fontSize: 14,
   },
   body: {
@@ -32,6 +32,7 @@ const styles: { [K in TextVariant]: { lineHeight: number; fontSize: number } } =
 const textColors: { [K in TextColor]: string } = {
   pin: colors.warning.pin,
   star: colors.warning.star,
+  colonel: colors.warning.colonel,
 };
 
 export const Text = styled.Text<IText>`
