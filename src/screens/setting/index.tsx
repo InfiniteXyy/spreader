@@ -15,12 +15,7 @@ interface IDispatchProps {
 }
 function Setting(props: IStateProps & IDispatchProps) {
   return (
-    <Container>
-      <ScrollView>
-        <Title>设置</Title>
-        <Button title={'dark'} onPress={props.toggleMode} />
-      </ScrollView>
-    </Container>
+    <Title>设置</Title>
   );
 }
 

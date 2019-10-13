@@ -12,20 +12,27 @@ import { BottomBar } from '../components';
 const RouteConfigs = {
   Home: {
     screen: Home,
-    path: 'home',
+    navigationOptions: {
+      title: '书库',
+    },
   },
   Explore: {
     screen: Explore,
-    path: 'explore',
+    navigationOptions: {
+      title: '发现',
+    },
   },
   Setting: {
     screen: Setting,
-    path: 'setting',
+    navigationOptions: {
+      title: '我的',
+    },
   },
 };
 
 const MainNavigator = createBottomTabNavigator(RouteConfigs, {
   defaultNavigationOptions: ({ navigation }) => ({
+    lazy: false,
     tabBarIcon: props => {
       const { focused, horizontal, tintColor } = props;
       const { routeName } = navigation.state;

@@ -1,9 +1,10 @@
 import React from 'react';
-import { CardBody, CardSubTitle, CardTitle, CardWrapper, CoverImg } from './components';
+import { CardSubTitle, CardTitle, CardWrapper, CoverImg } from './components';
 import { View } from 'react-native';
 import { SavedBook } from '../../model/Book';
 import { getLastOf } from '../../utils';
 import { Chapter } from '../../model/Chapter';
+import { HStack, SearchBar, Text, VStack } from '../../components';
 
 interface IBookListProps {
   onNavigate(book: SavedBook): () => void;
@@ -14,11 +15,12 @@ export function BookList(props: IBookListProps) {
   const { onNavigate, books } = props;
 
   return (
-    <>
+    <View>
+      <SearchBar />
       {books.map(i => (
         <BookItem book={i} key={i.key} onPress={onNavigate(i)} />
       ))}
-    </>
+    </View>
   );
 }
 
@@ -31,11 +33,22 @@ function BookItem(props: IBookItemProps) {
   return (
     <CardWrapper onPress={onPress}>
       <CoverImg source={{ uri: book.coverImg }} />
-      <View>
-        <CardTitle>{book.title}</CardTitle>
-        <CardSubTitle>{book.author}</CardSubTitle>
-        <CardBody>最近更新：{getLastOf<Chapter, string>(book.chapters, i => i.title, '无')}</CardBody>
-      </View>
+      <VStack expand>
+        <View>
+          <CardTitle>{book.title}</CardTitle>
+          <CardSubTitle style={{ marginTop: 4 }}>{book.author}</CardSubTitle>
+        </View>
+        <HStack expand>
+          <HStack>
+            <Text secondary>最新 </Text>
+            <Text bold>{getLastOf<Chapter, string>(book.chapters, i => i.title, '无')}</Text>
+          </HStack>
+          <HStack>
+            <Text color="pin">{1}章 </Text>
+            <Text>未读</Text>
+          </HStack>
+        </HStack>
+      </VStack>
     </CardWrapper>
   );
 }

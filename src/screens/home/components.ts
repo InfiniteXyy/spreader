@@ -8,21 +8,17 @@ export const CardWrapper = styled.TouchableOpacity`
 
 export const CardTitle = styled(Text).attrs({
   bold: true,
-  variant: 'title',
+  variant: 'subtitle',
 })``;
 
 export const CardSubTitle = styled(Text).attrs({
   secondary: true,
-  variant: 'subtitle',
-})``;
-
-export const CardBody = styled(Text).attrs({
   variant: 'body',
 })``;
 
 export const CoverImg = styled.Image`
-  width: 80px;
-  height: 110px;
-  border-radius: 4px;
+  width: 55px;
+  height: 80px;
+  border-radius: 2px;
   margin-right: 20px;
 `;

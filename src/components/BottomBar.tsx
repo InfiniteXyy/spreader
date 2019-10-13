@@ -12,7 +12,6 @@ function TabBarComponent(props: IStateProps & any) {
   return (
     <BottomTabBar
       {...props}
-      showLabel={false}
       activeTintColor={colors.warning.pin}
       style={{
         backgroundColor: props.dark ? colors.darkBg : colors.bg,
