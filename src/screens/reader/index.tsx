@@ -1,25 +1,37 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Container, Header, Text } from '../../components';
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { Container, Header } from '../../components';
 import { connect } from 'react-redux';
 import { NavigationInjectedProps, withNavigation } from 'react-navigation';
 import { IState } from '../../reducers';
 import { SavedBook } from '../../model/Book';
 import { Chapter } from '../../model/Chapter';
 import { getContent } from '../../agents/spider';
-import { ChapterTitle, ReaderContainer, ReaderScroll, StyledContent } from './components';
-import { NativeScrollEvent, NativeSyntheticEvent, ScrollView } from 'react-native';
+import { NativeScrollEvent, NativeSyntheticEvent, Text, TextStyle, View } from 'react-native';
 import { Skeleton } from './Skeleton';
+import { ReaderState } from '../../reducers/reader/reader.state';
+import { ReaderScroll } from './components';
+import Icon from 'react-native-vector-icons/EvilIcons';
+import { ThemeContext } from 'styled-components/native';
+import { Editor } from './Editor';
 
 interface IStateProps {
   book?: SavedBook;
   chapter?: Chapter;
+  readerStyle: ReaderState;
+}
+
+function padWithTab(content: string) {
+  return '        ' + content;
 }
 
 function _Reader(props: NavigationInjectedProps & IStateProps) {
   const [contents, setContents] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [menuVisible, setMenuVisible] = useState(true);
-  const { book, chapter, navigation } = props;
+  const [editorVisible, setEditorVisible] = useState(false);
+  const theme = useContext(ThemeContext);
+  const { book, chapter, navigation, readerStyle } = props;
+  const { lineHeight, titleAlign, bgColor, fontColor, fontSize, titleSize, paragraphSpace } = readerStyle;
   if (!book || !chapter) {
     return <Container />;
   }
@@ -47,24 +59,66 @@ function _Reader(props: NavigationInjectedProps & IStateProps) {
     [menuVisible, isLoading],
   );
 
+  const textStyle = useMemo(
+    () => ({
+      fontSize: readerStyle.fontSize,
+      lineHeight: readerStyle.lineHeight,
+      color: readerStyle.fontColor,
+      marginTop: readerStyle.paragraphSpace,
+    }),
+    [fontSize, lineHeight, fontColor, paragraphSpace],
+  );
+
+  const titleStyle = useMemo<TextStyle>(
+    () => ({
+      fontSize: titleSize,
+      color: fontColor,
+      marginTop: 50,
+      marginBottom: 10,
+      alignSelf: titleAlign,
+      fontWeight: '500',
+    }),
+    [titleSize, fontColor, titleAlign],
+  );
+
+  const backgroundStyle = useMemo(
+    () => ({
+      backgroundColor: bgColor,
+    }),
+    [bgColor],
+  );
+
   return (
     <Container>
-      <ReaderContainer>
+      <View style={backgroundStyle}>
         <ReaderScroll
+          scrollEnabled={!isLoading}
           onScroll={handleScroll}
           onScrollBeginDrag={e => {
             prevOffsetY.current = e.nativeEvent.contentOffset.y;
           }}
           scrollEventThrottle={64}>
-          <ChapterTitle>{chapter.title}</ChapterTitle>
+          <Text style={titleStyle}>{chapter.title}</Text>
           {isLoading ? (
             <Skeleton />
           ) : (
-            contents.map((i, index) => <StyledContent key={index}>{'        ' + i}</StyledContent>)
+            contents.map((para, index) => (
+              <Text style={textStyle} key={index}>
+                {padWithTab(para)}
+              </Text>
+            ))
           )}
         </ReaderScroll>
-      </ReaderContainer>
-      <Header visible={menuVisible} goBack={navigation.goBack} absolute />
+      </View>
+      <Header
+        visible={menuVisible}
+        goBack={navigation.goBack}
+        absolute
+        rightComponent={
+          <Icon name="navicon" size={20} color={theme.tintColor} onPress={() => setEditorVisible(true)} />
+        }
+      />
+      <Editor onClose={() => setEditorVisible(false)} visible={editorVisible} />
     </Container>
   );
 }
@@ -73,11 +127,12 @@ function mapStateToProps(state: IState, props: NavigationInjectedProps): IStateP
   const bookId = props.navigation.getParam<string>('bookId');
   const chapterHref = props.navigation.getParam<string>('chapterHref');
   const book = state.bookReducer.books.find(i => i.id === bookId);
-  if (book === undefined) return {};
+  if (book === undefined) return { readerStyle: state.readerReducer };
   const chapter = book.chapters.find(i => i.href === chapterHref);
   return {
     book,
     chapter,
+    readerStyle: state.readerReducer,
   };
 }
 
