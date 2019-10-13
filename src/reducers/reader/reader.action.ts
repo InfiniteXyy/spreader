@@ -1,5 +1,6 @@
 import { Action } from 'redux';
 import { TitleAlign } from './reader.state';
+import { ReaderTheme } from '../../model/Theme';
 
 export enum ReaderActionType {
   UPDATE_FONT_SIZE = '[Reader] update font size',
@@ -7,8 +8,8 @@ export enum ReaderActionType {
   SET_TITLE_ALIGN = '[Reader] set title align',
   UPDATE_LINE_HEIGHT = '[Reader] update line height',
   UPDATE_PARA_SPACE = '[Reader] update paragraph spacing',
-  UPDATE_FONT_COLOR = '[Reader] update font color',
-  UPDATE_BG_COLOR = '[Reader] update bgcolor',
+  UPDATE_READER_THEME = '[Reader] set theme',
+  RESET_STYLE = '[Reader] reset style',
 }
 
 export class ReaderSetFontSize implements Action {
@@ -25,19 +26,18 @@ export class ReaderSetTitleAlign implements Action {
 }
 export class ReaderSetLineHeight implements Action {
   readonly type = ReaderActionType.UPDATE_LINE_HEIGHT;
-  constructor(public readonly lineHeight: number) {}
+  constructor(public readonly lineHeightRatio: number) {}
 }
 export class ReaderSetParaSpacing implements Action {
   readonly type = ReaderActionType.UPDATE_PARA_SPACE;
   constructor(public readonly paraSpacing: number) {}
 }
-export class ReaderSetFontColor implements Action {
-  readonly type = ReaderActionType.UPDATE_FONT_COLOR;
-  constructor(public readonly fontColor: string) {}
+export class ReaderSetTheme implements Action {
+  readonly type = ReaderActionType.UPDATE_READER_THEME;
+  constructor(public readonly theme: ReaderTheme) {}
 }
-export class ReaderSetBgColor implements Action {
-  readonly type = ReaderActionType.UPDATE_BG_COLOR;
-  constructor(public readonly bgColor: string) {}
+export class ReaderResetStyle implements Action {
+  readonly type = ReaderActionType.RESET_STYLE;
 }
 
 export type ReaderAction =
@@ -46,5 +46,5 @@ export type ReaderAction =
   | ReaderSetTitleAlign
   | ReaderSetLineHeight
   | ReaderSetParaSpacing
-  | ReaderSetFontColor
-  | ReaderSetBgColor;
+  | ReaderSetTheme
+  | ReaderResetStyle;
