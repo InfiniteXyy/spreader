@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useCallback, useContext, useMemo, useState } from 'react';
 import Modal from 'react-native-modal';
 import { Picker, StyleSheet, View } from 'react-native';
 import { getPageTitle, PAGE_LENGTH, range } from '../../utils';
@@ -18,6 +18,11 @@ interface IChapterPickerProps {
   onChangePage(book: SavedBook, pageIndex: number, reversed: boolean): void;
 }
 
+type PickerItem = {
+  title: string;
+  pageIndex: number;
+};
+
 export function ChapterPicker(props: IChapterPickerProps) {
   const [modalOpen, setModalOpen] = useState(false);
   const theme = useContext(ThemeContext);
@@ -26,33 +31,31 @@ export function ChapterPicker(props: IChapterPickerProps) {
   const { currentPage, reverse, chapters } = book;
   const maxLength = chapters.length;
 
-  function visualizePicker() {
-    let pageCount = Math.ceil(maxLength / PAGE_LENGTH);
-    let data = reverse ? range(pageCount - 1, -1, -1) : range(0, pageCount);
-    return (
-      <Picker
-        selectedValue={currentPage.toString()}
-        onValueChange={(itemValue, itemIndex) => onChangePage(book, itemValue, !!book.reverse)}>
-        {data.map(i => {
-          return (
-            <Picker.Item
-              color={theme.primaryText}
-              key={i.toString()}
-              label={getPageTitle(i, PAGE_LENGTH, maxLength, !!reverse)}
-              value={i.toString()}
-            />
-          );
-        })}
-      </Picker>
-    );
-  }
+  const pickerList = useMemo<PickerItem[]>(() => {
+    const pageCount = Math.ceil(maxLength / PAGE_LENGTH);
+    const rowData = reverse ? range(pageCount - 1, -1, -1) : range(0, pageCount);
+    return rowData.map(i => ({
+      title: getPageTitle(i, PAGE_LENGTH, maxLength, !!reverse),
+      pageIndex: i,
+    }));
+  }, [maxLength, reverse]);
 
-  function onReverseMenu() {
+  const onReverseMenu = useCallback(() => {
     if (reverse) {
       onChangePage(book, 0, false);
     } else {
-      onChangePage(book, Math.floor(book.chapters.length / PAGE_LENGTH), true);
+      onChangePage(book, Math.floor(maxLength / PAGE_LENGTH), true);
     }
+  }, [maxLength, reverse]);
+
+  function visualizePicker() {
+    return (
+      <Picker selectedValue={currentPage} onValueChange={pageIndex => onChangePage(book, pageIndex, !!book.reverse)}>
+        {pickerList.map(i => {
+          return <Picker.Item color={theme.primaryText} key={i.pageIndex} label={i.title} value={i.pageIndex} />;
+        })}
+      </Picker>
+    );
   }
 
   return (

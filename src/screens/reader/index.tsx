@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { Container, Header } from '../../components';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { Container, Header, Text } from '../../components';
 import { connect } from 'react-redux';
 import { NavigationInjectedProps, withNavigation } from 'react-navigation';
 import { IState } from '../../reducers';
 import { SavedBook } from '../../model/Book';
 import { Chapter } from '../../model/Chapter';
 import { getContent } from '../../agents/spider';
-import { ReaderContainer, StyledContent } from './components';
+import { ChapterTitle, ReaderContainer, ReaderScroll, StyledContent } from './components';
+import { NativeScrollEvent, NativeSyntheticEvent, ScrollView } from 'react-native';
+import { Skeleton } from './Skeleton';
 
 interface IStateProps {
   book?: SavedBook;
@@ -15,25 +17,54 @@ interface IStateProps {
 
 function _Reader(props: NavigationInjectedProps & IStateProps) {
   const [contents, setContents] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [menuVisible, setMenuVisible] = useState(true);
   const { book, chapter, navigation } = props;
   if (!book || !chapter) {
     return <Container />;
   }
 
+  const prevOffsetY = useRef(0);
+
   useEffect(() => {
+    setIsLoading(true);
     getContent(chapter.href, book.methods.getContent).then(result => {
       setContents(result);
+      setIsLoading(false);
     });
   }, [chapter]);
+
+  const handleScroll = useCallback(
+    (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+      if (isLoading) return;
+      const currentOffsetY = e.nativeEvent.contentOffset.y;
+      if (menuVisible && currentOffsetY > prevOffsetY.current) {
+        setMenuVisible(false);
+      } else if (!menuVisible && currentOffsetY < prevOffsetY.current) {
+        setMenuVisible(true);
+      }
+    },
+    [menuVisible, isLoading],
+  );
 
   return (
     <Container>
       <ReaderContainer>
-        {contents.map((i, index) => (
-          <StyledContent key={index}>{'        ' + i}</StyledContent>
-        ))}
+        <ReaderScroll
+          onScroll={handleScroll}
+          onScrollBeginDrag={e => {
+            prevOffsetY.current = e.nativeEvent.contentOffset.y;
+          }}
+          scrollEventThrottle={64}>
+          <ChapterTitle>{chapter.title}</ChapterTitle>
+          {isLoading ? (
+            <Skeleton />
+          ) : (
+            contents.map((i, index) => <StyledContent key={index}>{'        ' + i}</StyledContent>)
+          )}
+        </ReaderScroll>
       </ReaderContainer>
-      <Header visible={true} goBack={navigation.goBack} absolute />
+      <Header visible={menuVisible} goBack={navigation.goBack} absolute />
     </Container>
   );
 }
