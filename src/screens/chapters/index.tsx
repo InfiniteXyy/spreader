@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Container, Header } from '../../components';
+import { Container, Header, Spinner } from '../../components';
 import { NavigationInjectedProps, withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
 import { IState } from '../../reducers';
@@ -29,7 +29,7 @@ function Chapters(props: NavigationInjectedProps & IStateProps & IDispatchProps)
 
   return (
     <Container>
-      <Header goBack={navigation.goBack} visible={true} />
+      <Header goBack={navigation.goBack} visible={true} rightComponent={<Spinner loading={book.isFetching} />} />
       <ChapterList book={book} onLoad={() => props.loadChapters(book)} />
     </Container>
   );
