@@ -9,7 +9,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@types/react-native-vector-icons": "^6.4.4",
+    "@react-native-community/async-storage": "^1.6.2",
     "lodash.merge": "^4.6.2",
     "react": "16.8.1",
     "react-native": "0.61.2",
@@ -25,10 +25,12 @@
     "react-navigation-tabs": "^2.5.6",
     "react-redux": "^7.1.1",
     "redux": "^4.0.4",
+    "redux-persist": "^6.0.0",
     "redux-thunk": "^2.3.0",
     "styled-components": "^4.4.0"
   },
   "devDependencies": {
+    "@types/react-native-vector-icons": "^6.4.4",
     "@babel/core": "^7.5.0",
     "@babel/runtime": "^7.5.0",
     "@react-native-community/eslint-config": "^0.0.3",
@@ -37,6 +39,7 @@
     "@types/react-native": "^0.60.19",
     "@types/react-native-modal": "^4.1.1",
     "@types/react-redux": "^7.1.4",
+    "@types/redux-persist": "^4.3.1",
     "@types/styled-components": "^4.1.19",
     "babel-jest": "^24.1.0",
     "jest": "^24.1.0",

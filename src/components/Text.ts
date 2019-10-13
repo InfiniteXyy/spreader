@@ -1,16 +1,16 @@
 import styled from 'styled-components/native';
+import { colors } from '../theme';
 
-type TextVariant = 'title' | 'subtitle' | 'body';
-
+type TextVariant = 'title' | 'subtitle' | 'body' | 'tip';
+type TextColor = 'star' | 'pin';
 export interface IText {
   secondary?: boolean;
   variant?: TextVariant;
   bold?: boolean;
+  color?: TextColor;
 }
 
-const styles: {
-  [K in TextVariant]: { lineHeight: number; fontSize: number }
-} = {
+const styles: { [K in TextVariant]: { lineHeight: number; fontSize: number } } = {
   title: {
     lineHeight: 28,
     fontSize: 20,
@@ -19,15 +19,29 @@ const styles: {
     lineHeight: 20,
     fontSize: 16,
   },
+  tip: {
+    lineHeight: 16,
+    fontSize: 14,
+  },
   body: {
     lineHeight: 14,
     fontSize: 12,
   },
 };
 
+const textColors: { [K in TextColor]: string } = {
+  pin: colors.warning.pin,
+  star: colors.warning.star,
+};
+
 export const Text = styled.Text<IText>`
-  color: ${props =>
-    props.secondary ? props.theme.secondaryText : props.theme.primaryText};
+  color: ${props => {
+    if (props.color) {
+      return textColors[props.color];
+    } else {
+      return props.secondary ? props.theme.secondaryText : props.theme.primaryText;
+    }
+  }};
   font-size: ${props => styles[props.variant || 'body'].fontSize}px;
   line-height: ${props => styles[props.variant || 'body'].lineHeight}px;
   font-weight: ${props => (props.bold ? '500' : '400')};

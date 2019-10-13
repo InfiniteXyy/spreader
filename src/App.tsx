@@ -2,11 +2,12 @@ import React from 'react';
 import { ThemeProvider } from 'styled-components/native';
 import { AppContainer } from './routers';
 import { connect, Provider } from 'react-redux';
-import { store } from './store';
+import { persistor, store } from './store';
 import { getTheme } from './theme';
 import { IState } from './reducers';
 import { View } from 'react-native';
 import { StatusBar } from './components';
+import { PersistGate } from 'redux-persist/integration/react';
 
 function Root(props: { dark: boolean }) {
   return (
@@ -26,7 +27,9 @@ const StyledRoot = connect((state: IState) => ({
 function App() {
   return (
     <Provider store={store}>
-      <StyledRoot />
+      <PersistGate loading={null} persistor={persistor}>
+        <StyledRoot />
+      </PersistGate>
     </Provider>
   );
 }

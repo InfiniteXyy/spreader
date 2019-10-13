@@ -1,14 +1,15 @@
 import React from 'react';
 import { ScrollView } from 'react-native';
-import { connect } from 'react-redux';
 import { NavigationInjectedProps, withNavigation } from 'react-navigation';
-import { Dispatch } from 'redux';
-import { IState } from '../../reducers';
-import { Container, Title } from '../../components';
+import { Container, HStack, Text, Title } from '../../components';
 import { BookList } from './bookList';
 import agent from '../../agents';
 import { Book, SavedBook } from '../../model/Book';
 import { BookAction, BookAdd } from '../../reducers/book/book.action';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { IState } from '../../reducers';
+import { Dispatch } from 'redux';
+import { connect } from 'react-redux';
 
 interface IStateProps {
   books: SavedBook[];
@@ -24,7 +25,6 @@ class Home extends React.Component<NavigationInjectedProps & IStateProps & IDisp
       agent
         .getJSON('https://raw.githubusercontent.com/InfiniteXyy/spreader/master/assets/data/books.json')
         .then(store => {
-          console.log(store);
           this.props.addBooks(store.spiders);
         });
   }
@@ -37,7 +37,15 @@ class Home extends React.Component<NavigationInjectedProps & IStateProps & IDisp
     return (
       <Container>
         <ScrollView>
-          <Title>首页</Title>
+          <HStack expand center>
+            <Title>首页</Title>
+            <HStack center style={{ marginRight: 20 }}>
+              <Icon name="md-refresh" style={{ marginRight: 8, fontSize: 16, color: '#9b9b9b' }} />
+              <Text secondary variant="tip">
+                更新
+              </Text>
+            </HStack>
+          </HStack>
           <BookList onNavigate={this.onNavigateBook} books={this.props.books} />
         </ScrollView>
       </Container>
