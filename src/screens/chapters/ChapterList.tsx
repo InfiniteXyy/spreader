@@ -1,5 +1,5 @@
 import React from 'react';
-import { Chapter } from '../../model/Chapter';
+import { SavedChapter } from '../../model/Chapter';
 import { FlatList } from 'react-native';
 import { HStack, Text } from '../../components';
 import { SavedBook } from '../../model/Book';
@@ -19,15 +19,15 @@ interface IChapterListProps {
 
 interface IChapterListDispatchProps {
   onChangePage(book: SavedBook, index: number, reversed: boolean): void;
-  onReadChapter(book: SavedBook, chapter: Chapter): void;
+  onReadChapter(book: SavedBook, chapter: SavedChapter): void;
 }
 
 interface IChapterItemProps {
-  chapter: Chapter;
+  chapter: SavedChapter;
   onPress(): void;
 }
 
-const dummyChapter: Chapter = {
+const dummyChapter: SavedChapter = {
   hasRead: false,
   href: 'dummy',
   title: '',
@@ -35,9 +35,9 @@ const dummyChapter: Chapter = {
 
 function _ChapterList(props: IChapterListProps & IChapterListDispatchProps & NavigationInjectedProps) {
   const { book, onChangePage } = props;
-  const visibleChapters = createPageItems<Chapter>(book.chapters, book.currentPage, !!book.reverse, dummyChapter);
+  const visibleChapters = createPageItems<SavedChapter>(book.chapters, book.currentPage, !!book.reverse, dummyChapter);
 
-  const onNavigateChapter = (chapter: Chapter) => () => {
+  const onNavigateChapter = (chapter: SavedChapter) => () => {
     props.onReadChapter(book, chapter);
     props.navigation.navigate({ routeName: 'reader', params: { bookId: book.id, chapterHref: chapter.href } });
   };
@@ -79,7 +79,7 @@ function mapDispatchToProps(dispatch: Dispatch<BookAction>): IChapterListDispatc
     onChangePage(book: SavedBook, index: number, reversed: boolean): void {
       dispatch(new BookChangeIndex(book, index, reversed));
     },
-    onReadChapter(book: SavedBook, chapter: Chapter) {
+    onReadChapter(book: SavedBook, chapter: SavedChapter) {
       dispatch(new BookMarkAsRead(book, chapter));
     },
   };

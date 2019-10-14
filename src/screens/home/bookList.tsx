@@ -3,8 +3,8 @@ import { CardSubTitle, CardTitle, CardWrapper, CoverImg } from './components';
 import { ScrollView, View } from 'react-native';
 import { SavedBook } from '../../model/Book';
 import { getLastOf } from '../../utils';
-import { Chapter } from '../../model/Chapter';
-import { HStack, SearchBar, Text, VStack } from '../../components';
+import { SavedChapter } from '../../model/Chapter';
+import { HStack, Text, VStack } from '../../components';
 
 interface IBookListProps {
   onNavigate(book: SavedBook): () => void;
@@ -31,7 +31,7 @@ function BookItem(props: IBookItemProps) {
   const { book, onPress } = props;
 
   const lastChapter = useMemo(() => {
-    return getLastOf<Chapter, string>(book.chapters, i => i.title, '无');
+    return getLastOf<SavedChapter, string>(book.chapters, i => i.title, '无');
   }, [book.chapters.length]);
 
   const unReadCount = useMemo(() => {
