@@ -31,7 +31,7 @@ const colors = {
 
   // for icons
   tintColor: '#717274',
-  tintColorLight: '#A0A0A2',
+  tintColorLight: '#cccccc',
 
   // for dividers
   dividerColor: '#dddddd',

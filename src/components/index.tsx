@@ -33,6 +33,14 @@ export const Divider = styled.View`
   height: 0.5px;
   background-color: ${props => props.theme.dividerColor};
 `;
+
+export const Ellipse = styled.View<{ size: number }>`
+  border-radius: ${props => props.size};
+  width: ${props => props.size};
+  height: ${props => props.size};
+  background-color: black;
+`;
+
 export { BottomBar } from './BottomBar';
 export { Text } from './Text';
 export { Header } from './Header';
