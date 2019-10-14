@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Container, Header } from '../../components';
 import { connect } from 'react-redux';
 import { NavigationInjectedProps, withNavigation } from 'react-navigation';
@@ -6,19 +6,29 @@ import { IState } from '../../reducers';
 import { SavedBook } from '../../model/Book';
 import { Chapter } from '../../model/Chapter';
 import { getContent } from '../../agents/spider';
-import { NativeScrollEvent, NativeSyntheticEvent, Text, TextStyle, View } from 'react-native';
+import {
+  GestureResponderEvent,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  StatusBar,
+  Text,
+  TextStyle,
+  TimerMixin,
+  View,
+} from 'react-native';
 import { Skeleton } from './Skeleton';
 import { ReaderState } from '../../reducers/reader/reader.state';
 import { ReaderScroll } from './components';
 import Icon from 'react-native-vector-icons/EvilIcons';
-import { ThemeContext } from 'styled-components/native';
 import { Editor } from './Editor';
+import { colors } from '../../theme';
 
 interface IStateProps {
   book?: SavedBook;
   chapter?: Chapter;
   readerStyle: ReaderState;
 }
+const TOUCH_TIMEOUT = 150;
 
 function padWithTab(content: string) {
   return '        ' + content;
@@ -29,14 +39,13 @@ function _Reader(props: NavigationInjectedProps & IStateProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [menuVisible, setMenuVisible] = useState(true);
   const [editorVisible, setEditorVisible] = useState(false);
-  const theme = useContext(ThemeContext);
   const { book, chapter, navigation, readerStyle } = props;
   const { lineHeightRatio, titleAlign, readerTheme, fontSize, titleSize, paragraphSpace } = readerStyle;
   if (!book || !chapter) {
     return <Container />;
   }
 
-  const prevOffsetY = useRef(0);
+  const lastPressHandler = useRef<number | null>(null);
 
   useEffect(() => {
     setIsLoading(true);
@@ -46,18 +55,19 @@ function _Reader(props: NavigationInjectedProps & IStateProps) {
     });
   }, [chapter]);
 
-  const handleScroll = useCallback(
-    (e: NativeSyntheticEvent<NativeScrollEvent>) => {
-      if (isLoading) return;
-      const currentOffsetY = e.nativeEvent.contentOffset.y;
-      if (menuVisible && currentOffsetY > prevOffsetY.current) {
-        setMenuVisible(false);
-      } else if (!menuVisible && currentOffsetY < prevOffsetY.current) {
-        setMenuVisible(true);
-      }
+  const handleOnTouchStart = useCallback(
+    (e: GestureResponderEvent) => {
+      lastPressHandler.current = setTimeout(() => {
+        setMenuVisible(!menuVisible);
+      }, TOUCH_TIMEOUT);
     },
-    [menuVisible, isLoading],
+    [menuVisible],
   );
+
+  const handleOnScroll = useCallback((e: NativeSyntheticEvent<NativeScrollEvent>) => {
+    if (lastPressHandler.current !== null) clearTimeout(lastPressHandler.current);
+    setMenuVisible(false);
+  }, []);
 
   const textStyle = useMemo(
     () => ({
@@ -88,19 +98,20 @@ function _Reader(props: NavigationInjectedProps & IStateProps) {
     [readerTheme.bgColor],
   );
 
+  const dark = readerTheme.mode === 'dark';
+
   return (
     <Container style={backgroundStyle}>
+      <StatusBar barStyle={dark ? 'light-content' : 'dark-content'} backgroundColor={readerTheme.bgColor} />
       <View>
         <ReaderScroll
           scrollEnabled={!isLoading}
-          onScroll={handleScroll}
-          onScrollBeginDrag={e => {
-            prevOffsetY.current = e.nativeEvent.contentOffset.y;
-          }}
+          onTouchStart={handleOnTouchStart}
+          onScrollBeginDrag={handleOnScroll}
           scrollEventThrottle={64}>
           <Text style={titleStyle}>{chapter.title}</Text>
           {isLoading ? (
-            <Skeleton />
+            <Skeleton dark={dark} />
           ) : (
             contents.map((para, index) => (
               <Text style={textStyle} key={index}>
@@ -114,8 +125,17 @@ function _Reader(props: NavigationInjectedProps & IStateProps) {
         visible={menuVisible}
         goBack={navigation.goBack}
         absolute
+        dark={dark}
         rightComponent={
-          <Icon name="navicon" size={20} color={theme.tintColor} onPress={() => setEditorVisible(true)} />
+          <Icon
+            style={{ padding: 10 }}
+            name="navicon"
+            size={20}
+            color={dark ? colors.tintColorLight : colors.tintColor}
+            onPress={() => {
+              if (menuVisible) setEditorVisible(true);
+            }}
+          />
         }
       />
       <Editor onClose={() => setEditorVisible(false)} visible={editorVisible} />

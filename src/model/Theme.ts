@@ -36,7 +36,7 @@ export const DefaultReaderThemes: ReaderTheme[] = [
     name: 'yellow',
     mode: 'light',
     titleColor: '#4a4a4a',
-    displayColor: 'rgb(241,229,201)',
+    displayColor: 'rgb(241,221,155)',
     bgColor: 'rgb(241,229,201)',
     fontColor: 'black',
   },

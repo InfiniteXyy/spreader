@@ -4,22 +4,26 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { HStack } from './index';
 import { ThemeContext } from 'styled-components';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
+import { colors } from '../theme';
 
 interface IHeaderProps {
   goBack(): void;
   visible: boolean;
   rightComponent?: JSX.Element;
   absolute?: boolean;
+  dark?: boolean;
 }
 
 function Header(props: IHeaderProps) {
-  const { goBack, visible, rightComponent, absolute } = props;
+  const { goBack, visible, rightComponent, absolute, dark } = props;
   const [opacityAnimate] = useState(new Animated.Value(0.8));
   const theme = useContext(ThemeContext);
 
+  const darkMode = dark || theme.dark;
+
   useEffect(() => {
     Animated.timing(opacityAnimate, {
-      toValue: visible ? 0.8 : 0,
+      toValue: visible ? 1 : 0,
       duration: visible ? 200 : 100,
       useNativeDriver: true,
     }).start();
@@ -30,11 +34,21 @@ function Header(props: IHeaderProps) {
   }, [visible]);
 
   return (
-    <Animated.View style={[absolute && styles.absoluteHeader, { opacity: opacityAnimate }]}>
-      <HStack center expand style={{ paddingHorizontal: 20 }}>
-        <TouchableOpacity onPress={onBack} style={styles.iconContainer}>
-          <Icon name="ios-arrow-back" style={[styles.icon, { color: theme.tintColor }]} />
-        </TouchableOpacity>
+    <Animated.View
+      style={[
+        absolute && styles.absoluteHeader,
+        {
+          opacity: opacityAnimate,
+          backgroundColor: darkMode ? colors.darkBg : 'white',
+          borderBottomColor: theme.dividerColor,
+        },
+      ]}>
+      <HStack center expand style={{ paddingHorizontal: 10 }}>
+        <Icon
+          onPress={onBack}
+          name="ios-arrow-back"
+          style={[styles.icon, { color: darkMode ? colors.tintColorLight : colors.tintColor }]}
+        />
         {rightComponent}
       </HStack>
     </Animated.View>
@@ -48,14 +62,11 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     paddingTop: getStatusBarHeight(true),
-    backgroundColor: 'white',
+    borderBottomWidth: 0.5,
   },
   icon: {
     fontSize: 20,
-  },
-  iconContainer: {
-    paddingVertical: 10,
-    paddingRight: 10,
+    padding: 10,
   },
 });
 

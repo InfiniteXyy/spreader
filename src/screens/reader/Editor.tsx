@@ -1,12 +1,10 @@
-import React, { useContext, useMemo } from 'react';
+import React, { createContext } from 'react';
 import { IState } from '../../reducers';
 import { connect } from 'react-redux';
 import { ReaderState, TitleAlign } from '../../reducers/reader/reader.state';
 import { Dispatch } from 'redux';
 import Modal from 'react-native-modal';
-import { HStack, Text } from '../../components';
-import Icon from 'react-native-vector-icons/Feather';
-import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
+import { Text } from '../../components';
 
 import {
   ReaderAction,
@@ -17,9 +15,8 @@ import {
   ReaderSetTitleAlign,
   ReaderSetTitleSize,
 } from '../../reducers/reader/reader.action';
-import { EditorContainer, EditorItemContainer, EditorItemTitle, EditorSlider } from './components';
-import { View } from 'react-native';
-import { ThemeContext } from 'styled-components/native';
+import { EditorSlider, AlignOptionContainer, ThemeOptionContainer } from './EditorItem';
+import { SafeAreaView, View } from 'react-native';
 import { DefaultReaderThemes, ReaderTheme } from '../../model/Theme';
 
 interface IStateProps {
@@ -40,70 +37,12 @@ interface IEditorProps {
   onClose(): void;
 }
 
-type AlignOption = { iconName: string; type: TitleAlign };
-const AlignOptions: AlignOption[] = [
-  {
-    type: 'flex-start',
-    iconName: 'align-left',
-  },
-  {
-    type: 'center',
-    iconName: 'align-center',
-  },
-  {
-    type: 'flex-end',
-    iconName: 'align-right',
-  },
-];
-
+export const ReaderThemeContext = createContext<ReaderTheme>(DefaultReaderThemes[0]);
 function _Editor(props: IStateProps & IDispatchProps & IEditorProps) {
-  const { style } = props;
-  const theme = useContext(ThemeContext);
-  const iconStyle = useMemo(
-    () => (curAlign: TitleAlign) => ({
-      fontSize: 18,
-      color: curAlign === style.titleAlign ? theme.tintColor : theme.dividerColor,
-      marginLeft: 20,
-    }),
-    [theme, style.titleAlign],
-  );
-
-  function AlignOptionContainer() {
-    return (
-      <EditorItemContainer>
-        <EditorItemTitle>标题对齐</EditorItemTitle>
-        <HStack center>
-          {AlignOptions.map(i => (
-            <Icon
-              key={i.type}
-              onPress={() => props.setTitleAlign(i.type)}
-              style={iconStyle(i.type)}
-              name={i.iconName}
-            />
-          ))}
-        </HStack>
-      </EditorItemContainer>
-    );
-  }
-
-  function ThemeOptionContainer() {
-    return (
-      <EditorItemContainer>
-        <EditorItemTitle>主题</EditorItemTitle>
-        <HStack center>
-          {DefaultReaderThemes.map(i => (
-            <IconFontAwesome
-              key={i.name}
-              onPress={() => props.setTheme(i)}
-              size={32}
-              style={{ color: i.displayColor, marginLeft: 20 }}
-              name="circle"
-            />
-          ))}
-        </HStack>
-      </EditorItemContainer>
-    );
-  }
+  const {
+    style,
+    style: { readerTheme },
+  } = props;
 
   return (
     <Modal
@@ -118,24 +57,26 @@ function _Editor(props: IStateProps & IDispatchProps & IEditorProps) {
         flexDirection: 'row',
         justifyContent: 'flex-end',
       }}>
-      <EditorContainer>
-        <View style={{ marginHorizontal: 20, marginVertical: 10 }}>
-          <Text variant="title" bold style={{ marginBottom: 10 }}>
-            阅读器样式
-          </Text>
-          <AlignOptionContainer />
-          <EditorSlider value={style.titleSize} onChange={props.setTitleSize} range={[18, 30]} title="标题大小" />
-          <EditorSlider value={style.fontSize} onChange={props.setFontSize} range={[12, 24]} title="字体大小" />
-          <EditorSlider
-            value={style.lineHeightRatio}
-            onChange={props.setLineHeight}
-            range={[1.1, 2.4]}
-            title="行间距"
-          />
-          <EditorSlider value={style.paragraphSpace} onChange={props.setParaSpace} range={[0, 1.5]} title="段间距" />
-          <ThemeOptionContainer />
-        </View>
-      </EditorContainer>
+      <SafeAreaView style={{ backgroundColor: readerTheme.bgColor, width: 280 }}>
+        <ReaderThemeContext.Provider value={readerTheme}>
+          <View style={{ marginHorizontal: 20, marginVertical: 10 }}>
+            <Text variant="title" bold style={{ marginBottom: 10, color: readerTheme.fontColor }}>
+              阅读器样式
+            </Text>
+            <AlignOptionContainer value={style.titleAlign} onChange={props.setTitleAlign} label="标题对齐" />
+            <EditorSlider value={style.titleSize} onChange={props.setTitleSize} range={[18, 30]} label="标题大小" />
+            <EditorSlider value={style.fontSize} onChange={props.setFontSize} range={[12, 24]} label="字体大小" />
+            <EditorSlider
+              value={style.lineHeightRatio}
+              onChange={props.setLineHeight}
+              range={[1.1, 2.4]}
+              label="行间距"
+            />
+            <EditorSlider value={style.paragraphSpace} onChange={props.setParaSpace} range={[0, 1.5]} label="段间距" />
+            <ThemeOptionContainer value={style.readerTheme} onChange={props.setTheme} label="主题" />
+          </View>
+        </ReaderThemeContext.Provider>
+      </SafeAreaView>
     </Modal>
   );
 }
