@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { NavigationInjectedProps, withNavigation } from 'react-navigation';
 import { IState } from '../../reducers';
 import { SavedBook } from '../../model/Book';
-import { Chapter } from '../../model/Chapter';
+import { SavedChapter } from '../../model/Chapter';
 import { getContent } from '../../agents/spider';
 import {
   GestureResponderEvent,
@@ -13,19 +13,19 @@ import {
   StatusBar,
   Text,
   TextStyle,
-  TimerMixin,
   View,
 } from 'react-native';
 import { Skeleton } from './Skeleton';
 import { ReaderState } from '../../reducers/reader/reader.state';
 import { ReaderScroll } from './components';
-import Icon from 'react-native-vector-icons/EvilIcons';
+import IconFeather from 'react-native-vector-icons/Feather';
+import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Editor } from './Editor';
 import { colors } from '../../theme';
 
 interface IStateProps {
   book?: SavedBook;
-  chapter?: Chapter;
+  chapter?: SavedChapter;
   readerStyle: ReaderState;
 }
 const TOUCH_TIMEOUT = 150;
@@ -127,9 +127,9 @@ function _Reader(props: NavigationInjectedProps & IStateProps) {
         absolute
         dark={dark}
         rightComponent={
-          <Icon
+          <IconFeather
             style={{ padding: 10 }}
-            name="navicon"
+            name={dark ? 'moon' : 'sun'}
             size={20}
             color={dark ? colors.tintColorLight : colors.tintColor}
             onPress={() => {

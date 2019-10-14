@@ -1,4 +1,4 @@
-import { Chapter } from './Chapter';
+import { SavedChapter } from './Chapter';
 
 export interface Book {
   key: string;
@@ -11,9 +11,9 @@ export interface Book {
 export interface SavedBook extends Book {
   id: string;
   isFetching: boolean;
-  chapters: Chapter[];
+  chapters: SavedChapter[];
   currentPage: number;
-  lastRead?: Chapter;
+  lastRead?: SavedChapter;
   reverse?: boolean;
 }
 

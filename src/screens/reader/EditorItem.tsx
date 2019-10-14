@@ -20,9 +20,9 @@ interface IEditorSlider extends IEditorItem<number> {
 export function EditorSlider(props: IEditorSlider) {
   const { range, label, onChange, value } = props;
   const [start, end] = range;
-  return (
-    <EditorItemContainer>
-      <EditorItemTitle>{label}</EditorItemTitle>
+
+  const slider = useMemo(
+    () => (
       <Slider
         value={value}
         onSlidingComplete={onChange}
@@ -32,6 +32,13 @@ export function EditorSlider(props: IEditorSlider) {
         minimumTrackTintColor="rgba(160,160,160,0.3)"
         maximumTrackTintColor="rgba(160,160,160,0.1)"
       />
+    ),
+    [],
+  );
+  return (
+    <EditorItemContainer>
+      <EditorItemTitle>{label}</EditorItemTitle>
+      {slider}
     </EditorItemContainer>
   );
 }

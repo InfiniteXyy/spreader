@@ -1,6 +1,6 @@
 import { Action, Dispatch } from 'redux';
 import { Book, SavedBook } from '../../model/Book';
-import { Chapter } from '../../model/Chapter';
+import { SavedChapter } from '../../model/Chapter';
 import { getList } from '../../agents/spider';
 
 export enum BookActionType {
@@ -28,7 +28,7 @@ export class BookLoadChapters extends BaseBookAction implements Action {
 export class BookMarkAsRead extends BaseBookAction implements Action {
   readonly type = BookActionType.MARK_READ;
 
-  constructor(book: SavedBook, public readonly chapter: Chapter) {
+  constructor(book: SavedBook, public readonly chapter: SavedChapter) {
     super(book);
   }
 }
@@ -50,7 +50,7 @@ export class BookChangeIndex extends BaseBookAction implements Action {
 
 export class BookUpdateChapters extends BaseBookAction implements Action {
   readonly type = BookActionType.UPDATE_CHAPTERS;
-  constructor(book: SavedBook, public readonly chapters: Chapter[]) {
+  constructor(book: SavedBook, public readonly chapters: SavedChapter[]) {
     super(book);
   }
 }
