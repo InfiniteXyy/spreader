@@ -11,6 +11,7 @@ import { BookAction, BookChangeIndex, BookMarkAsRead } from '../../reducers/book
 import { connect } from 'react-redux';
 import { NavigationInjectedProps, withNavigation } from 'react-navigation';
 import { ChapterListItemContainer, ChapterListItemDot } from './components';
+import { Loader } from 'rn-placeholder';
 
 interface IChapterListProps {
   book: SavedBook;
@@ -44,7 +45,7 @@ function _ChapterList(props: IChapterListProps & IChapterListDispatchProps & Nav
 
   return (
     <FlatList
-      ListEmptyComponent={<Text>loading</Text>}
+      ListEmptyComponent={<Loader style={{ paddingTop: 100 }} />}
       stickyHeaderIndices={[1]}
       ListHeaderComponent={<Banner book={book} />}
       onRefresh={props.onLoad}

@@ -3,7 +3,7 @@ import { Chapter } from './Chapter';
 
 export interface BookFeed extends Book {
   uploader: string;
-  lastUpdateChapter: ChapterFeed;
+  lastUpdateChapter?: ChapterFeed;
   chaptersCount: number;
   tags: BookTag[];
   source: BookSource;
