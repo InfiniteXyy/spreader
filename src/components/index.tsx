@@ -1,4 +1,5 @@
 import styled from 'styled-components/native';
+import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 
 // common
 export const Title = styled.Text`
@@ -8,7 +9,8 @@ export const Title = styled.Text`
   margin: 25px 25px 20px 20px;
 `;
 
-export const Container = styled.SafeAreaView`
+export const Container = styled.View`
+  padding-top: ${getStatusBarHeight(true)}px;
   flex: 1;
   background-color: ${props => props.theme.bgColor};
 `;

@@ -15,7 +15,9 @@ interface IDispatchProps {
 }
 function Setting(props: IStateProps & IDispatchProps) {
   return (
-    <Title>设置</Title>
+    <Container>
+      <Title>我的</Title>
+    </Container>
   );
 }
 
