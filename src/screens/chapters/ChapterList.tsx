@@ -7,7 +7,7 @@ import { Banner } from './Banner';
 import { createPageItems } from '../../utils';
 import { ChapterPicker } from './ChapterPicker';
 import { Dispatch } from 'redux';
-import { BookAction, BookChangeIndex, BookMarkAsRead } from '../../reducers/book/book.action';
+import { BookAction, BookChangeIndex } from '../../reducers/book/book.action';
 import { connect } from 'react-redux';
 import { NavigationInjectedProps, withNavigation } from 'react-navigation';
 import { ChapterListItemContainer, ChapterListItemDot } from './components';
@@ -18,9 +18,8 @@ interface IChapterListProps {
   onLoad(): void;
 }
 
-interface IChapterListDispatchProps {
+interface IDispatchProps {
   onChangePage(book: SavedBook, index: number, reversed: boolean): void;
-  onReadChapter(book: SavedBook, chapter: SavedChapter): void;
 }
 
 interface IChapterItemProps {
@@ -34,12 +33,11 @@ const dummyChapter: SavedChapter = {
   title: '',
 };
 
-function _ChapterList(props: IChapterListProps & IChapterListDispatchProps & NavigationInjectedProps) {
+function _ChapterList(props: IChapterListProps & IDispatchProps & NavigationInjectedProps) {
   const { book, onChangePage } = props;
   const visibleChapters = createPageItems<SavedChapter>(book.chapters, book.currentPage, !!book.reverse, dummyChapter);
 
-  const onNavigateChapter = (chapter: SavedChapter) => () => {
-    props.onReadChapter(book, chapter);
+  const onNavigateChapter = (chapter: SavedChapter) => {
     props.navigation.navigate({ routeName: 'reader', params: { bookId: book.id, chapterHref: chapter.href } });
   };
 
@@ -56,7 +54,7 @@ function _ChapterList(props: IChapterListProps & IChapterListDispatchProps & Nav
         if (i.item.href === 'dummy') {
           return <ChapterPicker book={book} onChangePage={onChangePage} />;
         } else {
-          return <ChapterItem chapter={i.item} onPress={onNavigateChapter(i.item)} />;
+          return <ChapterItem chapter={i.item} onPress={() => onNavigateChapter(i.item)} />;
         }
       }}
     />
@@ -75,16 +73,14 @@ function ChapterItem(props: IChapterItemProps) {
   );
 }
 
-function mapDispatchToProps(dispatch: Dispatch<BookAction>): IChapterListDispatchProps {
+function mapDispatchToProps(dispatch: Dispatch<BookAction>): IDispatchProps {
   return {
     onChangePage(book: SavedBook, index: number, reversed: boolean): void {
       dispatch(new BookChangeIndex(book, index, reversed));
     },
-    onReadChapter(book: SavedBook, chapter: SavedChapter) {
-      dispatch(new BookMarkAsRead(book, chapter));
-    },
   };
 }
+
 export const ChapterList = connect(
   null,
   mapDispatchToProps,

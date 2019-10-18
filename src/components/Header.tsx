@@ -10,26 +10,16 @@ interface IHeaderProps {
   goBack(): void;
   visible: boolean;
   rightComponent?: JSX.Element;
-  title?: string;
-  titleVisible?: boolean;
   absolute?: boolean;
   dark?: boolean;
 }
 
 function Header(props: IHeaderProps) {
-  const { goBack, visible, rightComponent, absolute, dark, title, titleVisible } = props;
+  const { goBack, visible, rightComponent, absolute, dark } = props;
   const headerOpacity = useMemo(() => new Animated.Value(1), []);
   const theme = useContext(ThemeContext);
 
   const darkMode = dark === undefined ? theme.dark : dark;
-
-  useEffect(() => {
-    Animated.timing(headerOpacity, {
-      toValue: visible ? 1 : 0,
-      duration: visible ? 200 : 100,
-      useNativeDriver: true,
-    }).start();
-  }, [visible]);
 
   useEffect(() => {
     Animated.timing(headerOpacity, {
