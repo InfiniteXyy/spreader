@@ -189,7 +189,7 @@ function mapStateToProps(state: IState, props: NavigationInjectedProps): IStateP
   if (book === undefined) return { readerStyle: state.readerReducer };
   const chapterIndex = book.chapters.findIndex(i => i.href === chapterHref);
   const chapter = chapterIndex !== -1 ? book.chapters[chapterIndex] : undefined;
-  const prevChapter = chapterIndex - 1 > 0 ? book.chapters[chapterIndex - 1] : undefined;
+  const prevChapter = chapterIndex - 1 >= 0 ? book.chapters[chapterIndex - 1] : undefined;
   const nextChapter = chapterIndex + 1 < book.chapters.length ? book.chapters[chapterIndex + 1] : undefined;
   return {
     book,
