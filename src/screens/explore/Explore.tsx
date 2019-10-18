@@ -1,14 +1,18 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Container, SearchBar, Title } from '../../components';
 import { TopicList } from './TopicList';
 import { HotList } from './HotList';
 import { ScrollView } from 'react-native';
+import { NavigationInjectedProps } from 'react-navigation';
 
-function Explore() {
+export function Explore(props: NavigationInjectedProps) {
+  const onSearch = useCallback(() => {
+    props.navigation.navigate('search');
+  }, [props.navigation]);
   return (
     <Container>
       <Title>发现</Title>
-      <SearchBar />
+      <SearchBar onPress={onSearch} />
       <ScrollView>
         <TopicList />
         <HotList />
@@ -16,5 +20,3 @@ function Explore() {
     </Container>
   );
 }
-
-export default Explore;

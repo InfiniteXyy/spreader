@@ -39,7 +39,7 @@ const colors = {
 
   // for containers
   container: '#EEEEEE',
-  containerLight: '#000',
+  containerLight: '#2C2D30',
 
   primary: {
     default: '#1543D9',
