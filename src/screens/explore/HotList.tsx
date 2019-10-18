@@ -14,7 +14,14 @@ const feedList: BookFeed[] = range(1, 10).map(i => ({
     title: '第1300章、你的婆婆在哪里',
     href: '123',
   },
-  tags: [],
+  tags: [
+    {
+      title: '玄幻',
+    },
+    {
+      title: '起点',
+    },
+  ],
   source: {
     name: '123',
     url: '123',

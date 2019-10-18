@@ -47,5 +47,6 @@ export { BottomBar } from './BottomBar';
 export { Text } from './Text';
 export { Header } from './Header';
 export { Button } from './Button';
+export { Tag } from './Tag';
 export { SearchBar } from './SearchBar';
 export { Spinner } from './Spinner';

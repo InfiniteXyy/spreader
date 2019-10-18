@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { ScrollView } from 'react-native';
 import { NavigationInjectedProps, withNavigation } from 'react-navigation';
 import { Container, HStack, SearchBar, Text, Title } from '../../components';
@@ -19,7 +19,7 @@ interface IDispatchProps {
   addBooks(books: Book[]): void;
 }
 
-class Home extends React.Component<NavigationInjectedProps & IStateProps & IDispatchProps> {
+class _Home extends React.Component<NavigationInjectedProps & IStateProps & IDispatchProps> {
   componentDidMount() {
     if (this.props.books.length === 0)
       agent
@@ -31,6 +31,10 @@ class Home extends React.Component<NavigationInjectedProps & IStateProps & IDisp
 
   onNavigateBook = (book: SavedBook) => () => {
     this.props.navigation.navigate({ routeName: 'chapters', params: { bookId: book.id } });
+  };
+
+  onSearch = () => {
+    this.props.navigation.navigate('search');
   };
 
   render() {
@@ -45,7 +49,7 @@ class Home extends React.Component<NavigationInjectedProps & IStateProps & IDisp
             </Text>
           </HStack>
         </HStack>
-        <SearchBar />
+        <SearchBar onPress={this.onSearch} />
         <BookList onNavigate={this.onNavigateBook} books={this.props.books} />
       </Container>
     );
@@ -68,7 +72,7 @@ function mapDispatchToProps(dispatch: Dispatch<BookAction>) {
   };
 }
 
-export default connect<IStateProps, IDispatchProps>(
+export const Home = connect<IStateProps, IDispatchProps>(
   mapStateToProps,
   mapDispatchToProps,
-)(withNavigation(Home));
+)(withNavigation(_Home));

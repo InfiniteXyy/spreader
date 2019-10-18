@@ -2,9 +2,9 @@ import React from 'react';
 
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 
-import Home from '../screens/home';
-import Explore from '../screens/explore';
-import Setting from '../screens/setting';
+import { Home } from '../screens/home';
+import { Explore } from '../screens/explore/Explore';
+import { Setting } from '../screens/setting';
 
 import Icon from 'react-native-vector-icons/AntDesign';
 import { BottomBar } from '../components';
@@ -40,9 +40,9 @@ const MainNavigator = createBottomTabNavigator(RouteConfigs, {
       if (routeName === 'Home') {
         iconName = `home`;
       } else if (routeName === 'Explore') {
-        iconName = `cloudo`;
+        iconName = `appstore-o`;
       } else {
-        iconName = 'setting';
+        iconName = 'profile';
       }
       return <Icon name={iconName} style={{ color: tintColor, fontSize: 24 }} />;
     },
