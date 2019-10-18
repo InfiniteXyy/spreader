@@ -1,11 +1,11 @@
 import { Slider, TouchableWithoutFeedback } from 'react-native';
 import { TitleAlign } from '../../reducers/reader/reader.state';
 import React, { useContext, useMemo } from 'react';
-import { ReaderThemeContext } from './Editor';
 import { Ellipse, HStack } from '../../components';
 import Icon from 'react-native-vector-icons/Feather';
 import { DefaultReaderThemes, ReaderTheme } from '../../model/Theme';
 import { EditorItemContainer, EditorItemTitle } from './components';
+import { ReaderThemeContext } from './index';
 
 interface IEditorItem<T> {
   label: string;

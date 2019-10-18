@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { createContext, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Container, Header } from '../../components';
 import { connect } from 'react-redux';
 import { NavigationInjectedProps, withNavigation } from 'react-navigation';
@@ -19,41 +19,61 @@ import { Skeleton } from './Skeleton';
 import { ReaderState } from '../../reducers/reader/reader.state';
 import { ReaderScroll } from './components';
 import IconFeather from 'react-native-vector-icons/Feather';
-import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Editor } from './Editor';
 import { colors } from '../../theme';
+import { ReaderFooter } from './ReaderFooter';
+import { DefaultReaderThemes, ReaderTheme } from '../../model/Theme';
+import { Dispatch } from 'redux';
+import { BookAction, BookMarkAsRead } from '../../reducers/book/book.action';
 
 interface IStateProps {
   book?: SavedBook;
   chapter?: SavedChapter;
+  prevChapter?: SavedChapter;
+  nextChapter?: SavedChapter;
   readerStyle: ReaderState;
 }
+
+interface IDispatchProps {
+  onReadChapter(book: SavedBook, chapter: SavedChapter): void;
+}
+
 const TOUCH_TIMEOUT = 150;
 
 function padWithTab(content: string) {
   return '        ' + content;
 }
 
-function _Reader(props: NavigationInjectedProps & IStateProps) {
+export const ReaderThemeContext = createContext<ReaderTheme>(DefaultReaderThemes[0]);
+
+function _Reader(props: NavigationInjectedProps & IStateProps & IDispatchProps) {
   const [contents, setContents] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [menuVisible, setMenuVisible] = useState(true);
   const [editorVisible, setEditorVisible] = useState(false);
-  const { book, chapter, navigation, readerStyle } = props;
+  const { book, chapter, navigation, readerStyle, prevChapter, nextChapter } = props;
   const { lineHeightRatio, titleAlign, readerTheme, fontSize, titleSize, paragraphSpace } = readerStyle;
   if (!book || !chapter) {
     return <Container />;
   }
 
+  const currentHref = useRef<string>(chapter.href);
   const lastPressHandler = useRef<number | null>(null);
 
   useEffect(() => {
     setIsLoading(true);
     getContent(chapter.href, book.methods.getContent).then(result => {
-      setContents(result);
-      setIsLoading(false);
+      if (chapter.href === currentHref.current) {
+        setContents(result);
+        props.onReadChapter(book, chapter);
+        setIsLoading(false);
+      }
     });
-  }, [chapter]);
+  }, [chapter.href]);
+
+  useEffect(() => {
+    currentHref.current = chapter.href;
+  }, [chapter.href]);
 
   const handleOnTouchStart = useCallback(
     (e: GestureResponderEvent) => {
@@ -100,45 +120,64 @@ function _Reader(props: NavigationInjectedProps & IStateProps) {
 
   const dark = readerTheme.mode === 'dark';
 
+  const header = (
+    <Header
+      visible={menuVisible}
+      goBack={navigation.goBack}
+      absolute
+      dark={dark}
+      rightComponent={
+        <IconFeather
+          style={{ padding: 10 }}
+          name={dark ? 'moon' : 'sun'}
+          size={20}
+          color={dark ? colors.tintColorLight : colors.tintColor}
+          onPress={() => {
+            if (menuVisible) setEditorVisible(true);
+          }}
+        />
+      }
+    />
+  );
+
+  const footer = (
+    <ReaderFooter
+      visible={menuVisible}
+      prevChapter={prevChapter}
+      nextChapter={nextChapter}
+      onNavigate={chapter => {
+        props.navigation.navigate({ routeName: 'reader', params: { bookId: book.id, chapterHref: chapter.href } });
+      }}
+    />
+  );
+
   return (
     <Container style={backgroundStyle}>
-      <StatusBar barStyle={dark ? 'light-content' : 'dark-content'} backgroundColor={readerTheme.bgColor} />
-      <View>
-        <ReaderScroll
-          scrollEnabled={!isLoading}
-          onTouchStart={handleOnTouchStart}
-          onScrollBeginDrag={handleOnScroll}
-          scrollEventThrottle={64}>
-          <Text style={titleStyle}>{chapter.title}</Text>
-          {isLoading ? (
-            <Skeleton dark={dark} />
-          ) : (
-            contents.map((para, index) => (
-              <Text style={textStyle} key={index}>
-                {padWithTab(para)}
-              </Text>
-            ))
-          )}
-        </ReaderScroll>
-      </View>
-      <Header
-        visible={menuVisible}
-        goBack={navigation.goBack}
-        absolute
-        dark={dark}
-        rightComponent={
-          <IconFeather
-            style={{ padding: 10 }}
-            name={dark ? 'moon' : 'sun'}
-            size={20}
-            color={dark ? colors.tintColorLight : colors.tintColor}
-            onPress={() => {
-              if (menuVisible) setEditorVisible(true);
-            }}
-          />
-        }
-      />
-      <Editor onClose={() => setEditorVisible(false)} visible={editorVisible} />
+      <ReaderThemeContext.Provider value={readerTheme}>
+        <StatusBar barStyle={dark ? 'light-content' : 'dark-content'} backgroundColor={readerTheme.bgColor} />
+        <View>
+          <ReaderScroll
+            scrollEnabled={!isLoading}
+            onTouchStart={handleOnTouchStart}
+            onScrollBeginDrag={handleOnScroll}
+            scrollEventThrottle={64}>
+            <Text style={titleStyle}>{chapter.title}</Text>
+            {isLoading ? (
+              <Skeleton dark={dark} />
+            ) : (
+              contents.map((para, index) => (
+                <Text style={textStyle} key={index}>
+                  {padWithTab(para)}
+                </Text>
+              ))
+            )}
+            <View style={{ height: 30 }} />
+          </ReaderScroll>
+        </View>
+        {header}
+        {footer}
+        <Editor onClose={() => setEditorVisible(false)} visible={editorVisible} />
+      </ReaderThemeContext.Provider>
     </Container>
   );
 }
@@ -148,12 +187,28 @@ function mapStateToProps(state: IState, props: NavigationInjectedProps): IStateP
   const chapterHref = props.navigation.getParam<string>('chapterHref');
   const book = state.bookReducer.books.find(i => i.id === bookId);
   if (book === undefined) return { readerStyle: state.readerReducer };
-  const chapter = book.chapters.find(i => i.href === chapterHref);
+  const chapterIndex = book.chapters.findIndex(i => i.href === chapterHref);
+  const chapter = chapterIndex !== -1 ? book.chapters[chapterIndex] : undefined;
+  const prevChapter = chapterIndex - 1 > 0 ? book.chapters[chapterIndex - 1] : undefined;
+  const nextChapter = chapterIndex + 1 < book.chapters.length ? book.chapters[chapterIndex + 1] : undefined;
   return {
     book,
     chapter,
+    prevChapter,
+    nextChapter,
     readerStyle: state.readerReducer,
   };
 }
 
-export const Reader = connect(mapStateToProps)(withNavigation(_Reader));
+function mapDispatchToProps(dispatch: Dispatch<BookAction>): IDispatchProps {
+  return {
+    onReadChapter(book: SavedBook, chapter: SavedChapter) {
+      dispatch(new BookMarkAsRead(book, chapter));
+    },
+  };
+}
+
+export const Reader = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(withNavigation(_Reader));

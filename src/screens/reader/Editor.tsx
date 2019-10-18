@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { ReaderState, TitleAlign } from '../../reducers/reader/reader.state';
 import { Dispatch } from 'redux';
 import Modal from 'react-native-modal';
-import { Text } from '../../components';
+import { Container, Text } from '../../components';
 
 import {
   ReaderAction,
@@ -15,9 +15,10 @@ import {
   ReaderSetTitleAlign,
   ReaderSetTitleSize,
 } from '../../reducers/reader/reader.action';
-import { EditorSlider, AlignOptionContainer, ThemeOptionContainer } from './EditorItem';
-import { SafeAreaView, View } from 'react-native';
+import { AlignOptionContainer, EditorSlider, ThemeOptionContainer } from './EditorItem';
+import { View } from 'react-native';
 import { DefaultReaderThemes, ReaderTheme } from '../../model/Theme';
+import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 
 interface IStateProps {
   style: ReaderState;
@@ -37,7 +38,6 @@ interface IEditorProps {
   onClose(): void;
 }
 
-export const ReaderThemeContext = createContext<ReaderTheme>(DefaultReaderThemes[0]);
 function _Editor(props: IStateProps & IDispatchProps & IEditorProps) {
   const {
     style,
@@ -57,26 +57,24 @@ function _Editor(props: IStateProps & IDispatchProps & IEditorProps) {
         flexDirection: 'row',
         justifyContent: 'flex-end',
       }}>
-      <SafeAreaView style={{ backgroundColor: readerTheme.bgColor, width: 280 }}>
-        <ReaderThemeContext.Provider value={readerTheme}>
-          <View style={{ marginHorizontal: 20, marginVertical: 10 }}>
-            <Text variant="title" bold style={{ marginBottom: 10, color: readerTheme.fontColor }}>
-              阅读器样式
-            </Text>
-            <AlignOptionContainer value={style.titleAlign} onChange={props.setTitleAlign} label="标题对齐" />
-            <EditorSlider value={style.titleSize} onChange={props.setTitleSize} range={[18, 30]} label="标题大小" />
-            <EditorSlider value={style.fontSize} onChange={props.setFontSize} range={[12, 24]} label="字体大小" />
-            <EditorSlider
-              value={style.lineHeightRatio}
-              onChange={props.setLineHeight}
-              range={[1.1, 2.4]}
-              label="行间距"
-            />
-            <EditorSlider value={style.paragraphSpace} onChange={props.setParaSpace} range={[0, 1.5]} label="段间距" />
-            <ThemeOptionContainer value={style.readerTheme} onChange={props.setTheme} label="主题" />
-          </View>
-        </ReaderThemeContext.Provider>
-      </SafeAreaView>
+      <View style={{ backgroundColor: readerTheme.bgColor, width: 280, paddingTop: getStatusBarHeight(true) }}>
+        <View style={{ marginHorizontal: 20, marginVertical: 10 }}>
+          <Text variant="title" bold style={{ marginBottom: 10, color: readerTheme.fontColor }}>
+            阅读器样式
+          </Text>
+          <AlignOptionContainer value={style.titleAlign} onChange={props.setTitleAlign} label="标题对齐" />
+          <EditorSlider value={style.titleSize} onChange={props.setTitleSize} range={[18, 30]} label="标题大小" />
+          <EditorSlider value={style.fontSize} onChange={props.setFontSize} range={[12, 24]} label="字体大小" />
+          <EditorSlider
+            value={style.lineHeightRatio}
+            onChange={props.setLineHeight}
+            range={[1.1, 2.4]}
+            label="行间距"
+          />
+          <EditorSlider value={style.paragraphSpace} onChange={props.setParaSpace} range={[0, 1.5]} label="段间距" />
+          <ThemeOptionContainer value={style.readerTheme} onChange={props.setTheme} label="主题" />
+        </View>
+      </View>
     </Modal>
   );
 }
