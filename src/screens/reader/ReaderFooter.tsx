@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useMemo } from 'react';
-import { Animated, TouchableOpacity } from 'react-native';
+import { Animated, TouchableOpacity, View } from 'react-native';
 import { HStack, Text, VStack } from '../../components';
 import { ReaderFooterContainer } from './components';
 import { colors } from '../../theme';
@@ -25,7 +25,7 @@ export function ReaderFooter(props: IFooterProps) {
     }).start();
   }, [visible]);
 
-  const prevChapterComponent = prevChapter && (
+  const prevChapterComponent = prevChapter ? (
     <TouchableOpacity onPress={() => onNavigate(prevChapter)}>
       <Text style={{ color: readerTheme.fontColor }} bold variant="tip">
         上一章
@@ -34,9 +34,11 @@ export function ReaderFooter(props: IFooterProps) {
         {prevChapter.title}
       </Text>
     </TouchableOpacity>
+  ) : (
+    <View />
   );
 
-  const nextChapterComponent = nextChapter && (
+  const nextChapterComponent = nextChapter ? (
     <TouchableOpacity onPress={() => onNavigate(nextChapter)} style={{ alignItems: 'flex-end' }}>
       <Text style={{ color: readerTheme.fontColor }} bold variant="tip">
         下一章
@@ -45,6 +47,8 @@ export function ReaderFooter(props: IFooterProps) {
         {nextChapter.title}
       </Text>
     </TouchableOpacity>
+  ) : (
+    <View />
   );
   return (
     <ReaderFooterContainer
