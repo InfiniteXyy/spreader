@@ -16,7 +16,7 @@ export enum BookActionType {
 abstract class BaseBookAction {
   bookId: string;
 
-  constructor(book: SavedBook) {
+  constructor(book: Book) {
     this.bookId = book.id;
   }
 }

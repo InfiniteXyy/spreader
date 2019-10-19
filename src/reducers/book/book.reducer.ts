@@ -94,6 +94,7 @@ export function bookReducer(state = bookInitialState, action: BookAction): BookS
               ...chapter,
               hasRead: true,
             })),
+            lastRead: book.chapters[book.chapters.length - 1],
           };
         }),
       };

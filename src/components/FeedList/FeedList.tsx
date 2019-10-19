@@ -1,41 +1,46 @@
 import React from 'react';
-import { FlatList, View } from 'react-native';
+import { View } from 'react-native';
 import { FeedItem } from './FeedItem';
 import { BookFeed } from '../../model/Feed';
 import { connect } from 'react-redux';
 import { IState } from '../../reducers';
 import { Dispatch } from 'redux';
-import { BookAction, BookAdd } from '../../reducers/book/book.action';
+import {
+  BookAction,
+  BookAdd,
+  BookLoadChapters,
+  BookLoadChaptersAsync,
+  BookRemove,
+} from '../../reducers/book/book.action';
+import { SavedBook } from '../../model/Book';
 
 interface IFeedListProps {
   feeds: BookFeed[];
 }
 
 interface IStateProps {
-  bookIds: string[];
+  books: SavedBook[];
 }
 
 interface IDispatchProps {
   onAddFeed(feed: BookFeed): void;
+  onRemoveFeed(feed: BookFeed): void;
 }
 
 function _FeedList(props: IFeedListProps & IStateProps & IDispatchProps) {
   return (
     <View style={{ marginTop: 20 }}>
-      {props.feeds.map(i => (
-        <FeedItem
-          isAdded={props.bookIds.findIndex(k => i.id === k) !== -1}
-          onAddFeed={props.onAddFeed}
-          feed={i}
-        />
-      ))}
+      {props.feeds.map(i => {
+        const isAdded = props.books.findIndex(k => i.id === k.id) !== -1;
+        return <FeedItem isAdded={isAdded} onPressToggle={isAdded ? props.onRemoveFeed : props.onAddFeed} feed={i} />;
+      })}
     </View>
   );
 }
 
 function mapStateToProps(state: IState): IStateProps {
   return {
-    bookIds: state.bookReducer.books.map(i => i.id),
+    books: state.bookReducer.books,
   };
 }
 
@@ -43,6 +48,9 @@ function mapDispatchToProps(dispatch: Dispatch<BookAction>): IDispatchProps {
   return {
     onAddFeed(feed: BookFeed): void {
       dispatch(new BookAdd(feed));
+    },
+    onRemoveFeed(feed: BookFeed): void {
+      dispatch(new BookRemove(feed));
     },
   };
 }
