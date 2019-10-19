@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { CardSubTitle, CardTitle, CardWrapper, CoverImg } from './components';
-import { ScrollView, View } from 'react-native';
+import { FlatList, ScrollView, View } from 'react-native';
 import { SavedBook } from '../../model/Book';
 import { getLastOf } from '../../utils';
 import { SavedChapter } from '../../model/Chapter';
@@ -9,17 +9,21 @@ import { HStack, Text, VStack } from '../../components';
 interface IBookListProps {
   onNavigate(book: SavedBook): () => void;
   books: SavedBook[];
+  onUpdateAll(): void;
+  isUpdating: boolean;
 }
 
 export function BookList(props: IBookListProps) {
-  const { onNavigate, books } = props;
+  const { onNavigate, books, onUpdateAll, isUpdating } = props;
 
   return (
-    <ScrollView>
-      {books.map(i => (
-        <BookItem book={i} key={i.key} onPress={onNavigate(i)} />
-      ))}
-    </ScrollView>
+    <FlatList
+      onRefresh={onUpdateAll}
+      refreshing={isUpdating}
+      keyExtractor={item => item.id}
+      data={books}
+      renderItem={i => <BookItem book={i.item} onPress={onNavigate(i.item)} />}
+    />
   );
 }
 

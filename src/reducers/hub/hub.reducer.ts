@@ -36,6 +36,6 @@ export function hubReducer(state = hubInitialState, action: HubAction): HubState
         },
       };
     default:
-      return hubInitialState;
+      return state;
   }
 }

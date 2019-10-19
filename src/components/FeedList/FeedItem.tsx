@@ -6,12 +6,12 @@ import { TouchableOpacity } from 'react-native';
 
 interface IFeedItemProps {
   feed: BookFeed;
-  onAddFeed(feed: BookFeed): void;
+  onPressToggle(feed: BookFeed): void;
   isAdded: boolean;
 }
 
 export function FeedItem(props: IFeedItemProps) {
-  const { feed, onAddFeed, isAdded } = props;
+  const { feed, onPressToggle, isAdded } = props;
   const lastUpdate = <Text>{feed.lastUpdateChapter ? feed.lastUpdateChapter.title : '最新章节未知'}</Text>;
   const tagList = feed.tags.map(tag => <Tag title={tag.title} />);
   const title = (
@@ -25,7 +25,7 @@ export function FeedItem(props: IFeedItemProps) {
     </Text>
   );
   return (
-    <FeedItemContainer>
+    <FeedItemContainer key={feed.id}>
       <FeedItemImage source={{ uri: feed.coverImg }} />
       <VStack style={{ marginLeft: 20, height: '100%' }} expand>
         <HStack>
@@ -33,11 +33,7 @@ export function FeedItem(props: IFeedItemProps) {
             {title}
             {author}
           </VStack>
-          <TouchableOpacity
-            disabled={isAdded}
-            onPress={() => {
-              if (!isAdded) onAddFeed(feed);
-            }}>
+          <TouchableOpacity onPress={() => onPressToggle(feed)}>
             {isAdded ? <Text secondary>已添加</Text> : <FeedListIcon name="download" />}
           </TouchableOpacity>
         </HStack>
