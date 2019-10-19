@@ -1,11 +1,11 @@
 import styled from 'styled-components/native';
-import { HStack } from '../../components';
+import { HStack } from '../index';
 import Icon from 'react-native-vector-icons/Feather';
 
 export const FeedItemContainer = styled(HStack)`
   height: 90px;
-  margin-top: 20px;
-  padding: 0 0 10px 0;
+  margin-bottom: 20px;
+  padding: 0 0 5px 0;
 `;
 
 export const FeedItemImage = styled.Image`

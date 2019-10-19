@@ -44,7 +44,7 @@ function _Banner(props: IBannerProps & IDispatchProps & IStateProps & Navigation
               <Text variant="tip" style={{ marginBottom: 4 }}>
                 上次读到
               </Text>
-              <Text variant="tip" color="colonel" bold>
+              <Text variant="tip" colorType="pin" bold>
                 {book.lastRead.title}
               </Text>
             </View>

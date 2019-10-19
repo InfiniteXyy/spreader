@@ -1,7 +1,7 @@
 import { SavedChapter } from './Chapter';
 
 export interface Book {
-  key: string;
+  id: string;
   title: string;
   author: string;
   coverImg: string;
@@ -9,7 +9,6 @@ export interface Book {
 }
 
 export interface SavedBook extends Book {
-  id: string;
   isFetching: boolean;
   chapters: SavedChapter[];
   currentPage: number;
