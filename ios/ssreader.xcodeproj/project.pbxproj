@@ -5,6 +5,7 @@
 	};
 	objectVersion = 46;
 	objects = {
+
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* ssreaderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* ssreaderTests.m */; };
 		0CA50393E09345F2BA3495BF /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F760BD85FA8642CEB0AE556B /* Feather.ttf */; };
@@ -63,7 +64,7 @@
 		06195EB195ED476CBB885445 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
 		0C5CC051BD515810C28285EA /* Pods-ssreaderTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ssreaderTests.debug.xcconfig"; path = "Target Support Files/Pods-ssreaderTests/Pods-ssreaderTests.debug.xcconfig"; sourceTree = "<group>"; };
 		115CF8C67CFDD8248F0B129B /* libPods-ssreader.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ssreader.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		13B07F961A680F5B00A75B9A /* ssreader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ssreader.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07F961A680F5B00A75B9A /* 掌上书虫.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "掌上书虫.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = ssreader/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = ssreader/AppDelegate.m; sourceTree = "<group>"; };
 		13B07FB21A68108700A75B9A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -206,7 +207,7 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* ssreader.app */,
+				13B07F961A680F5B00A75B9A /* 掌上书虫.app */,
 				00E356EE1AD99517003FC87E /* ssreaderTests.xctest */,
 				2D02E47B1E0B4A5D006451C7 /* ssreader-tvOS.app */,
 				2D02E4901E0B4A5D006451C7 /* ssreader-tvOSTests.xctest */,
@@ -292,7 +293,7 @@
 			);
 			name = ssreader;
 			productName = ssreader;
-			productReference = 13B07F961A680F5B00A75B9A /* ssreader.app */;
+			productReference = 13B07F961A680F5B00A75B9A /* 掌上书虫.app */;
 			productType = "com.apple.product-type.application";
 		};
 		2D02E47A1E0B4A5D006451C7 /* ssreader-tvOS */ = {
@@ -758,13 +759,14 @@
 				DEVELOPMENT_TEAM = 5CEESDE3L6;
 				INFOPLIST_FILE = ssreader/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 0.0.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.github.infiniteXyy.ssreader;
-				PRODUCT_NAME = ssreader;
+				PRODUCT_NAME = "掌上书虫";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -778,13 +780,14 @@
 				DEVELOPMENT_TEAM = 5CEESDE3L6;
 				INFOPLIST_FILE = ssreader/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 0.0.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.github.infiniteXyy.ssreader;
-				PRODUCT_NAME = ssreader;
+				PRODUCT_NAME = "掌上书虫";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
