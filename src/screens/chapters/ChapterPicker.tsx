@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useMemo, useState } from 'react';
 import Modal from 'react-native-modal';
-import { Picker, StyleSheet, View } from 'react-native';
-import { getPageTitle, PAGE_LENGTH, range } from '../../utils';
+import { Platform, StyleSheet, View } from 'react-native';
+import { getPageTitle, getReversedListIndex, PAGE_LENGTH, range } from '../../utils';
 import { ThemeContext } from 'styled-components';
 import { SavedBook } from '../../model/Book';
 import { HStack, Text } from '../../components';
@@ -12,6 +12,7 @@ import {
   ChapterPickerSmallBtn,
   ChapterPickerSmallBtnText,
 } from './components';
+import { ScrollPicker } from '../../components/WheelPicker';
 
 interface IChapterPickerProps {
   book: SavedBook;
@@ -19,8 +20,8 @@ interface IChapterPickerProps {
 }
 
 type PickerItem = {
-  title: string;
-  pageIndex: number;
+  label: string;
+  value: number;
 };
 
 export function ChapterPicker(props: IChapterPickerProps) {
@@ -35,8 +36,8 @@ export function ChapterPicker(props: IChapterPickerProps) {
     const pageCount = Math.ceil(maxLength / PAGE_LENGTH);
     const rowData = reverse ? range(pageCount - 1, -1, -1) : range(0, pageCount);
     return rowData.map(i => ({
-      title: getPageTitle(i, PAGE_LENGTH, maxLength, !!reverse),
-      pageIndex: i,
+      label: getPageTitle(i, PAGE_LENGTH, maxLength, !!reverse),
+      value: i,
     }));
   }, [maxLength, reverse]);
 
@@ -47,16 +48,6 @@ export function ChapterPicker(props: IChapterPickerProps) {
       onChangePage(book, Math.floor(maxLength / PAGE_LENGTH), true);
     }
   }, [maxLength, reverse]);
-
-  function visualizePicker() {
-    return (
-      <Picker selectedValue={currentPage} onValueChange={pageIndex => onChangePage(book, pageIndex, !!book.reverse)}>
-        {pickerList.map(i => {
-          return <Picker.Item color={theme.primaryText} key={i.pageIndex} label={i.title} value={i.pageIndex} />;
-        })}
-      </Picker>
-    );
-  }
 
   return (
     <View>
@@ -83,7 +74,14 @@ export function ChapterPicker(props: IChapterPickerProps) {
           margin: 0,
           justifyContent: 'flex-end',
         }}>
-        <View style={[styles.picker, { backgroundColor: theme.bgColor }]}>{visualizePicker()}</View>
+        <View style={[styles.picker, { backgroundColor: theme.bgColor }]}>
+          <ScrollPicker
+            data={pickerList}
+            onValueChange={pageIndex => onChangePage(book, pageIndex, !!book.reverse)}
+            mapValueToIndex={value => (reverse ? getReversedListIndex(value, book.chapters.length) : value)}
+            selectedValue={currentPage}
+          />
+        </View>
       </Modal>
     </View>
   );
@@ -93,11 +91,20 @@ const styles = StyleSheet.create({
   picker: {
     borderTopRightRadius: 16,
     borderTopLeftRadius: 16,
-    justifyContent: 'center',
+    ...Platform.select({
+      android: { alignItems: 'center' },
+    }),
   },
   icon: {
     color: '#757575',
-    marginLeft: 4,
+    marginLeft: Platform.select({
+      ios: 4,
+      android: 8,
+    }),
     fontSize: 10,
+    marginBottom: Platform.select({
+      ios: 0,
+      android: 4,
+    }),
   },
 });

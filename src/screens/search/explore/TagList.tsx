@@ -30,8 +30,8 @@ function _TagList(props: ITopicListProps & IStateProps & IDispatchProps) {
         主题
       </Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        {data.map(i => (
-          <TagItem item={i} />
+        {data.map((item, index) => (
+          <TagItem key={item.id.toString()} item={item} isLastItem={index === data.length - 1} />
         ))}
       </ScrollView>
     </SectionContainer>

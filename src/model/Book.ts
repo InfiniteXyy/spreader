@@ -1,7 +1,7 @@
 import { SavedChapter } from './Chapter';
 
 export interface Book {
-  id: string;
+  id: number;
   title: string;
   author: string;
   coverImg: string;

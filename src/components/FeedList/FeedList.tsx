@@ -5,13 +5,7 @@ import { BookFeed } from '../../model/Feed';
 import { connect } from 'react-redux';
 import { IState } from '../../reducers';
 import { Dispatch } from 'redux';
-import {
-  BookAction,
-  BookAdd,
-  BookLoadChapters,
-  BookLoadChaptersAsync,
-  BookRemove,
-} from '../../reducers/book/book.action';
+import { BookAction, BookAdd, BookRemove } from '../../reducers/book/book.action';
 import { SavedBook } from '../../model/Book';
 
 interface IFeedListProps {
@@ -32,7 +26,14 @@ function _FeedList(props: IFeedListProps & IStateProps & IDispatchProps) {
     <View style={{ marginTop: 20 }}>
       {props.feeds.map(i => {
         const isAdded = props.books.findIndex(k => i.id === k.id) !== -1;
-        return <FeedItem isAdded={isAdded} onPressToggle={isAdded ? props.onRemoveFeed : props.onAddFeed} feed={i} />;
+        return (
+          <FeedItem
+            key={i.id.toString()}
+            isAdded={isAdded}
+            onPressToggle={isAdded ? props.onRemoveFeed : props.onAddFeed}
+            feed={i}
+          />
+        );
       })}
     </View>
   );

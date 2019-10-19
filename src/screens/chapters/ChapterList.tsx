@@ -1,6 +1,6 @@
 import React from 'react';
 import { SavedChapter } from '../../model/Chapter';
-import { FlatList } from 'react-native';
+import { FlatList, FlatListProps, Platform } from 'react-native';
 import { HStack, Text } from '../../components';
 import { SavedBook } from '../../model/Book';
 import { Banner } from './Banner';
@@ -43,8 +43,9 @@ function _ChapterList(props: IChapterListProps & IDispatchProps & NavigationInje
 
   return (
     <FlatList
-      ListEmptyComponent={<Loader style={{ paddingTop: 100 }} />}
       stickyHeaderIndices={[1]}
+      removeClippedSubviews={!(Platform.OS === 'android')} // fix android crash issue
+      ListEmptyComponent={<Loader style={{ paddingTop: 100 }} />}
       ListHeaderComponent={<Banner book={book} />}
       onRefresh={props.onLoad}
       refreshing={false}

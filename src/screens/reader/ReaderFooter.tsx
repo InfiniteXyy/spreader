@@ -53,7 +53,7 @@ export function ReaderFooter(props: IFooterProps) {
   return (
     <ReaderFooterContainer
       style={{
-        backgroundColor: readerTheme.mode === 'dark' ? colors.darkBg : 'white',
+        backgroundColor: readerTheme.bgColor,
         borderTopColor: readerTheme.mode === 'dark' ? colors.dividerColorLight : colors.dividerColor,
         opacity: footerOpacity,
       }}>

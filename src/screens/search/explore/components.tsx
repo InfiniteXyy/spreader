@@ -14,10 +14,13 @@ export const TopicCardContainer = styled.ImageBackground`
   margin: 10px 0 10px 20px;
 `;
 
-export function TagItem(props: { item: BookTag }) {
-  const { item } = props;
+export function TagItem(props: { item: BookTag; isLastItem: boolean }) {
+  const { item, isLastItem } = props;
   return (
-    <TopicCardContainer style={{ elevation: 1 }} source={{ uri: item.coverImg }} borderRadius={6}>
+    <TopicCardContainer
+      style={{ elevation: 1, marginRight: isLastItem ? 20 : 0 }}
+      source={{ uri: item.coverImg }}
+      borderRadius={6}>
       <LinearGradient
         colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.78)']}
         style={{ flex: 1, borderRadius: 6, padding: 8, justifyContent: 'flex-end' }}>

@@ -29,7 +29,7 @@ function Chapters(props: NavigationInjectedProps & IStateProps & IDispatchProps)
 
   return (
     <Container>
-      <Header goBack={navigation.goBack} visible={true} rightComponent={<Spinner loading={book.isFetching} />} />
+      <Header goBack={() => navigation.goBack()} rightComponent={<Spinner loading={book.isFetching} />} />
       <ChapterList book={book} onLoad={() => props.loadChapters(book)} />
     </Container>
   );

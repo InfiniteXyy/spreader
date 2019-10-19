@@ -1,5 +1,5 @@
 import React, { createContext, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Container, Header } from '../../components';
+import { Container } from '../../components';
 import { connect } from 'react-redux';
 import { NavigationInjectedProps, withNavigation } from 'react-navigation';
 import { IState } from '../../reducers';
@@ -25,6 +25,7 @@ import { ReaderFooter } from './ReaderFooter';
 import { DefaultReaderThemes, ReaderTheme } from '../../model/Theme';
 import { Dispatch } from 'redux';
 import { BookAction, BookMarkAsRead } from '../../reducers/book/book.action';
+import { ReaderHeader } from './ReaderHeader';
 
 interface IStateProps {
   book?: SavedBook;
@@ -121,11 +122,9 @@ function _Reader(props: NavigationInjectedProps & IStateProps & IDispatchProps) 
   const dark = readerTheme.mode === 'dark';
 
   const header = (
-    <Header
+    <ReaderHeader
       visible={menuVisible}
       goBack={navigation.goBack}
-      absolute
-      dark={dark}
       rightComponent={
         <IconFeather
           style={{ padding: 10 }}

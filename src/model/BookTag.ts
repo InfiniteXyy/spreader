@@ -1,7 +1,7 @@
 import { BookFeed } from './Feed';
 
 export interface BookTag {
-  id: string;
+  id: number;
   title: string;
   feedsCount: number;
   feed?: BookFeed[];
