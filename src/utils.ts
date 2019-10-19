@@ -48,6 +48,10 @@ export const getPageRange = (pageIndex: number, pageSize: number, maxLength: num
   return [pageIndex * pageSize, Math.min(pageIndex * pageSize + pageSize, maxLength)];
 };
 
+export function getReversedListIndex(pageIndex: number, count: number, pageSize: number = PAGE_LENGTH) {
+  return Math.ceil(count / pageSize) - pageIndex - 1;
+}
+
 export function createPageItems<T>(
   items: T[],
   pageIndex: number,

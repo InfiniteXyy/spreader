@@ -13,7 +13,7 @@ interface IFeedItemProps {
 export function FeedItem(props: IFeedItemProps) {
   const { feed, onPressToggle, isAdded } = props;
   const lastUpdate = <Text>{feed.lastUpdateChapter ? feed.lastUpdateChapter.title : '最新章节未知'}</Text>;
-  const tagList = feed.tags.map(tag => <Tag title={tag.title} />);
+  const tagList = feed.tags.map(tag => <Tag key={tag.title} title={tag.title} />);
   const title = (
     <Text variant="subtitle" bold>
       {feed.title}

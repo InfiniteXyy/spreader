@@ -10,18 +10,17 @@ interface IBookListProps {
   onNavigate(book: SavedBook): () => void;
   books: SavedBook[];
   onUpdateAll(): void;
-  isUpdating: boolean;
 }
 
 export function BookList(props: IBookListProps) {
-  const { onNavigate, books, onUpdateAll, isUpdating } = props;
+  const { onNavigate, books, onUpdateAll } = props;
 
   return (
     <FlatList
       onRefresh={onUpdateAll}
-      refreshing={isUpdating}
-      keyExtractor={item => item.id}
+      refreshing={false}
       data={books}
+      keyExtractor={item => item.id.toString()}
       renderItem={i => <BookItem book={i.item} onPress={onNavigate(i.item)} />}
     />
   );

@@ -3,16 +3,14 @@ import { NavigationInjectedProps, withNavigation } from 'react-navigation';
 import { Container, HStack, SearchBar, Title } from '../../components';
 import { BookList } from './bookList';
 import { Book, SavedBook } from '../../model/Book';
-import { BookAction, BookAdd, BookLoadChaptersAsync, BookUpdateChapters } from '../../reducers/book/book.action';
+import { BookAction, BookLoadChaptersAsync } from '../../reducers/book/book.action';
 import Icon from 'react-native-vector-icons/Feather';
 import { IState } from '../../reducers';
-import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 
 interface IStateProps {
   books: SavedBook[];
-  isRefreshing: boolean;
 }
 
 interface IDispatchProps {
@@ -48,7 +46,6 @@ class _Home extends React.Component<NavigationInjectedProps & IStateProps & IDis
           onNavigate={this.onNavigateBook}
           books={this.props.books}
           onUpdateAll={() => this.props.updateBooks(this.props.books)}
-          isUpdating={this.props.isRefreshing}
         />
       </Container>
     );
@@ -58,7 +55,6 @@ class _Home extends React.Component<NavigationInjectedProps & IStateProps & IDis
 function mapStateToProps(state: IState): IStateProps {
   return {
     books: state.bookReducer.books,
-    isRefreshing: state.bookReducer.books.some(i => i.isFetching),
   };
 }
 

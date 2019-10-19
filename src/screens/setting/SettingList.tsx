@@ -24,6 +24,18 @@ function _SettingList(props: IStateProps & IDispatchProps) {
         </Text>
         <Switch value={props.darkMode} onValueChange={props.onSetDarkMode} />
       </SettingItemContainer>
+      <SettingItemContainer>
+        <Text variant="subtitle" bold>
+          使用服务器书源（开发中）
+        </Text>
+        <Switch disabled value={false} onValueChange={() => {}} />
+      </SettingItemContainer>
+      <SettingItemContainer>
+        <Text variant="subtitle" bold>
+          跟随系统夜间模式（开发中）
+        </Text>
+        <Switch disabled value={false} onValueChange={() => {}} />
+      </SettingItemContainer>
     </ScrollView>
   );
 }

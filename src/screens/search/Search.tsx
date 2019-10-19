@@ -3,7 +3,7 @@ import { Container, HStack, Text } from '../../components';
 import Icon from 'react-native-vector-icons/Feather';
 import { ThemeContext } from 'styled-components';
 import { SearchBarInput, SearchBarWrapper } from './components';
-import { ScrollView, TextInput, TouchableOpacity } from 'react-native';
+import { Platform, ScrollView, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { NavigationInjectedProps, withNavigation } from 'react-navigation';
 import { Explore } from './explore/Explore';
 
@@ -18,6 +18,8 @@ function _Search(props: NavigationInjectedProps) {
           <Icon name="search" style={{ fontSize: 16, marginRight: 8, color: theme.tintColor }} />
           <SearchBarInput
             placeholder="搜索书名/作者/类型"
+            numberOfLines={1}
+            style={styles.searchBarInput}
             placeholderTextColor={theme.secondaryText}
             value={input}
             onChangeText={setInput}
@@ -40,5 +42,14 @@ function _Search(props: NavigationInjectedProps) {
     </Container>
   );
 }
+
+const styles = StyleSheet.create({
+  searchBarInput: {
+    paddingBottom: Platform.select({
+      default: 0,
+      android: 8,
+    }),
+  },
+});
 
 export const Search = withNavigation(_Search);
