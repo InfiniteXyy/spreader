@@ -55,7 +55,7 @@ function BookItem(props: IBookItemProps) {
           </HStack>
           {unReadCount !== 0 && (
             <HStack>
-              <Text color="pin">{unReadCount}章 </Text>
+              <Text colorType="pin">{unReadCount}章 </Text>
               <Text>未读</Text>
             </HStack>
           )}

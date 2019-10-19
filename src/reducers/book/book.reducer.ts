@@ -10,7 +10,6 @@ export function bookReducer(state = bookInitialState, action: BookAction): BookS
         ...action.book,
         chapters: [],
         isFetching: false,
-        id: action.book.key,
         currentPage: 0,
       };
       return {

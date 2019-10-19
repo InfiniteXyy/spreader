@@ -7,7 +7,8 @@ export interface IText {
   secondary?: boolean;
   variant?: TextVariant;
   bold?: boolean;
-  color?: TextColor;
+  colorType?: TextColor;
+  color?: string;
 }
 
 const styles: { [K in TextVariant]: { lineHeight: number; fontSize: number } } = {
@@ -38,7 +39,9 @@ const textColors: { [K in TextColor]: string } = {
 export const Text = styled.Text<IText>`
   color: ${props => {
     if (props.color) {
-      return textColors[props.color];
+      return props.color;
+    } else if (props.colorType) {
+      return textColors[props.colorType];
     } else {
       return props.secondary ? props.theme.secondaryText : props.theme.primaryText;
     }
