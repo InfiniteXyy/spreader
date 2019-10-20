@@ -27,8 +27,9 @@ export const HStack = styled.View<{ expand?: boolean; center?: boolean }>`
   justify-content: ${props => (props.expand ? 'space-between' : 'flex-start')};
 `;
 
-export const VStack = styled.View<{ expand?: boolean }>`
+export const VStack = styled.View<{ expand?: boolean; center?: boolean }>`
   flex: 1;
+  ${props => (props.center ? 'align-items: center' : '')};
   justify-content: ${props => (props.expand ? 'space-between' : 'flex-start')};
 `;
 

@@ -11,6 +11,7 @@ export enum BookActionType {
   REMOVE_BOOK = '[Book] remove book',
   TOGGLE_BOOK_MENU_INDEX = '[Book] toggle book menu index',
   MARK_ALL_READ = '[Book] mark all read',
+  SET_SAVED_BOOK_LIST = '[Book] set saved book list',
 }
 
 abstract class BaseBookAction {
@@ -39,6 +40,11 @@ export class BookMarkAllAsRead extends BaseBookAction implements Action {
 
 export class BookRemove extends BaseBookAction implements Action {
   readonly type = BookActionType.REMOVE_BOOK;
+}
+
+export class BookSetSavedList implements Action {
+  readonly type = BookActionType.SET_SAVED_BOOK_LIST;
+  constructor(public readonly books: readonly SavedBook[]) {}
 }
 
 export class BookChangeIndex extends BaseBookAction implements Action {
@@ -77,4 +83,5 @@ export type BookAction =
   | BookAdd
   | BookChangeIndex
   | BookRemove
-  | BookUpdateChapters;
+  | BookUpdateChapters
+  | BookSetSavedList;

@@ -4,6 +4,7 @@ import { Text } from '../../components';
 export const CardWrapper = styled.TouchableOpacity`
   padding: 10px 20px;
   flex-direction: row;
+  background-color: ${props => props.theme.bgColor};
 `;
 
 export const CardTitle = styled(Text).attrs({

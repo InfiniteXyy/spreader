@@ -1,37 +1,19 @@
-import React, { useMemo } from 'react';
-import { CardSubTitle, CardTitle, CardWrapper, CoverImg } from './components';
-import { FlatList, ScrollView, View } from 'react-native';
 import { SavedBook } from '../../model/Book';
+import React, { useContext, useMemo } from 'react';
+import { ThemeContext } from 'styled-components';
 import { getLastOf } from '../../utils';
 import { SavedChapter } from '../../model/Chapter';
+import { CardSubTitle, CardTitle, CardWrapper, CoverImg } from './components';
 import { HStack, Text, VStack } from '../../components';
+import { TouchableOpacityProps, View } from 'react-native';
+import Spinner from 'react-native-spinkit';
 
-interface IBookListProps {
-  onNavigate(book: SavedBook): () => void;
-  books: SavedBook[];
-  onUpdateAll(): void;
-}
-
-export function BookList(props: IBookListProps) {
-  const { onNavigate, books, onUpdateAll } = props;
-
-  return (
-    <FlatList
-      onRefresh={onUpdateAll}
-      refreshing={false}
-      data={books}
-      keyExtractor={item => item.id.toString()}
-      renderItem={i => <BookItem book={i.item} onPress={onNavigate(i.item)} />}
-    />
-  );
-}
-
-interface IBookItemProps {
+interface IBookItemProps extends TouchableOpacityProps {
   book: SavedBook;
-  onPress(): void;
 }
-function BookItem(props: IBookItemProps) {
-  const { book, onPress } = props;
+export function BookItem(props: IBookItemProps) {
+  const { book } = props;
+  const theme = useContext(ThemeContext);
 
   const lastChapter = useMemo(() => {
     return getLastOf<SavedChapter, string>(book.chapters, i => i.title, '无');
@@ -44,18 +26,25 @@ function BookItem(props: IBookItemProps) {
   }, [book.chapters.length, book.lastRead]);
 
   return (
-    <CardWrapper onPress={onPress}>
+    <CardWrapper {...props}>
       <CoverImg source={{ uri: book.coverImg }} />
       <VStack expand>
         <View>
           <CardTitle>{book.title}</CardTitle>
           <CardSubTitle>{book.author}</CardSubTitle>
         </View>
-        <HStack expand>
+        <HStack expand center>
           <HStack>
             <Text secondary>最新 </Text>
-            <Text bold>{lastChapter}</Text>
+            {book.isFetching ? (
+              <View style={{ marginLeft: 8 }}>
+                <Spinner type="ThreeBounce" size={12} color={theme.primaryText} />
+              </View>
+            ) : (
+              <Text bold>{lastChapter}</Text>
+            )}
           </HStack>
+
           {unReadCount !== 0 && (
             <HStack>
               <Text colorType="pin">{unReadCount}章 </Text>

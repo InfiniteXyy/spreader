@@ -1,23 +1,11 @@
 import React from 'react';
 import { NavigationInjectedProps, withNavigation } from 'react-navigation';
 import { Container, HStack, SearchBar, Title } from '../../components';
-import { BookList } from './bookList';
-import { Book, SavedBook } from '../../model/Book';
-import { BookAction, BookLoadChaptersAsync } from '../../reducers/book/book.action';
+import { BookList } from './BookList';
+import { SavedBook } from '../../model/Book';
 import Icon from 'react-native-vector-icons/Feather';
-import { IState } from '../../reducers';
-import { connect } from 'react-redux';
-import { ThunkDispatch } from 'redux-thunk';
 
-interface IStateProps {
-  books: SavedBook[];
-}
-
-interface IDispatchProps {
-  updateBooks(books: Book[]): void;
-}
-
-class _Home extends React.Component<NavigationInjectedProps & IStateProps & IDispatchProps> {
+class _Home extends React.Component<NavigationInjectedProps> {
   onNavigateBook = (book: SavedBook) => () => {
     this.props.navigation.navigate({ routeName: 'chapters', params: { bookId: book.id } });
   };
@@ -42,33 +30,10 @@ class _Home extends React.Component<NavigationInjectedProps & IStateProps & IDis
           />
         </HStack>
         <SearchBar onPress={this.onNavigateSearch} />
-        <BookList
-          onNavigate={this.onNavigateBook}
-          books={this.props.books}
-          onUpdateAll={() => this.props.updateBooks(this.props.books)}
-        />
+        <BookList onNavigate={this.onNavigateBook} onNavigateSearch={this.onNavigateSearch} />
       </Container>
     );
   }
 }
 
-function mapStateToProps(state: IState): IStateProps {
-  return {
-    books: state.bookReducer.books,
-  };
-}
-
-function mapDispatchToProps(dispatch: ThunkDispatch<IState, null, BookAction>) {
-  return {
-    updateBooks(books: SavedBook[]) {
-      for (let book of books) {
-        dispatch(BookLoadChaptersAsync(book));
-      }
-    },
-  };
-}
-
-export const Home = connect<IStateProps, IDispatchProps>(
-  mapStateToProps,
-  mapDispatchToProps,
-)(withNavigation(_Home));
+export const Home = withNavigation(_Home);

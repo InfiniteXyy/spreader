@@ -42,7 +42,7 @@ const colors = {
   containerLight: '#2C2D30',
 
   primary: {
-    default: '#1543D9',
+    default: '#0091FF',
     hover: '#005E99',
     link: '#0576B9',
     fill: '#2D9EE0',
