@@ -4,6 +4,7 @@ import { Container, HStack, SearchBar, Title } from '../../components';
 import { BookList } from './BookList';
 import { SavedBook } from '../../model/Book';
 import Icon from 'react-native-vector-icons/Feather';
+import { SavedChapter } from '../../model/Chapter';
 
 class _Home extends React.Component<NavigationInjectedProps> {
   onNavigateBook = (book: SavedBook) => () => {
@@ -18,6 +19,10 @@ class _Home extends React.Component<NavigationInjectedProps> {
     this.props.navigation.navigate('setting');
   };
 
+  onNavigateChapter = (book: SavedBook, chapter: SavedChapter) => () => {
+    this.props.navigation.navigate({ routeName: 'reader', params: { bookId: book.id, chapterHref: chapter.href } });
+  };
+
   render() {
     return (
       <Container>
@@ -30,7 +35,11 @@ class _Home extends React.Component<NavigationInjectedProps> {
           />
         </HStack>
         <SearchBar onPress={this.onNavigateSearch} />
-        <BookList onNavigate={this.onNavigateBook} onNavigateSearch={this.onNavigateSearch} />
+        <BookList
+          onNavigate={this.onNavigateBook}
+          onNavigateSearch={this.onNavigateSearch}
+          onNavigateChapter={this.onNavigateChapter}
+        />
       </Container>
     );
   }

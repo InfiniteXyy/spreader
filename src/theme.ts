@@ -73,7 +73,7 @@ function getTheme(darkMode: boolean): DefaultTheme {
     containerColor: defaultMode ? colors.container : colors.containerLight,
 
     primaryColor: colors.primary.default,
-    warningColor: colors.warning.default,
+    warningColor: defaultMode ? colors.warning.default : colors.warning.pin,
     successColor: colors.green,
   };
 }

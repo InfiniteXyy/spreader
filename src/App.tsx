@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { ThemeProvider } from 'styled-components/native';
-import { AppContainer } from './routers';
+import { AppContainer } from './router';
 import { connect, Provider } from 'react-redux';
 import { persistor, store } from './store';
 import { getTheme } from './theme';

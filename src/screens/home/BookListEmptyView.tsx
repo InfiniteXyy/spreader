@@ -11,7 +11,7 @@ export default function(props: { onPress(): void }) {
       <Text variant="subtitle" bold>
         空空如也
       </Text>
-      <Text variant="tip" secondary style={{ marginVertical: 15, textAlign: 'center' }}>
+      <Text variant="tip" secondary style={{ marginVertical: 15, textAlign: 'center', lineHeight: 20 }}>
         点击"搜索栏"或者下边按钮，去添加你的第一本小说吧～
       </Text>
       <Button title="前往添加" variant="primary" onPress={props.onPress} />

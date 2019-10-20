@@ -1,5 +1,6 @@
 import styled from 'styled-components/native';
 import { Text } from '../../components';
+import Icon from 'react-native-vector-icons/Feather';
 
 export const CardWrapper = styled.TouchableOpacity`
   padding: 10px 20px;
@@ -24,4 +25,13 @@ export const CoverImg = styled.Image`
   height: 80px;
   border-radius: 2px;
   margin-right: 20px;
+`;
+
+export const MoreIcon = styled(Icon)`
+  color: ${props => props.theme.tintColor};
+  position: absolute;
+  right: -20px;
+  top: -10px;
+  padding: 10px 20px 20px 20px;
+  font-size: 20px;
 `;

@@ -21,13 +21,17 @@ export function range(start: number, stop?: number, step?: number) {
   return result;
 }
 
-export function getLastOf<T, R>(array: T[], pick: (t: T) => R, or: R): R {
+export function getLastAndPick<T, R>(array: T[], pick: (t: T) => R, or: R): R {
   if (array.length === 0) return or;
   return pick(array[array.length - 1]);
 }
 
-export function getLast<T>(array: T[], or: T): T {
+export function getLastOr<T>(array: T[], or: T): T {
   if (array.length === 0) return or;
+  return array[array.length - 1];
+}
+
+export function getLast<T>(array: T[]): T | undefined {
   return array[array.length - 1];
 }
 
@@ -64,4 +68,24 @@ export function createPageItems<T>(
   const result = items.slice(start, end);
   if (reverse) result.reverse();
   return [injected, ...result];
+}
+
+export function hofActions<T extends { [K: string]: () => void }>(prevFunctions: T, injectedFunction: () => void) {
+  let result: T = { ...prevFunctions };
+  for (const k of Object.keys(prevFunctions) as Array<keyof T>) {
+    (result[k] as any) = () => {
+      injectedFunction();
+      prevFunctions[k]();
+    };
+  }
+  return result;
+}
+
+export function findNext<T>(data: T[], predicate: (item: T) => boolean): T {
+  const index = data.findIndex(predicate);
+  if (index === -1) return data[0];
+  if (index + 1 >= data.length) {
+    return data[data.length - 1];
+  }
+  return data[index + 1];
 }
