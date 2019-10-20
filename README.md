@@ -35,13 +35,14 @@ A cross-platform reader, which can read anything with user-defined spiders
 
 
 
-### 截图 / Screenshots (old version)
-PS: new version is now developing with TypeScript
+### 截图 / Screenshots
+PS: Some features is still developing with TypeScript
 
 
-Dark Mode         |  Light Mode
-:-------------------------:|:-------------------------:
-![夜间模式主页](https://raw.githubusercontent.com/InfiniteXyy/spreader/master/screenshots/sc1.PNG) | ![主页](https://raw.githubusercontent.com/InfiniteXyy/spreader/master/screenshots/sc2.PNG)
-![夜间模式爬虫仓库](https://raw.githubusercontent.com/InfiniteXyy/spreader/master/screenshots/sc4.PNG) | ![爬虫仓库](https://raw.githubusercontent.com/InfiniteXyy/spreader/master/screenshots/sc3.PNG)
-![theme1](https://raw.githubusercontent.com/InfiniteXyy/spreader/master/screenshots/sc6.PNG) | ![夜间模式主页](https://raw.githubusercontent.com/InfiniteXyy/spreader/master/screenshots/sc5.PNG)
-![theme2](https://raw.githubusercontent.com/InfiniteXyy/spreader/master/screenshots/sc7.PNG) | ![theme3](https://raw.githubusercontent.com/InfiniteXyy/spreader/master/screenshots/sc8.PNG)
+Default Mode         |  Dark Mode | More
+:-------------------------:|:-------------------------:|:-------------------------:|
+![chapters](https://raw.githubusercontent.com/InfiniteXyy/spreader/master/screenshots/chapters.png)|![chapters-dark](https://raw.githubusercontent.com/InfiniteXyy/spreader/master/screenshots/chapters-dark.png)|![chapters-open](https://raw.githubusercontent.com/InfiniteXyy/spreader/master/screenshots/chapters-open.png)
+![home](https://raw.githubusercontent.com/InfiniteXyy/spreader/master/screenshots/home.png)|![home-dark](https://raw.githubusercontent.com/InfiniteXyy/spreader/master/screenshots/home-dark.png)|![dropdown](https://raw.githubusercontent.com/InfiniteXyy/spreader/master/screenshots/dropdown.png)
+![reader](https://raw.githubusercontent.com/InfiniteXyy/spreader/master/screenshots/reader.png)|![reader-dark](https://raw.githubusercontent.com/InfiniteXyy/spreader/master/screenshots/reader-dark.png)|![reader-loading](https://raw.githubusercontent.com/InfiniteXyy/spreader/master/screenshots/reader-loading.png)
+![reader-modal](https://raw.githubusercontent.com/InfiniteXyy/spreader/master/screenshots/reader-modal.png)|![reader-modal-dark](https://raw.githubusercontent.com/InfiniteXyy/spreader/master/screenshots/reader-modal-dark.png)|![setting](https://raw.githubusercontent.com/InfiniteXyy/spreader/master/screenshots/setting.png)
+![search](https://raw.githubusercontent.com/InfiniteXyy/spreader/master/screenshots/search.png)|![search-dark](https://raw.githubusercontent.com/InfiniteXyy/spreader/master/screenshots/search-dark.png)|
