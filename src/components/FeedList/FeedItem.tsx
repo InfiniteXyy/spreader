@@ -37,6 +37,7 @@ export function FeedItem(props: IFeedItemProps) {
             {isAdded ? <Text secondary>已添加</Text> : <FeedListIcon name="download" />}
           </TouchableOpacity>
         </HStack>
+
         <HStack expand center>
           {lastUpdate}
           <HStack>{tagList}</HStack>

@@ -5,6 +5,11 @@ import { SavedBook } from '../../model/Book';
 
 export function bookReducer(state = bookInitialState, action: BookAction): BookState {
   switch (action.type) {
+    case BookActionType.SET_SAVED_BOOK_LIST:
+      return {
+        ...state,
+        books: action.books,
+      };
     case BookActionType.ADD_BOOK: {
       const savedBook: SavedBook = {
         ...action.book,
