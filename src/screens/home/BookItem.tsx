@@ -35,14 +35,13 @@ export function BookItem(props: IBookItemProps) {
         </View>
         <HStack expand center>
           <HStack>
-            <Text secondary>最新 </Text>
-            {book.isFetching ? (
-              <View style={{ marginLeft: 8 }}>
-                <Spinner type="ThreeBounce" size={12} color={theme.primaryText} />
-              </View>
-            ) : (
-              <Text bold>{lastChapter}</Text>
-            )}
+            <Text secondary>{book.isFetching ? '加载' : '最新'} </Text>
+            <Text bold secondary={book.isFetching}>
+              {lastChapter}
+            </Text>
+            <View style={{ marginLeft: 8 }}>
+              <Spinner isVisible={book.isFetching} type="ThreeBounce" size={12} color={theme.secondaryText} />
+            </View>
           </HStack>
 
           {unReadCount !== 0 && (
