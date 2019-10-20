@@ -27,7 +27,7 @@ function Dropdown(props: IDropdownProps) {
       style={{ backgroundColor: theme.dark ? '#4b4b4b' : 'white', borderColor: 'red' }}>
       {props.menuItems.map(i => {
         if (i instanceof DropdownDivider) {
-          return <MenuDivider color={theme.dividerColor} />;
+          return <MenuDivider key="divider" color={theme.dividerColor} />;
         } else {
           return (
             <MenuItem

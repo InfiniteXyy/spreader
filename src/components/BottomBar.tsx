@@ -16,9 +16,7 @@ function TabBarComponent(props: IStateProps & any) {
       style={{
         backgroundColor: props.dark ? colors.darkBg : colors.bg,
         borderTopWidth: 0.5,
-        borderTopColor: props.dark
-          ? colors.dividerColorLight
-          : colors.dividerColor,
+        borderTopColor: props.dark ? colors.dividerColorLight : colors.dividerColor,
         height: 60,
       }}
     />

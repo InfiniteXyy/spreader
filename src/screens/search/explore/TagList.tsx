@@ -1,12 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Text } from '../../../components';
-import { SectionContainer, TagItem } from './components';
+import { SectionContainer } from './components';
 import { ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import { IState } from '../../../reducers';
 import { ThunkDispatch } from 'redux-thunk';
-import { HubAction, HubLoadTagsAsync, HubLoadTrendingAsync } from '../../../reducers/hub/hub.action';
+import { HubAction, HubLoadTagsAsync } from '../../../reducers/hub/hub.action';
 import { BookTag } from '../../../model/BookTag';
+import { TagItem } from './TagItem';
+import { NavigationInjectedProps, withNavigation } from 'react-navigation';
 
 interface ITopicListProps {}
 
@@ -19,11 +21,17 @@ interface IDispatchProps {
   onLoad(): void;
 }
 
-function _TagList(props: ITopicListProps & IStateProps & IDispatchProps) {
+function _TagList(props: ITopicListProps & IStateProps & IDispatchProps & NavigationInjectedProps) {
   const { data, onLoad } = props;
   useEffect(() => {
     onLoad();
   }, []);
+  const onNavigateTopic = useCallback(
+    BookTag => () => {
+      props.navigation.navigate('topic');
+    },
+    [props.navigation],
+  );
   return (
     <SectionContainer>
       <Text variant="title" bold style={{ marginLeft: 20 }}>
@@ -31,7 +39,12 @@ function _TagList(props: ITopicListProps & IStateProps & IDispatchProps) {
       </Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         {data.map((item, index) => (
-          <TagItem key={item.id.toString()} item={item} isLastItem={index === data.length - 1} />
+          <TagItem
+            key={item.id.toString()}
+            item={item}
+            isLastItem={index === data.length - 1}
+            onPress={onNavigateTopic(item)}
+          />
         ))}
       </ScrollView>
     </SectionContainer>
@@ -54,4 +67,4 @@ function mapDispatchToProps(dispatch: ThunkDispatch<IState, void, HubAction>): I
 export const TagList = connect(
   mapStateToProps,
   mapDispatchToProps,
-)(_TagList);
+)(withNavigation(_TagList));

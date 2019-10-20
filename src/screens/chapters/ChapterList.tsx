@@ -1,6 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { SavedChapter } from '../../model/Chapter';
-import { FlatList, FlatListProps, Platform } from 'react-native';
+import {
+  FlatList,
+  FlatListProps,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  Platform,
+  ScrollViewProps,
+} from 'react-native';
 import { HStack, Text } from '../../components';
 import { SavedBook } from '../../model/Book';
 import { Banner } from './Banner';
@@ -16,6 +23,7 @@ import { Loader } from 'rn-placeholder';
 interface IChapterListProps {
   book: SavedBook;
   onLoad(): void;
+  onScroll(event: NativeSyntheticEvent<NativeScrollEvent>): void;
 }
 
 interface IDispatchProps {
@@ -36,13 +44,14 @@ const dummyChapter: SavedChapter = {
 function _ChapterList(props: IChapterListProps & IDispatchProps & NavigationInjectedProps) {
   const { book, onChangePage } = props;
   const visibleChapters = createPageItems<SavedChapter>(book.chapters, book.currentPage, !!book.reverse, dummyChapter);
-
   const onNavigateChapter = (chapter: SavedChapter) => {
     props.navigation.navigate({ routeName: 'reader', params: { bookId: book.id, chapterHref: chapter.href } });
   };
 
   return (
     <FlatList
+      onScroll={props.onScroll}
+      scrollEventThrottle={64}
       stickyHeaderIndices={[1]}
       removeClippedSubviews={!(Platform.OS === 'android')} // fix android crash issue
       ListEmptyComponent={<Loader style={{ paddingTop: 100 }} />}
