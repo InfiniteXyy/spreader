@@ -9,6 +9,7 @@ import { BookAction, BookMarkAllAsRead } from '../../reducers/book/book.action';
 import { IState } from '../../reducers';
 import { SavedChapter } from '../../model/Chapter';
 import { NavigationInjectedProps, withNavigation } from 'react-navigation';
+import { findNext } from '../../utils';
 
 interface IBannerProps {
   book: SavedBook;
@@ -62,16 +63,14 @@ function _Banner(props: IBannerProps & IDispatchProps & IStateProps & Navigation
 function mapStateToProps(state: IState, props: IBannerProps): IStateProps {
   const { book } = props;
   const { chapters, lastRead } = book;
-  if (lastRead === undefined) {
+  if (lastRead === undefined)
     return {
       nextChapter: chapters[0],
     };
-  } else {
-    const chapterIndex = chapters.findIndex(i => i.href === lastRead.href);
+  else
     return {
-      nextChapter: chapterIndex + 1 < chapters.length ? chapters[chapterIndex + 1] : undefined,
+      nextChapter: findNext(chapters, i => i.href === lastRead.href),
     };
-  }
 }
 
 function mapDispatchToProps(dispatch: Dispatch<BookAction>): IDispatchProps {

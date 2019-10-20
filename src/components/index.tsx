@@ -52,3 +52,4 @@ export { Button } from './Button';
 export { Tag } from './Tag';
 export { SearchBar } from './SearchBar';
 export { Spinner } from './Spinner';
+export { Dropdown } from './Dropdown';

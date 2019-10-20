@@ -1,12 +1,12 @@
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
-import Chapters from '../screens/chapters';
+import Chapters from './screens/chapters';
 import { Platform } from 'react-native';
-import { Reader } from '../screens/reader';
-import { Search } from '../screens/search/Search';
-import { fadeIn, fadeOut, fromBottom, fromRight, fromTop } from 'react-navigation-transitions';
-import { Home } from '../screens/home';
-import { Setting } from '../screens/setting';
+import { Reader } from './screens/reader';
+import { Search } from './screens/search/Search';
+import { fadeIn, fadeOut, fromBottom, fromTop } from 'react-navigation-transitions';
+import { Home } from './screens/home';
+import { Setting } from './screens/setting';
 
 const RouteConfigs = {
   home: {
@@ -43,7 +43,6 @@ const stack = createStackNavigator(RouteConfigs, {
     } else if (nextScene.route.routeName === 'setting') {
       return fromBottom();
     }
-    return fromRight();
   },
   transparentCard: Platform.OS === 'android',
 });
