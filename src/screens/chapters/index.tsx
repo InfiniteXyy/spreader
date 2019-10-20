@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Container, Header, Spinner } from '../../components';
 import { NavigationInjectedProps, withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
@@ -7,6 +7,7 @@ import { SavedBook } from '../../model/Book';
 import { BookAction, BookLoadChaptersAsync } from '../../reducers/book/book.action';
 import { ThunkDispatch } from 'redux-thunk';
 import { ChapterList } from './ChapterList';
+import { NativeScrollEvent, NativeSyntheticEvent } from 'react-native';
 
 interface IStateProps {
   book?: SavedBook;
@@ -18,6 +19,7 @@ interface IDispatchProps {
 
 function Chapters(props: NavigationInjectedProps & IStateProps & IDispatchProps) {
   const { book, navigation } = props;
+  const [titleVisible, setTitleVisible] = useState(false);
   if (!book) {
     return <Container />;
   }
@@ -27,10 +29,36 @@ function Chapters(props: NavigationInjectedProps & IStateProps & IDispatchProps)
     }
   }, []);
 
+  const onScroll = useCallback(
+    (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+      if (!titleVisible) {
+        if (event.nativeEvent.contentOffset.y >= 70) {
+          setTitleVisible(true);
+        }
+      } else {
+        if (event.nativeEvent.contentOffset.y < 70) {
+          setTitleVisible(false);
+        }
+      }
+    },
+    [titleVisible],
+  );
+
   return (
     <Container>
-      <Header goBack={() => navigation.goBack()} rightComponent={<Spinner loading={book.isFetching} />} />
-      <ChapterList book={book} onLoad={() => props.loadChapters(book)} />
+      <Header
+        title={book.title}
+        titleVisible={titleVisible}
+        goBack={() => navigation.goBack()}
+        rightComponent={<Spinner loading={book.isFetching} />}
+      />
+      <ChapterList
+        onScroll={onScroll}
+        titleVisible={titleVisible}
+        setTitleVisible={setTitleVisible}
+        book={book}
+        onLoad={() => props.loadChapters(book)}
+      />
     </Container>
   );
 }
