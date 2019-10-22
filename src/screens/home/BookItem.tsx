@@ -51,10 +51,13 @@ export function BookItem(props: IBookItemProps) {
     <CardWrapper {...props}>
       <CoverImg source={{ uri: book.coverImg }} />
       <VStack expand>
-        <View>
-          <CardTitle>{book.title}</CardTitle>
-          <CardSubTitle>{book.author}</CardSubTitle>
-        </View>
+        <HStack expand>
+          <View>
+            <CardTitle>{book.title}</CardTitle>
+            <CardSubTitle>{book.author}</CardSubTitle>
+          </View>
+          {dropdown}
+        </HStack>
         <HStack expand center>
           <HStack>
             <Text secondary>{book.isFetching ? '更新' : '最新'} </Text>
@@ -73,7 +76,6 @@ export function BookItem(props: IBookItemProps) {
           )}
         </HStack>
       </VStack>
-      {dropdown}
     </CardWrapper>
   );
 }

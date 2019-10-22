@@ -26,11 +26,11 @@ export function ReaderFooter(props: IFooterProps) {
   }, [visible]);
 
   const prevChapterComponent = prevChapter ? (
-    <TouchableOpacity onPress={() => onNavigate(prevChapter)}>
+    <TouchableOpacity onPress={() => onNavigate(prevChapter)} style={{ flex: 1 }}>
       <Text style={{ color: readerTheme.fontColor }} bold variant="tip">
         上一章
       </Text>
-      <Text style={{ color: readerTheme.titleColor, marginTop: 3 }} variant="tip">
+      <Text style={{ color: readerTheme.titleColor, marginTop: 3 }} variant="tip" numberOfLines={1}>
         {prevChapter.title}
       </Text>
     </TouchableOpacity>
@@ -39,11 +39,11 @@ export function ReaderFooter(props: IFooterProps) {
   );
 
   const nextChapterComponent = nextChapter ? (
-    <TouchableOpacity onPress={() => onNavigate(nextChapter)} style={{ alignItems: 'flex-end' }}>
+    <TouchableOpacity onPress={() => onNavigate(nextChapter)} style={{ alignItems: 'flex-end', flex: 1 }}>
       <Text style={{ color: readerTheme.fontColor }} bold variant="tip">
         下一章
       </Text>
-      <Text style={{ color: readerTheme.titleColor, marginTop: 3 }} variant="tip">
+      <Text style={{ color: readerTheme.titleColor, marginTop: 3 }} variant="tip"  numberOfLines={1}>
         {nextChapter.title}
       </Text>
     </TouchableOpacity>

@@ -29,7 +29,7 @@ export const CoverImg = styled.Image`
 
 export const MoreIcon = styled(Icon)`
   color: ${props => props.theme.tintColor};
-  position: absolute;
+  position: relative;
   right: -20px;
   top: -10px;
   padding: 10px 20px 20px 20px;
