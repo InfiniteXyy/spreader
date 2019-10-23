@@ -3,6 +3,8 @@ import { ReaderAction, ReaderActionType } from './reader.action';
 
 export function readerReducer(state = readerInitialState, action: ReaderAction): ReaderState {
   switch (action.type) {
+    case ReaderActionType.UPDATE_SCREEN_PADDING:
+      return { ...state, screenPadding: Math.round(action.screenPadding) };
     case ReaderActionType.UPDATE_FONT_SIZE:
       return { ...state, fontSize: Math.round(action.fontSize) };
     case ReaderActionType.UPDATE_TITLE_SIZE:

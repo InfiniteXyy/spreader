@@ -8,6 +8,7 @@ export enum ReaderActionType {
   SET_TITLE_ALIGN = '[Reader] set title align',
   UPDATE_LINE_HEIGHT = '[Reader] update line height',
   UPDATE_PARA_SPACE = '[Reader] update paragraph spacing',
+  UPDATE_SCREEN_PADDING = '[Reader] update screen padding',
   UPDATE_READER_THEME = '[Reader] set theme',
   RESET_STYLE = '[Reader] reset style',
 }
@@ -36,6 +37,10 @@ export class ReaderSetTheme implements Action {
   readonly type = ReaderActionType.UPDATE_READER_THEME;
   constructor(public readonly theme: ReaderTheme) {}
 }
+export class ReaderSetScreenPadding implements Action {
+  readonly type = ReaderActionType.UPDATE_SCREEN_PADDING;
+  constructor(public readonly screenPadding: number) {}
+}
 export class ReaderResetStyle implements Action {
   readonly type = ReaderActionType.RESET_STYLE;
 }
@@ -47,4 +52,5 @@ export type ReaderAction =
   | ReaderSetLineHeight
   | ReaderSetParaSpacing
   | ReaderSetTheme
+  | ReaderSetScreenPadding
   | ReaderResetStyle;

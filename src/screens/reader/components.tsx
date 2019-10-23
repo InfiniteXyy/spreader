@@ -5,10 +5,6 @@ import { ReaderThemeContext } from './index';
 import { Animated } from 'react-native';
 import { getBottomSpace } from 'react-native-iphone-x-helper';
 
-export const ReaderScroll = styled.ScrollView`
-  padding: 0 20px;
-`;
-
 export const EditorItemContainer = styled(HStack).attrs({ center: true, expand: true })`
   height: 65px;
 `;

@@ -4,7 +4,7 @@ import { fadeIn, fadeOut, fromBottom, fromRight, fromTop } from 'react-navigatio
 
 import Chapters from './screens/chapters';
 import { Platform } from 'react-native';
-import { Reader } from './screens/reader';
+import { Reader } from './screens/reader/Reader';
 import { Search } from './screens/search/Search';
 import { Home } from './screens/home';
 import { Setting } from './screens/setting';

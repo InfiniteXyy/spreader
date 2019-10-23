@@ -9,6 +9,7 @@ export interface ReaderState {
   titleAlign: TitleAlign;
   lineHeightRatio: number;
   paragraphSpace: number;
+  screenPadding: number;
   readerTheme: ReaderTheme;
 }
 
@@ -18,5 +19,6 @@ export const readerInitialState: ReaderState = {
   titleSize: 22,
   lineHeightRatio: 1.8,
   paragraphSpace: 0.7,
+  screenPadding: 8,
   readerTheme: DefaultReaderThemes[0],
 };

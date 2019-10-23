@@ -1,23 +1,24 @@
-import React, { createContext } from 'react';
+import React from 'react';
 import { IState } from '../../reducers';
 import { connect } from 'react-redux';
 import { ReaderState, TitleAlign } from '../../reducers/reader/reader.state';
 import { Dispatch } from 'redux';
 import Modal from 'react-native-modal';
-import { Container, Text } from '../../components';
+import { Text } from '../../components';
 
 import {
   ReaderAction,
   ReaderSetFontSize,
   ReaderSetLineHeight,
   ReaderSetParaSpacing,
+  ReaderSetScreenPadding,
   ReaderSetTheme,
   ReaderSetTitleAlign,
   ReaderSetTitleSize,
 } from '../../reducers/reader/reader.action';
 import { AlignOptionContainer, EditorSlider, ThemeOptionContainer } from './EditorItem';
 import { View } from 'react-native';
-import { DefaultReaderThemes, ReaderTheme } from '../../model/Theme';
+import { ReaderTheme } from '../../model/Theme';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 
 interface IStateProps {
@@ -31,6 +32,7 @@ interface IDispatchProps {
   setParaSpace(space: number): void;
   setTitleAlign(align: TitleAlign): void;
   setTheme(theme: ReaderTheme): void;
+  setScreenPadding(screenPadding: number): void;
 }
 
 interface IEditorProps {
@@ -72,6 +74,12 @@ function _Editor(props: IStateProps & IDispatchProps & IEditorProps) {
             label="行间距"
           />
           <EditorSlider value={style.paragraphSpace} onChange={props.setParaSpace} range={[0, 1.5]} label="段间距" />
+          <EditorSlider
+            value={style.screenPadding}
+            onChange={props.setScreenPadding}
+            range={[8, 30]}
+            label="页面边距"
+          />
           <ThemeOptionContainer value={style.readerTheme} onChange={props.setTheme} label="主题" />
         </View>
       </View>
@@ -95,6 +103,9 @@ function mapDispatchToProps(dispatch: Dispatch<ReaderAction>): IDispatchProps {
     },
     setLineHeight(height: number): void {
       dispatch(new ReaderSetLineHeight(height));
+    },
+    setScreenPadding(screenPadding: number): void {
+      dispatch(new ReaderSetScreenPadding(screenPadding));
     },
     setParaSpace(space: number): void {
       dispatch(new ReaderSetParaSpacing(space));

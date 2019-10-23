@@ -1,7 +1,7 @@
 import { SavedBook } from '../../model/Book';
 
 export interface BookState {
-  books: SavedBook[];
+  books: readonly SavedBook[];
 }
 
 export const bookInitialState: BookState = {

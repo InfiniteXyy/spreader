@@ -1,11 +1,10 @@
 import React, { useCallback, useContext, useEffect, useMemo } from 'react';
 import { Animated, Platform, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { ThemeContext } from 'styled-components';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import { colors } from '../../theme';
 import { HStack } from '../../components';
-import { ReaderThemeContext } from './index';
+import { ReaderThemeContext } from '.';
 
 interface IReaderHeaderProps {
   goBack(): void;
