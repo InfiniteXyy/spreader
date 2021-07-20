@@ -14,7 +14,7 @@
     "lodash": "^4.17.15",
     "lodash.merge": "^4.6.2",
     "react": "16.8.1",
-    "react-native": "0.61.2",
+    "react-native": "0.62.3",
     "react-native-cheerio": "^1.0.0-rc.4",
     "react-native-dark-mode": "^0.2.0",
     "react-native-draggable-flatlist": "^1.1.9",
