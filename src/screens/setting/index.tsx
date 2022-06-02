@@ -3,25 +3,24 @@ import { Container, HStack, Title } from '../../components';
 import { SettingList } from './SettingList';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { ThemeContext } from 'styled-components/native';
-import { NavigationInjectedProps, withNavigation } from 'react-navigation';
+import { useNavigation } from '@react-navigation/native';
 
-function _Setting(props: NavigationInjectedProps) {
+export function Setting() {
+  const navigation = useNavigation();
   const theme = useContext(ThemeContext);
   return (
     <Container>
       <HStack center expand>
         <Title>设置</Title>
         <Icon
-          name="ios-arrow-down"
+          name="ios-arrow-back"
           size={20}
           style={{ padding: 20 }}
           color={theme.tintColor}
-          onPress={() => props.navigation.goBack()}
+          onPress={() => navigation.goBack()}
         />
       </HStack>
       <SettingList />
     </Container>
   );
 }
-
-export const Setting = withNavigation(_Setting);

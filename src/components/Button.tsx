@@ -11,8 +11,8 @@ interface IButtonProps extends TouchableOpacityProps {
 const SimpleButtonWrapper = styled.TouchableOpacity`
   border-radius: 4px;
   padding: 7px 6px;
-  border: 0.5px solid ${props => props.theme.tintColor};
-  background-color: ${props => props.theme.containerColor};
+  border: 0.5px solid ${(props) => props.theme.tintColor};
+  background-color: ${(props) => props.theme.containerColor};
   margin-right: 10px;
   align-items: center;
   justify-content: center;
@@ -27,7 +27,7 @@ const SimpleButtonText = styled(Text)`
 const PrimaryButtonWrapper = styled.TouchableOpacity`
   border-radius: 8px;
   padding: 10px 20px;
-  background-color: ${props => props.theme.primaryColor};
+  background-color: ${(props) => props.theme.primaryColor};
   margin-right: 10px;
   align-items: center;
   justify-content: center;
@@ -40,13 +40,13 @@ const PrimaryButtonText = styled.Text`
 `;
 
 export function Button(props: IButtonProps) {
-  if (props.variant === 'primary')
+  if (props.variant === 'primary') {
     return (
       <PrimaryButtonWrapper onPress={props.onPress}>
         <PrimaryButtonText>{props.title}</PrimaryButtonText>
       </PrimaryButtonWrapper>
     );
-  else {
+  } else {
     return (
       <SimpleButtonWrapper onPress={props.onPress}>
         <SimpleButtonText>{props.title}</SimpleButtonText>

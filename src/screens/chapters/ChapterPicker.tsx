@@ -35,7 +35,7 @@ export function ChapterPicker(props: IChapterPickerProps) {
   const pickerList = useMemo<PickerItem[]>(() => {
     const pageCount = Math.ceil(maxLength / PAGE_LENGTH);
     const rowData = reverse ? range(pageCount - 1, -1, -1) : range(0, pageCount);
-    return rowData.map(i => ({
+    return rowData.map((i) => ({
       label: getPageTitle(i, PAGE_LENGTH, maxLength, !!reverse),
       value: i,
     }));
@@ -47,7 +47,7 @@ export function ChapterPicker(props: IChapterPickerProps) {
     } else {
       onChangePage(book, Math.floor(maxLength / PAGE_LENGTH), true);
     }
-  }, [maxLength, reverse]);
+  }, [book, maxLength, onChangePage, reverse]);
 
   return (
     <View>
@@ -73,12 +73,13 @@ export function ChapterPicker(props: IChapterPickerProps) {
           flex: 1,
           margin: 0,
           justifyContent: 'flex-end',
-        }}>
+        }}
+      >
         <View style={[styles.picker, { backgroundColor: theme.bgColor }]}>
           <ScrollPicker
             data={pickerList}
-            onValueChange={pageIndex => onChangePage(book, pageIndex, !!book.reverse)}
-            mapValueToIndex={value => (reverse ? getReversedListIndex(value, book.chapters.length) : value)}
+            onValueChange={(pageIndex) => onChangePage(book, Number(pageIndex), !!book.reverse)}
+            mapValueToIndex={(value) => (reverse ? getReversedListIndex(value, book.chapters.length) : value)}
             selectedValue={currentPage}
           />
         </View>

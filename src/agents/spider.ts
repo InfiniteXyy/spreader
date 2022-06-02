@@ -1,16 +1,15 @@
 import cheerio from 'react-native-cheerio';
-import agent from './index';
-import { SavedChapter } from '../model/Chapter';
 import { GetContentMethod, GetListMethod } from '../model/Book';
+import { SavedChapter } from '../model/Chapter';
+import agent from './index';
 
 export async function getList(method: GetListMethod) {
   const { query, url, href_prefix, reverse } = method;
   const [q, range] = query.split('|');
   const html = await agent.get(url);
   const $ = cheerio.load(html);
-
   const links: SavedChapter[] = [];
-  $(q).each((index, element) => {
+  $(q).each((_index, element) => {
     let temp = $(element);
     links.push({
       title: temp.text(),
@@ -40,5 +39,5 @@ export async function getContent(url: string, method: GetContentMethod) {
       contents.push($(element).text());
     }
   });
-  return contents.map(i => i.trim()).filter(i => !!i);
+  return contents.map((i) => i.trim()).filter((i) => !!i);
 }

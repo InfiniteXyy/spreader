@@ -1,33 +1,21 @@
-import React, { useState } from 'react';
+import React, { useCallback } from 'react';
 import { SavedChapter } from '../../model/Chapter';
-import {
-  FlatList,
-  FlatListProps,
-  NativeScrollEvent,
-  NativeSyntheticEvent,
-  Platform,
-  ScrollViewProps,
-} from 'react-native';
+import { FlatList, NativeScrollEvent, NativeSyntheticEvent, Platform } from 'react-native';
 import { HStack, Text } from '../../components';
 import { SavedBook } from '../../model/Book';
 import { Banner } from './Banner';
 import { createPageItems } from '../../utils';
 import { ChapterPicker } from './ChapterPicker';
-import { Dispatch } from 'redux';
-import { BookAction, BookChangeIndex } from '../../reducers/book/book.action';
-import { connect } from 'react-redux';
-import { NavigationInjectedProps, withNavigation } from 'react-navigation';
+import { BookChangeIndex } from '../../reducers/book/book.action';
+import { useNavigation } from '@react-navigation/native';
 import { ChapterListItemContainer, ChapterListItemDot } from './components';
 import { Loader } from 'rn-placeholder';
+import { useDispatch } from 'react-redux';
 
 interface IChapterListProps {
   book: SavedBook;
   onLoad(): void;
   onScroll(event: NativeSyntheticEvent<NativeScrollEvent>): void;
-}
-
-interface IDispatchProps {
-  onChangePage(book: SavedBook, index: number, reversed: boolean): void;
 }
 
 interface IChapterItemProps {
@@ -41,11 +29,21 @@ const dummyChapter: SavedChapter = {
   title: '',
 };
 
-function _ChapterList(props: IChapterListProps & IDispatchProps & NavigationInjectedProps) {
-  const { book, onChangePage } = props;
+export function ChapterList(props: IChapterListProps) {
+  const { book } = props;
   const visibleChapters = createPageItems<SavedChapter>(book.chapters, book.currentPage, !!book.reverse, dummyChapter);
+  const navigation = useNavigation<any>();
+  const dispatch = useDispatch();
+
+  const onChangePage = useCallback(
+    (_book: SavedBook, index: number, reversed: boolean) => {
+      dispatch(new BookChangeIndex(_book, index, reversed));
+    },
+    [dispatch],
+  );
+
   const onNavigateChapter = (chapter: SavedChapter) => {
-    props.navigation.navigate({ routeName: 'reader', params: { bookId: book.id, chapterHref: chapter.href } });
+    navigation.navigate('reader', { bookId: book.id, chapterHref: chapter.href });
   };
 
   return (
@@ -59,8 +57,8 @@ function _ChapterList(props: IChapterListProps & IDispatchProps & NavigationInje
       onRefresh={props.onLoad}
       refreshing={false}
       data={visibleChapters}
-      keyExtractor={item => item.href}
-      renderItem={i => {
+      keyExtractor={(item) => item.href}
+      renderItem={(i) => {
         if (i.item.href === 'dummy') {
           return <ChapterPicker book={book} onChangePage={onChangePage} />;
         } else {
@@ -82,16 +80,3 @@ function ChapterItem(props: IChapterItemProps) {
     </ChapterListItemContainer>
   );
 }
-
-function mapDispatchToProps(dispatch: Dispatch<BookAction>): IDispatchProps {
-  return {
-    onChangePage(book: SavedBook, index: number, reversed: boolean): void {
-      dispatch(new BookChangeIndex(book, index, reversed));
-    },
-  };
-}
-
-export const ChapterList = connect(
-  null,
-  mapDispatchToProps,
-)(withNavigation(_ChapterList));

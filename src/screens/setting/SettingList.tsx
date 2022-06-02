@@ -3,7 +3,7 @@ import { IState } from '../../reducers';
 import { Dispatch } from 'redux';
 import { AppAction, AppToggleMode, AppToggleModeFollowSystem } from '../../reducers/app/app.action';
 import { connect } from 'react-redux';
-import { ScrollView, Switch, View } from 'react-native';
+import { ScrollView, Switch } from 'react-native';
 import { SettingItemContainer } from './components';
 import { Text } from '../../components';
 
@@ -60,7 +60,4 @@ function mapDispatchToProps(dispatch: Dispatch<AppAction>): IDispatchProps {
   };
 }
 
-export const SettingList = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(_SettingList);
+export const SettingList = connect(mapStateToProps, mapDispatchToProps)(_SettingList);

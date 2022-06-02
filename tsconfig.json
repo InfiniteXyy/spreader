@@ -1,9 +1,6 @@
 {
+  "extends": "expo/tsconfig.base",
   "compilerOptions": {
-    "strictNullChecks": true,
-    "esModuleInterop": true,
-    "jsx": "react-native",
-    "noImplicitAny": true,
-    "lib": ["es2015"]
+    "strict": true
   }
 }

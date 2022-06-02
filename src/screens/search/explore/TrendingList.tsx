@@ -24,7 +24,7 @@ function _TrendingList(props: IFeedListProps & IStateProps & IDispatchProps) {
   const { data, onLoad } = props;
   useEffect(() => {
     onLoad();
-  }, []);
+  }, [onLoad]);
   return (
     <SectionContainer>
       <Text variant="title" bold style={{ marginLeft: 20 }}>
@@ -50,7 +50,4 @@ function mapDispatchToProps(dispatch: ThunkDispatch<IState, void, HubAction>): I
   };
 }
 
-export const TrendingList = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(_TrendingList);
+export const TrendingList = connect(mapStateToProps, mapDispatchToProps)(_TrendingList);

@@ -1,5 +1,5 @@
 import React from 'react';
-import { BottomTabBar } from 'react-navigation-tabs';
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { connect } from 'react-redux';
 import { IState } from '../reducers';
 import { colors } from '../theme';
@@ -8,9 +8,11 @@ interface IStateProps {
   dark: boolean;
 }
 
+const BottomTabBar = createMaterialBottomTabNavigator();
+
 function TabBarComponent(props: IStateProps & any) {
   return (
-    <BottomTabBar
+    <BottomTabBar.Navigator
       {...props}
       activeTintColor={colors.warning.pin}
       style={{

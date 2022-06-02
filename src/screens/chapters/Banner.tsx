@@ -8,7 +8,7 @@ import { Dispatch } from 'redux';
 import { BookAction, BookMarkAllAsRead } from '../../reducers/book/book.action';
 import { IState } from '../../reducers';
 import { SavedChapter } from '../../model/Chapter';
-import { NavigationInjectedProps, withNavigation } from 'react-navigation';
+import { useNavigation } from '@react-navigation/native';
 import { findNext } from '../../utils';
 
 interface IBannerProps {
@@ -23,12 +23,15 @@ interface IDispatchProps {
   markAllAsRead(book: SavedBook): void;
 }
 
-function _Banner(props: IBannerProps & IDispatchProps & IStateProps & NavigationInjectedProps) {
+function _Banner(props: IBannerProps & IDispatchProps & IStateProps) {
   const { book, markAllAsRead, nextChapter } = props;
+  const navigation = useNavigation<any>();
 
   const onReadNext = () => {
-    if (nextChapter === undefined) return;
-    props.navigation.navigate({ routeName: 'reader', params: { bookId: book.id, chapterHref: nextChapter.href } });
+    if (nextChapter === undefined) {
+      return;
+    }
+    navigation.navigate('reader', { bookId: book.id, chapterHref: nextChapter.href });
   };
 
   return (
@@ -63,14 +66,15 @@ function _Banner(props: IBannerProps & IDispatchProps & IStateProps & Navigation
 function mapStateToProps(state: IState, props: IBannerProps): IStateProps {
   const { book } = props;
   const { chapters, lastRead } = book;
-  if (lastRead === undefined)
+  if (lastRead === undefined) {
     return {
       nextChapter: chapters[0],
     };
-  else
+  } else {
     return {
-      nextChapter: findNext(chapters, i => i.href === lastRead.href),
+      nextChapter: findNext(chapters, (i) => i.href === lastRead.href),
     };
+  }
 }
 
 function mapDispatchToProps(dispatch: Dispatch<BookAction>): IDispatchProps {
@@ -80,7 +84,4 @@ function mapDispatchToProps(dispatch: Dispatch<BookAction>): IDispatchProps {
     },
   };
 }
-export const Banner = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(withNavigation(_Banner));
+export const Banner = connect(mapStateToProps, mapDispatchToProps)(_Banner);

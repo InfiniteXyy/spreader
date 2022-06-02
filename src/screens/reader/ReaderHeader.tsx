@@ -1,7 +1,6 @@
 import React, { useCallback, useContext, useEffect, useMemo } from 'react';
 import { Animated, Platform, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { ThemeContext } from 'styled-components';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import { colors } from '../../theme';
 import { HStack } from '../../components';
@@ -26,11 +25,13 @@ function ReaderHeader(props: IReaderHeaderProps) {
       duration: visible ? 200 : 100,
       useNativeDriver: true,
     }).start();
-  }, [visible]);
+  }, [headerOpacity, visible]);
 
   const onBack = useCallback(() => {
-    if (visible) goBack();
-  }, [visible]);
+    if (visible) {
+      goBack();
+    }
+  }, [goBack, visible]);
 
   const leftComponent = (
     <Icon

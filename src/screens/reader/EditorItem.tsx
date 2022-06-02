@@ -33,7 +33,7 @@ export function EditorSlider(props: IEditorSlider) {
         maximumTrackTintColor="rgba(160,160,160,0.1)"
       />
     ),
-    [],
+    [end, onChange, start, value],
   );
   return (
     <EditorItemContainer>
@@ -77,7 +77,7 @@ export function AlignOptionContainer(props: IEditorItem<TitleAlign>) {
     <EditorItemContainer>
       <EditorItemTitle>{label}</EditorItemTitle>
       <HStack center>
-        {AlignOptions.map(i => (
+        {AlignOptions.map((i) => (
           <Icon key={i.type} onPress={() => onChange(i.type)} style={iconStyle(i.type)} name={i.iconName} />
         ))}
       </HStack>
@@ -86,12 +86,12 @@ export function AlignOptionContainer(props: IEditorItem<TitleAlign>) {
 }
 
 export function ThemeOptionContainer(props: IEditorItem<ReaderTheme>) {
-  const { label, value, onChange } = props;
+  const { label, onChange } = props;
   return (
     <EditorItemContainer>
       <EditorItemTitle>{label}</EditorItemTitle>
       <HStack center>
-        {DefaultReaderThemes.map(i => (
+        {DefaultReaderThemes.map((i) => (
           <TouchableWithoutFeedback onPress={() => onChange(i)} key={i.name}>
             <Ellipse
               size={32}

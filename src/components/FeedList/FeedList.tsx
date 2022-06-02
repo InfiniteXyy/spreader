@@ -24,8 +24,8 @@ interface IDispatchProps {
 function _FeedList(props: IFeedListProps & IStateProps & IDispatchProps) {
   return (
     <View style={{ marginTop: 20 }}>
-      {props.feeds.map(i => {
-        const isAdded = props.books.findIndex(k => i.id === k.id) !== -1;
+      {props.feeds.map((i) => {
+        const isAdded = props.books.findIndex((k) => i.id === k.id) !== -1;
         return (
           <FeedItem
             key={i.id.toString()}
@@ -56,7 +56,4 @@ function mapDispatchToProps(dispatch: Dispatch<BookAction>): IDispatchProps {
   };
 }
 
-export const FeedList = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(_FeedList);
+export const FeedList = connect(mapStateToProps, mapDispatchToProps)(_FeedList);

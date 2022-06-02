@@ -1,11 +1,12 @@
+import { TouchableOpacity } from 'react-native';
+import Icon from 'react-native-vector-icons/Feather';
 import styled from 'styled-components/native';
 import { Text } from '../../components';
-import Icon from 'react-native-vector-icons/Feather';
 
-export const CardWrapper = styled.TouchableOpacity`
+export const CardWrapper = styled(TouchableOpacity)`
   padding: 10px 20px;
   flex-direction: row;
-  background-color: ${props => props.theme.bgColor};
+  background-color: ${(props) => props.theme.bgColor};
 `;
 
 export const CardTitle = styled(Text).attrs({
@@ -28,7 +29,7 @@ export const CoverImg = styled.Image`
 `;
 
 export const MoreIcon = styled(Icon)`
-  color: ${props => props.theme.tintColor};
+  color: ${(props) => props.theme.tintColor};
   position: relative;
   right: -20px;
   top: -10px;

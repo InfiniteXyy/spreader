@@ -1,12 +1,15 @@
-import { Action, applyMiddleware, createStore, Store } from 'redux';
+import { Action, applyMiddleware, createStore } from 'redux';
 import { reducer } from './reducers';
 import thunk from 'redux-thunk';
 import { persistReducer, persistStore } from 'redux-persist';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const actionObjectMiddleWare = (store: Store) => (next: Function) => (action: Action) => {
-  if (typeof action === 'function') next(action);
-  else next({ ...action });
+const actionObjectMiddleWare = () => (next: Function) => (action: Action) => {
+  if (typeof action === 'function') {
+    next(action);
+  } else {
+    next({ ...action });
+  }
 };
 
 const persistConfig = {

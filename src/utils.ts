@@ -1,11 +1,11 @@
 export const PAGE_LENGTH = 50;
 export function range(start: number, stop?: number, step?: number) {
-  if (typeof stop == 'undefined') {
+  if (typeof stop === 'undefined') {
     stop = start;
     start = 0;
   }
 
-  if (typeof step == 'undefined') {
+  if (typeof step === 'undefined') {
     step = 1;
   }
 
@@ -22,12 +22,16 @@ export function range(start: number, stop?: number, step?: number) {
 }
 
 export function getLastAndPick<T, R>(array: T[], pick: (t: T) => R, or: R): R {
-  if (array.length === 0) return or;
+  if (array.length === 0) {
+    return or;
+  }
   return pick(array[array.length - 1]);
 }
 
 export function getLastOr<T>(array: T[], or: T): T {
-  if (array.length === 0) return or;
+  if (array.length === 0) {
+    return or;
+  }
   return array[array.length - 1];
 }
 
@@ -63,10 +67,14 @@ export function createPageItems<T>(
   injected: T,
   pageSize: number = PAGE_LENGTH,
 ): T[] {
-  if (items.length === 0) return [];
+  if (items.length === 0) {
+    return [];
+  }
   const [start, end] = getPageRange(pageIndex, pageSize, items.length);
   const result = items.slice(start, end);
-  if (reverse) result.reverse();
+  if (reverse) {
+    result.reverse();
+  }
   return [injected, ...result];
 }
 
@@ -83,7 +91,9 @@ export function hofActions<T extends { [K: string]: () => void }>(prevFunctions:
 
 export function findNext<T>(data: T[], predicate: (item: T) => boolean): T {
   const index = data.findIndex(predicate);
-  if (index === -1) return data[0];
+  if (index === -1) {
+    return data[0];
+  }
   if (index + 1 >= data.length) {
     return data[data.length - 1];
   }

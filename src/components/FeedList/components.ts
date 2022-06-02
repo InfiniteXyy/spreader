@@ -17,5 +17,5 @@ export const FeedItemImage = styled.Image`
 export const FeedListIcon = styled(Icon).attrs({
   size: 14,
 })`
-  color: ${props => props.theme.tintColor};
+  color: ${(props) => props.theme.tintColor};
 `;

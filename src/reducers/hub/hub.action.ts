@@ -12,12 +12,12 @@ export enum HubActionType {
 
 export class HubUpdateTrendingList implements Action {
   readonly type = HubActionType.UPDATE_TRENDING_LIST;
-  constructor(public readonly list: BookFeed[]) {}
+  constructor(public list: BookFeed[]) {}
 }
 
 export class HubUpdateTagList implements Action {
   readonly type = HubActionType.UPDATE_TAG_LIST;
-  constructor(public readonly list: BookTag[]) {}
+  constructor(public list: BookTag[]) {}
 }
 
 export class HubLoadTrending implements Action {

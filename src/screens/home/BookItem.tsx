@@ -1,13 +1,11 @@
-import { SavedBook } from '../../model/Book';
-import React, { useContext, useMemo, useRef, useState } from 'react';
-import { ThemeContext } from 'styled-components';
-import { getLastAndPick, hofActions } from '../../utils';
-import { SavedChapter } from '../../model/Chapter';
-import { CardSubTitle, CardTitle, CardWrapper, CoverImg, MoreIcon } from './components';
-import { Dropdown, HStack, Text, VStack } from '../../components';
+import React, { useMemo, useRef } from 'react';
 import { TouchableOpacityProps, View } from 'react-native';
-import Spinner from 'react-native-spinkit';
+import { Dropdown, HStack, Text, VStack } from '../../components';
 import { DropdownDivider } from '../../components/Dropdown';
+import { SavedBook } from '../../model/Book';
+import { SavedChapter } from '../../model/Chapter';
+import { getLastAndPick, hofActions } from '../../utils';
+import { CardSubTitle, CardTitle, CardWrapper, CoverImg, MoreIcon } from './components';
 
 interface IBookItemProps extends TouchableOpacityProps {
   book: SavedBook;
@@ -19,18 +17,17 @@ interface IBookItemProps extends TouchableOpacityProps {
 }
 export function BookItem(props: IBookItemProps) {
   const { book } = props;
-  const theme = useContext(ThemeContext);
   const menuRef = useRef<any>(null);
   // 最近阅读文章
   const lastChapter = useMemo(() => {
-    return getLastAndPick<SavedChapter, string>(book.chapters, i => i.title, '无');
-  }, [book.chapters.length]);
+    return getLastAndPick<SavedChapter, string>(book.chapters, (i) => i.title, '无');
+  }, [book.chapters]);
   // 还有几章未读
   const unReadCount = useMemo(() => {
     return book.chapters.reduce((value, cur) => {
       return !cur.hasRead ? value + 1 : value;
     }, 0);
-  }, [book.chapters.length, book.lastRead]);
+  }, [book.chapters]);
   // 下拉菜单和内容
   const menuActions = hofActions(props.menuActions, () => menuRef.current.hide());
   const dropdown = (
@@ -64,9 +61,6 @@ export function BookItem(props: IBookItemProps) {
             <Text bold secondary={book.isFetching}>
               {lastChapter}
             </Text>
-            <HStack style={{ marginLeft: 8, height: 14 }} center>
-              <Spinner isVisible={book.isFetching} type="ThreeBounce" size={12} color={theme.secondaryText} />
-            </HStack>
           </HStack>
           {unReadCount !== 0 && (
             <HStack>

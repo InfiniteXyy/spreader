@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import Menu, { MenuItem, MenuDivider } from 'react-native-material-menu';
+import { Menu, MenuDivider, MenuItem } from 'react-native-material-menu';
 import { ThemeContext } from 'styled-components/native';
 
 export interface DropdownItem {
@@ -23,18 +23,20 @@ function Dropdown(props: IDropdownProps) {
   return (
     <Menu
       ref={props.menuRef}
-      button={props.buttonElement}
-      style={{ backgroundColor: theme.dark ? '#4b4b4b' : 'white', borderColor: 'red' }}>
-      {props.menuItems.map(i => {
+      anchor={props.buttonElement}
+      style={{ backgroundColor: theme.dark ? '#4b4b4b' : 'white', borderColor: 'red' }}
+    >
+      {props.menuItems.map((i) => {
         if (i instanceof DropdownDivider) {
           return <MenuDivider key="divider" color={theme.dividerColor} />;
         } else {
           return (
             <MenuItem
-              underlayColor="rgba(127,127,127, 0.28)"
+              pressColor="rgba(127,127,127, 0.28)"
               key={i.label}
               textStyle={{ color: i.variant === 'danger' ? theme.warningColor : theme.primaryText }}
-              onPress={i.onPress}>
+              onPress={i.onPress}
+            >
               {i.label}
             </MenuItem>
           );

@@ -26,19 +26,19 @@ export function bookReducer(state = bookInitialState, action: BookAction): BookS
     case BookActionType.REMOVE_BOOK: {
       return {
         ...state,
-        books: state.books.filter(i => i.id !== action.bookId),
+        books: state.books.filter((i) => i.id !== action.bookId),
       };
     }
 
     case BookActionType.LOAD_CHAPTERS: {
       return {
         ...state,
-        books: state.books.map(i => (action.bookId === i.id ? { ...i, isFetching: true } : i)),
+        books: state.books.map((i) => (action.bookId === i.id ? { ...i, isFetching: true } : i)),
       };
     }
 
     case BookActionType.UPDATE_CHAPTERS: {
-      let books = state.books.map(i =>
+      let books = state.books.map((i) =>
         action.bookId === i.id
           ? {
               ...i,
@@ -54,12 +54,12 @@ export function bookReducer(state = bookInitialState, action: BookAction): BookS
     case BookActionType.MARK_READ: {
       return {
         ...state,
-        books: state.books.map(i => {
+        books: state.books.map((i) => {
           if (action.bookId === i.id) {
             return {
               ...i,
               lastRead: { ...action.chapter },
-              chapters: i.chapters.map(chapter => {
+              chapters: i.chapters.map((chapter) => {
                 if (chapter.href === action.chapter.href) {
                   return { ...chapter, hasRead: true };
                 }
@@ -76,7 +76,7 @@ export function bookReducer(state = bookInitialState, action: BookAction): BookS
     case BookActionType.TOGGLE_BOOK_MENU_INDEX: {
       return {
         ...state,
-        books: state.books.map(book => {
+        books: state.books.map((book) => {
           if (book.id !== action.bookId) {
             return book;
           }
@@ -89,13 +89,13 @@ export function bookReducer(state = bookInitialState, action: BookAction): BookS
     case BookActionType.MARK_ALL_READ: {
       return {
         ...state,
-        books: state.books.map(book => {
+        books: state.books.map((book) => {
           if (book.id !== action.bookId) {
             return book;
           }
           return {
             ...book,
-            chapters: book.chapters.map(chapter => ({
+            chapters: book.chapters.map((chapter) => ({
               ...chapter,
               hasRead: true,
             })),

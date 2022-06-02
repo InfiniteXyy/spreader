@@ -14,27 +14,27 @@ export enum ReaderActionType {
 
 export class ReaderSetFontSize implements Action {
   readonly type = ReaderActionType.UPDATE_FONT_SIZE;
-  constructor(public readonly fontSize: number) {}
+  constructor(public fontSize: number) {}
 }
 export class ReaderSetTitleSize implements Action {
   readonly type = ReaderActionType.UPDATE_TITLE_SIZE;
-  constructor(public readonly titleSize: number) {}
+  constructor(public titleSize: number) {}
 }
 export class ReaderSetTitleAlign implements Action {
   readonly type = ReaderActionType.SET_TITLE_ALIGN;
-  constructor(public readonly titleAlign: TitleAlign) {}
+  constructor(public titleAlign: TitleAlign) {}
 }
 export class ReaderSetLineHeight implements Action {
   readonly type = ReaderActionType.UPDATE_LINE_HEIGHT;
-  constructor(public readonly lineHeightRatio: number) {}
+  constructor(public lineHeightRatio: number) {}
 }
 export class ReaderSetParaSpacing implements Action {
   readonly type = ReaderActionType.UPDATE_PARA_SPACE;
-  constructor(public readonly paraSpacing: number) {}
+  constructor(public paraSpacing: number) {}
 }
 export class ReaderSetTheme implements Action {
   readonly type = ReaderActionType.UPDATE_READER_THEME;
-  constructor(public readonly theme: ReaderTheme) {}
+  constructor(public theme: ReaderTheme) {}
 }
 export class ReaderResetStyle implements Action {
   readonly type = ReaderActionType.RESET_STYLE;

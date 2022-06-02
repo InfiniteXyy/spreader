@@ -7,12 +7,12 @@ export enum AppActionType {
 
 export class AppToggleMode implements Action {
   readonly type = AppActionType.TOGGLE_MODE;
-  constructor(public readonly mode: boolean) {}
+  constructor(public mode: boolean) {}
 }
 
 export class AppToggleModeFollowSystem implements Action {
   readonly type = AppActionType.TOGGLE_FOLLOW_SYSTEM;
-  constructor(public readonly follow: boolean) {}
+  constructor(public follow: boolean) {}
 }
 
 export type AppAction = AppToggleMode | AppToggleModeFollowSystem;

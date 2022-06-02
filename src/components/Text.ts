@@ -37,7 +37,7 @@ const textColors: { [K in TextColor]: string } = {
 };
 
 export const Text = styled.Text<IText>`
-  color: ${props => {
+  color: ${(props) => {
     if (props.color) {
       return props.color;
     } else if (props.colorType) {
@@ -46,7 +46,7 @@ export const Text = styled.Text<IText>`
       return props.secondary ? props.theme.secondaryText : props.theme.primaryText;
     }
   }};
-  font-size: ${props => styles[props.variant || 'body'].fontSize}px;
-  line-height: ${props => styles[props.variant || 'body'].lineHeight}px;
-  font-weight: ${props => (props.bold ? '500' : '400')};
+  font-size: ${(props) => styles[props.variant || 'body'].fontSize}px;
+  line-height: ${(props) => styles[props.variant || 'body'].lineHeight}px;
+  font-weight: ${(props) => (props.bold ? '500' : '400')};
 `;

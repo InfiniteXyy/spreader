@@ -1,10 +1,10 @@
-import React, { createContext } from 'react';
+import React from 'react';
 import { IState } from '../../reducers';
 import { connect } from 'react-redux';
 import { ReaderState, TitleAlign } from '../../reducers/reader/reader.state';
 import { Dispatch } from 'redux';
 import Modal from 'react-native-modal';
-import { Container, Text } from '../../components';
+import { Text } from '../../components';
 
 import {
   ReaderAction,
@@ -17,7 +17,7 @@ import {
 } from '../../reducers/reader/reader.action';
 import { AlignOptionContainer, EditorSlider, ThemeOptionContainer } from './EditorItem';
 import { View } from 'react-native';
-import { DefaultReaderThemes, ReaderTheme } from '../../model/Theme';
+import { ReaderTheme } from '../../model/Theme';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 
 interface IStateProps {
@@ -108,7 +108,4 @@ function mapDispatchToProps(dispatch: Dispatch<ReaderAction>): IDispatchProps {
   };
 }
 
-export const Editor = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(_Editor);
+export const Editor = connect(mapStateToProps, mapDispatchToProps)(_Editor);

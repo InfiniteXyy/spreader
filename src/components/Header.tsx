@@ -16,17 +16,23 @@ function Header(props: IHeaderProps) {
   const { goBack, rightComponent, title, titleVisible } = props;
   const theme = useContext(ThemeContext);
   const titleAnimated = useMemo(() => {
-    if (titleVisible === undefined) return new Animated.Value(1);
-    else return new Animated.Value(0);
-  }, []);
+    if (titleVisible === undefined) {
+      return new Animated.Value(1);
+    } else {
+      return new Animated.Value(0);
+    }
+  }, [titleVisible]);
 
   useEffect(() => {
-    if (titleVisible === undefined) return;
+    if (titleVisible === undefined) {
+      return;
+    }
     Animated.timing(titleAnimated, {
       toValue: titleVisible ? 1 : 0,
       duration: 150,
+      useNativeDriver: true,
     }).start();
-  }, [titleVisible]);
+  }, [titleAnimated, titleVisible]);
 
   const leftComponent = (
     <Icon
@@ -49,7 +55,8 @@ function Header(props: IHeaderProps) {
       style={{
         backgroundColor: theme.dark ? colors.darkBg : 'white',
         borderBottomColor: theme.dark ? colors.dividerColorLight : colors.dividerColor,
-      }}>
+      }}
+    >
       <HStack center expand style={{ paddingHorizontal: 10 }}>
         {titleComponent}
         {leftComponent}

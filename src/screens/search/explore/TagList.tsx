@@ -8,7 +8,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import { HubAction, HubLoadTagsAsync } from '../../../reducers/hub/hub.action';
 import { BookTag } from '../../../model/BookTag';
 import { TagItem } from './TagItem';
-import { NavigationInjectedProps, withNavigation } from 'react-navigation';
+import { useNavigation } from '@react-navigation/native';
 
 interface ITopicListProps {}
 
@@ -21,17 +21,15 @@ interface IDispatchProps {
   onLoad(): void;
 }
 
-function _TagList(props: ITopicListProps & IStateProps & IDispatchProps & NavigationInjectedProps) {
+function _TagList(props: ITopicListProps & IStateProps & IDispatchProps) {
   const { data, onLoad } = props;
+  const navigation = useNavigation<any>();
   useEffect(() => {
     onLoad();
-  }, []);
-  const onNavigateTopic = useCallback(
-    BookTag => () => {
-      props.navigation.navigate('topic');
-    },
-    [props.navigation],
-  );
+  }, [onLoad]);
+  const onNavigateTopic = useCallback(() => {
+    navigation.navigate('topic');
+  }, [navigation]);
   return (
     <SectionContainer>
       <Text variant="title" bold style={{ marginLeft: 20 }}>
@@ -43,7 +41,7 @@ function _TagList(props: ITopicListProps & IStateProps & IDispatchProps & Naviga
             key={item.id.toString()}
             item={item}
             isLastItem={index === data.length - 1}
-            onPress={onNavigateTopic(item)}
+            onPress={onNavigateTopic}
           />
         ))}
       </ScrollView>
@@ -64,7 +62,4 @@ function mapDispatchToProps(dispatch: ThunkDispatch<IState, void, HubAction>): I
   };
 }
 
-export const TagList = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(withNavigation(_TagList));
+export const TagList = connect(mapStateToProps, mapDispatchToProps)(_TagList);

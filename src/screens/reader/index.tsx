@@ -1,31 +1,23 @@
+import { useNavigation, useRoute } from '@react-navigation/native';
 import React, { createContext, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { StatusBar, Text, TextStyle, View } from 'react-native';
+import IconFeather from 'react-native-vector-icons/Feather';
+import { connect, useSelector } from 'react-redux';
+import { Dispatch } from 'redux';
+import { getContent } from '../../agents/spider';
 import { Container } from '../../components';
-import { connect } from 'react-redux';
-import { NavigationInjectedProps, withNavigation } from 'react-navigation';
-import { IState } from '../../reducers';
 import { SavedBook } from '../../model/Book';
 import { SavedChapter } from '../../model/Chapter';
-import { getContent } from '../../agents/spider';
-import {
-  GestureResponderEvent,
-  NativeScrollEvent,
-  NativeSyntheticEvent,
-  StatusBar,
-  Text,
-  TextStyle,
-  View,
-} from 'react-native';
-import { Skeleton } from './Skeleton';
-import { ReaderState } from '../../reducers/reader/reader.state';
-import { ReaderScroll } from './components';
-import IconFeather from 'react-native-vector-icons/Feather';
-import { Editor } from './Editor';
-import { colors } from '../../theme';
-import { ReaderFooter } from './ReaderFooter';
 import { DefaultReaderThemes, ReaderTheme } from '../../model/Theme';
-import { Dispatch } from 'redux';
+import { IState } from '../../reducers';
 import { BookAction, BookMarkAsRead } from '../../reducers/book/book.action';
+import { ReaderState } from '../../reducers/reader/reader.state';
+import { colors } from '../../theme';
+import { ReaderScroll } from './components';
+import { Editor } from './Editor';
+import { ReaderFooter } from './ReaderFooter';
 import { ReaderHeader } from './ReaderHeader';
+import { Skeleton } from './Skeleton';
 
 interface IStateProps {
   book?: SavedBook;
@@ -47,46 +39,46 @@ function padWithTab(content: string) {
 
 export const ReaderThemeContext = createContext<ReaderTheme>(DefaultReaderThemes[0]);
 
-function _Reader(props: NavigationInjectedProps & IStateProps & IDispatchProps) {
+function _Reader(props: IDispatchProps) {
   const [contents, setContents] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [menuVisible, setMenuVisible] = useState(true);
   const [editorVisible, setEditorVisible] = useState(false);
-  const { book, chapter, navigation, readerStyle, prevChapter, nextChapter } = props;
+  const { book, chapter, readerStyle, prevChapter, nextChapter } = useReaderState();
+  const navigation = useNavigation<any>();
   const { lineHeightRatio, titleAlign, readerTheme, fontSize, titleSize, paragraphSpace } = readerStyle;
-  if (!book || !chapter) {
-    return <Container />;
-  }
 
-  const currentHref = useRef<string>(chapter.href);
-  const lastPressHandler = useRef<number | null>(null);
+  const currentHref = useRef<string>(chapter?.href || '');
+  const lastPressHandler = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
+    if (!chapter || !book) {
+      return;
+    }
     setIsLoading(true);
-    getContent(chapter.href, book.methods.getContent).then(result => {
+    getContent(chapter.href, book.methods.getContent).then((result) => {
       if (chapter.href === currentHref.current) {
         setContents(result);
         props.onReadChapter(book, chapter);
         setIsLoading(false);
       }
     });
-  }, [chapter.href]);
+  }, [book, chapter, props]);
 
-  useEffect(() => {
+  if (chapter) {
     currentHref.current = chapter.href;
-  }, [chapter.href]);
+  }
 
-  const handleOnTouchStart = useCallback(
-    (e: GestureResponderEvent) => {
-      lastPressHandler.current = setTimeout(() => {
-        setMenuVisible(!menuVisible);
-      }, TOUCH_TIMEOUT);
-    },
-    [menuVisible],
-  );
+  const handleOnTouchStart = useCallback(() => {
+    lastPressHandler.current = setTimeout(() => {
+      setMenuVisible(!menuVisible);
+    }, TOUCH_TIMEOUT);
+  }, [menuVisible]);
 
-  const handleOnScroll = useCallback((e: NativeSyntheticEvent<NativeScrollEvent>) => {
-    if (lastPressHandler.current !== null) clearTimeout(lastPressHandler.current);
+  const handleOnScroll = useCallback(() => {
+    if (lastPressHandler.current !== null) {
+      clearTimeout(lastPressHandler.current);
+    }
     setMenuVisible(false);
   }, []);
 
@@ -119,6 +111,10 @@ function _Reader(props: NavigationInjectedProps & IStateProps & IDispatchProps) 
     [readerTheme.bgColor],
   );
 
+  if (!book || !chapter) {
+    return <Container />;
+  }
+
   const dark = readerTheme.mode === 'dark';
 
   const header = (
@@ -132,7 +128,9 @@ function _Reader(props: NavigationInjectedProps & IStateProps & IDispatchProps) 
           size={20}
           color={dark ? colors.tintColorLight : colors.tintColor}
           onPress={() => {
-            if (menuVisible) setEditorVisible(true);
+            if (menuVisible) {
+              setEditorVisible(true);
+            }
           }}
         />
       }
@@ -144,8 +142,8 @@ function _Reader(props: NavigationInjectedProps & IStateProps & IDispatchProps) 
       visible={menuVisible}
       prevChapter={prevChapter}
       nextChapter={nextChapter}
-      onNavigate={chapter => {
-        props.navigation.navigate({ routeName: 'reader', params: { bookId: book.id, chapterHref: chapter.href } });
+      onNavigate={(_chapter) => {
+        navigation.navigate('reader', { bookId: book.id, chapterHref: _chapter.href });
       }}
     />
   );
@@ -159,7 +157,8 @@ function _Reader(props: NavigationInjectedProps & IStateProps & IDispatchProps) 
             scrollEnabled={!isLoading}
             onTouchStart={handleOnTouchStart}
             onScrollBeginDrag={handleOnScroll}
-            scrollEventThrottle={64}>
+            scrollEventThrottle={64}
+          >
             <Text style={titleStyle}>{chapter.title}</Text>
             {isLoading ? (
               <Skeleton dark={dark} />
@@ -181,22 +180,27 @@ function _Reader(props: NavigationInjectedProps & IStateProps & IDispatchProps) 
   );
 }
 
-function mapStateToProps(state: IState, props: NavigationInjectedProps): IStateProps {
-  const bookId = props.navigation.getParam<string>('bookId');
-  const chapterHref = props.navigation.getParam<string>('chapterHref');
-  const book = state.bookReducer.books.find(i => i.id === bookId);
-  if (book === undefined) return { readerStyle: state.readerReducer };
-  const chapterIndex = book.chapters.findIndex(i => i.href === chapterHref);
-  const chapter = chapterIndex !== -1 ? book.chapters[chapterIndex] : undefined;
-  const prevChapter = chapterIndex - 1 >= 0 ? book.chapters[chapterIndex - 1] : undefined;
-  const nextChapter = chapterIndex + 1 < book.chapters.length ? book.chapters[chapterIndex + 1] : undefined;
-  return {
-    book,
-    chapter,
-    prevChapter,
-    nextChapter,
-    readerStyle: state.readerReducer,
-  };
+function useReaderState(): IStateProps {
+  const route = useRoute<any>();
+  return useSelector((state: IState) => {
+    const bookId = route.params.bookId;
+    const chapterHref = route.params.chapterHref;
+    const book = state.bookReducer.books.find((i) => i.id === bookId);
+    if (book === undefined) {
+      return { readerStyle: state.readerReducer };
+    }
+    const chapterIndex = book.chapters.findIndex((i) => i.href === chapterHref);
+    const chapter = chapterIndex !== -1 ? book.chapters[chapterIndex] : undefined;
+    const prevChapter = chapterIndex - 1 >= 0 ? book.chapters[chapterIndex - 1] : undefined;
+    const nextChapter = chapterIndex + 1 < book.chapters.length ? book.chapters[chapterIndex + 1] : undefined;
+    return {
+      book,
+      chapter,
+      prevChapter,
+      nextChapter,
+      readerStyle: state.readerReducer,
+    };
+  });
 }
 
 function mapDispatchToProps(dispatch: Dispatch<BookAction>): IDispatchProps {
@@ -207,7 +211,4 @@ function mapDispatchToProps(dispatch: Dispatch<BookAction>): IDispatchProps {
   };
 }
 
-export const Reader = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(withNavigation(_Reader));
+export const Reader = connect(() => null, mapDispatchToProps)(_Reader);

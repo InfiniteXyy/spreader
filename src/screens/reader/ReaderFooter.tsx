@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useMemo } from 'react';
 import { Animated, TouchableOpacity, View } from 'react-native';
-import { HStack, Text, VStack } from '../../components';
+import { HStack, Text } from '../../components';
 import { ReaderFooterContainer } from './components';
 import { colors } from '../../theme';
 import { ReaderThemeContext } from './index';
@@ -23,7 +23,7 @@ export function ReaderFooter(props: IFooterProps) {
       duration: visible ? 200 : 100,
       useNativeDriver: true,
     }).start();
-  }, [visible]);
+  }, [footerOpacity, visible]);
 
   const prevChapterComponent = prevChapter ? (
     <TouchableOpacity onPress={() => onNavigate(prevChapter)} style={{ flex: 1 }}>
@@ -43,7 +43,7 @@ export function ReaderFooter(props: IFooterProps) {
       <Text style={{ color: readerTheme.fontColor }} bold variant="tip">
         下一章
       </Text>
-      <Text style={{ color: readerTheme.titleColor, marginTop: 3 }} variant="tip"  numberOfLines={1}>
+      <Text style={{ color: readerTheme.titleColor, marginTop: 3 }} variant="tip" numberOfLines={1}>
         {nextChapter.title}
       </Text>
     </TouchableOpacity>

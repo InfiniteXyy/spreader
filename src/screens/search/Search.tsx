@@ -1,13 +1,14 @@
 import React, { useContext, useRef, useState } from 'react';
 import { Container, HStack, Text } from '../../components';
 import Icon from 'react-native-vector-icons/Feather';
-import { ThemeContext } from 'styled-components';
+import { ThemeContext } from 'styled-components/native';
 import { SearchBarInput, SearchBarWrapper } from './components';
 import { Platform, ScrollView, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
-import { NavigationInjectedProps, withNavigation } from 'react-navigation';
+import { useNavigation } from '@react-navigation/native';
 import { Explore } from './explore/Explore';
 
-function _Search(props: NavigationInjectedProps) {
+export function Search() {
+  const navigation = useNavigation<any>();
   const theme = useContext(ThemeContext);
   const [input, setInput] = useState('');
   const inputRef = useRef<TextInput | null>(null);
@@ -29,13 +30,15 @@ function _Search(props: NavigationInjectedProps) {
             keyboardAppearance={theme.dark ? 'dark' : 'default'}
           />
         </SearchBarWrapper>
-        <TouchableOpacity onPress={() => props.navigation.goBack()}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
           <Text variant="subtitle">取消</Text>
         </TouchableOpacity>
       </HStack>
       <ScrollView
         onScrollBeginDrag={() => {
-          if (inputRef.current) inputRef.current.blur();
+          if (inputRef.current) {
+            inputRef.current.blur();
+          }
         }}>
         <Explore />
       </ScrollView>
@@ -51,5 +54,3 @@ const styles = StyleSheet.create({
     }),
   },
 });
-
-export const Search = withNavigation(_Search);

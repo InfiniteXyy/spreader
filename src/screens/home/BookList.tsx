@@ -1,9 +1,10 @@
 import React from 'react';
-import { Book, SavedBook } from '../../model/Book';
-import { BookItem } from './BookItem';
 import DraggableFlatList from 'react-native-draggable-flatlist';
-import { IState } from '../../reducers';
+import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
+import { Book, SavedBook } from '../../model/Book';
+import { SavedChapter } from '../../model/Chapter';
+import { IState } from '../../reducers';
 import {
   BookAction,
   BookLoadChaptersAsync,
@@ -11,10 +12,9 @@ import {
   BookRemove,
   BookSetSavedList,
 } from '../../reducers/book/book.action';
-import { connect } from 'react-redux';
-import BookListEmptyView from './BookListEmptyView';
-import { SavedChapter } from '../../model/Chapter';
 import { findNext } from '../../utils';
+import { BookItem } from './BookItem';
+import BookListEmptyView from './BookListEmptyView';
 
 interface IBookListProps {
   onNavigate(book: SavedBook): () => void;
@@ -28,7 +28,7 @@ interface IStateProps {
 
 interface IDispatchProps {
   updateBooks(books: Book[]): void;
-  setBookList(books: readonly SavedBook[]): void;
+  setBookList(books: SavedBook[]): void;
   removeBook(book: SavedBook): void;
   markAllRead(book: SavedBook): void;
 }
@@ -42,30 +42,24 @@ function _BookList(props: IBookListProps & IStateProps & IDispatchProps) {
       refreshing={false}
       ListEmptyComponent={<BookListEmptyView onPress={onNavigateSearch} />}
       onRefresh={() => updateBooks(books)}
-      keyExtractor={item => item.id.toString()}
-      renderItem={({ item, index, move, moveEnd, isActive }) => {
+      keyExtractor={(item) => item.id.toString()}
+      renderItem={({ item, drag }) => {
         let nextChapter = item.chapters[0];
         if (item.lastRead !== undefined) {
           const href = item.lastRead.href;
-          nextChapter = findNext(item.chapters, i => href === i.href);
+          nextChapter = findNext(item.chapters, (i) => href === i.href);
         }
         const menuActions = {
           markAllRead: () => props.markAllRead(item),
           continueRead: props.onNavigateChapter(item, nextChapter),
           deleteBook: () => props.removeBook(item),
         };
-        return (
-          <BookItem
-            book={item}
-            onPress={onNavigate(item)}
-            onLongPress={move}
-            onPressOut={moveEnd}
-            menuActions={menuActions}
-          />
-        );
+        return <BookItem book={item} onPress={onNavigate(item)} onLongPress={drag} menuActions={menuActions} />;
       }}
-      onMoveEnd={({ data }) => {
-        if (data !== null) setBookList(data);
+      onDragEnd={({ data }) => {
+        if (data !== null) {
+          setBookList(data);
+        }
       }}
     />
   );
@@ -90,13 +84,10 @@ function mapDispatchToProps(dispatch: ThunkDispatch<IState, null, BookAction>): 
         dispatch(BookLoadChaptersAsync(book));
       }
     },
-    setBookList(books: readonly SavedBook[]) {
+    setBookList(books: SavedBook[]) {
       dispatch(new BookSetSavedList(books));
     },
   };
 }
 
-export const BookList = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(_BookList);
+export const BookList = connect(mapStateToProps, mapDispatchToProps)(_BookList);

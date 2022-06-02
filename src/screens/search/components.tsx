@@ -1,6 +1,7 @@
+import { TextInput, View } from 'react-native';
 import styled from 'styled-components/native';
 
-export const SearchBarWrapper = styled.View`
+export const SearchBarWrapper = styled(View)`
   flex: 1;
   background-color: rgba(227, 227, 227, 0.28);
   flex-direction: row;
@@ -11,7 +12,7 @@ export const SearchBarWrapper = styled.View`
   border-radius: 10px;
 `;
 
-export const SearchBarInput = styled.TextInput`
+export const SearchBarInput = styled(TextInput)`
   width: 100%;
-  color: ${props => props.theme.primaryText};
+  color: ${(props) => props.theme.primaryText};
 `;

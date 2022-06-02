@@ -1,13 +1,13 @@
+import { useNavigation, useRoute } from '@react-navigation/native';
 import React, { useCallback, useEffect, useState } from 'react';
-import { Container, Header, Spinner } from '../../components';
-import { NavigationInjectedProps, withNavigation } from 'react-navigation';
-import { connect } from 'react-redux';
-import { IState } from '../../reducers';
-import { SavedBook } from '../../model/Book';
-import { BookAction, BookLoadChaptersAsync } from '../../reducers/book/book.action';
-import { ThunkDispatch } from 'redux-thunk';
-import { ChapterList } from './ChapterList';
 import { NativeScrollEvent, NativeSyntheticEvent } from 'react-native';
+import { connect, useSelector } from 'react-redux';
+import { ThunkDispatch } from 'redux-thunk';
+import { Container, Header, Spinner } from '../../components';
+import { SavedBook } from '../../model/Book';
+import { IState } from '../../reducers';
+import { BookAction, BookLoadChaptersAsync } from '../../reducers/book/book.action';
+import { ChapterList } from './ChapterList';
 
 interface IStateProps {
   book?: SavedBook;
@@ -17,17 +17,16 @@ interface IDispatchProps {
   loadChapters(book: SavedBook): void;
 }
 
-function Chapters(props: NavigationInjectedProps & IStateProps & IDispatchProps) {
-  const { book, navigation } = props;
+function Chapters(props: IDispatchProps) {
+  const navigation = useNavigation<any>();
+  const { book } = useChapterState();
   const [titleVisible, setTitleVisible] = useState(false);
-  if (!book) {
-    return <Container />;
-  }
+
   useEffect(() => {
-    if (book.chapters.length === 0) {
+    if (book?.chapters.length === 0) {
       props.loadChapters(book);
     }
-  }, []);
+  }, [book, props]);
 
   const onScroll = useCallback(
     (event: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -44,6 +43,10 @@ function Chapters(props: NavigationInjectedProps & IStateProps & IDispatchProps)
     [titleVisible],
   );
 
+  if (!book) {
+    return <Container />;
+  }
+
   return (
     <Container>
       <Header
@@ -52,22 +55,19 @@ function Chapters(props: NavigationInjectedProps & IStateProps & IDispatchProps)
         goBack={() => navigation.goBack()}
         rightComponent={<Spinner loading={book.isFetching} />}
       />
-      <ChapterList
-        onScroll={onScroll}
-        titleVisible={titleVisible}
-        setTitleVisible={setTitleVisible}
-        book={book}
-        onLoad={() => props.loadChapters(book)}
-      />
+      <ChapterList onScroll={onScroll} book={book} onLoad={() => props.loadChapters(book)} />
     </Container>
   );
 }
 
-function mapStateToProps(state: IState, props: NavigationInjectedProps): IStateProps {
-  const bookId = props.navigation.getParam('bookId');
-  return {
-    book: state.bookReducer.books.find(i => i.id === bookId),
-  };
+function useChapterState(): IStateProps {
+  const route = useRoute<any>();
+  return useSelector((state: IState) => {
+    const bookId = route.params.bookId;
+    return {
+      book: state.bookReducer.books.find((i) => i.id === bookId),
+    };
+  });
 }
 
 function mapDispatchToProps(dispatch: ThunkDispatch<IState, void, BookAction>): IDispatchProps {
@@ -76,7 +76,4 @@ function mapDispatchToProps(dispatch: ThunkDispatch<IState, void, BookAction>): 
   };
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(withNavigation(Chapters));
+export default connect(() => null, mapDispatchToProps)(Chapters);

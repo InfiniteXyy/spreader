@@ -1,8 +1,7 @@
-import React from 'react';
 import { TagList } from './TagList';
 import { TrendingList } from './TrendingList';
 
-export function Explore(props: {}) {
+export function Explore() {
   return (
     <>
       <TagList />

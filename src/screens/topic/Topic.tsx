@@ -1,11 +1,12 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { Container, Header } from '../../components';
-import { NavigationInjectedProps } from 'react-navigation';
 
-function Topic(props: NavigationInjectedProps) {
+function Topic() {
+  const navigation = useNavigation();
   return (
     <Container>
-      <Header goBack={() => props.navigation.goBack()} title="武侠" />
+      <Header goBack={() => navigation.goBack()} title="武侠" />
     </Container>
   );
 }

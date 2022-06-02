@@ -3,7 +3,7 @@ import { Button, Text, VStack } from '../../components';
 import Icon from 'react-native-vector-icons/Entypo';
 import { ThemeContext } from 'styled-components/native';
 
-export default function(props: { onPress(): void }) {
+export default function (props: { onPress(): void }) {
   const theme = useContext(ThemeContext);
   return (
     <VStack center style={{ padding: 40 }}>

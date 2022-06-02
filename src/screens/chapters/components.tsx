@@ -30,9 +30,9 @@ export const ChapterPickerContainer = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  background-color: ${props => props.theme.bgColor};
+  background-color: ${(props) => props.theme.bgColor};
   padding: 0 20px;
-  border-bottom-color: ${props => props.theme.dividerColor};
+  border-bottom-color: ${(props) => props.theme.dividerColor};
   border-bottom-width: 0.5px;
 `;
 
@@ -41,19 +41,19 @@ export const ChapterPickerDropDown = styled.TouchableOpacity`
   justify-content: space-between;
   align-items: center;
   padding: 10px 0;
-  background-color: ${props => props.theme.bgColor};
+  background-color: ${(props) => props.theme.bgColor};
 `;
 
 export const ChapterPickerSmallBtn = styled.TouchableOpacity`
   border-radius: 5px;
   padding: 3px 5px;
   margin-left: 10px;
-  background-color: ${props => (props.theme.dark ? '#656565' : '#cccccc')};
+  background-color: ${(props) => (props.theme.dark ? '#656565' : '#cccccc')};
 `;
 
 export const ChapterPickerSmallBtnText = styled.Text`
   font-weight: 500;
-  color: ${props => (props.theme.dark ? colors.secondaryTextLight : '#FFF')};
+  color: ${(props) => (props.theme.dark ? colors.secondaryTextLight : '#FFF')};
 `;
 
 export const ChapterListItemContainer = styled.TouchableOpacity`
@@ -66,7 +66,7 @@ export const ChapterListItemContainer = styled.TouchableOpacity`
 export const ChapterListItemDot = styled.View`
   height: 4px;
   width: 4px;
-  background-color: ${props => props.theme.tintColor};
+  background-color: ${(props) => props.theme.tintColor};
   border-radius: 4px;
   position: absolute;
   left: 11px;
