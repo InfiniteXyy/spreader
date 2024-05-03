@@ -18,7 +18,9 @@ const persistConfig = {
   storage: AsyncStorage,
 };
 
+// @ts-ignore
 const store = createStore(persistReducer(persistConfig, reducer), applyMiddleware(actionObjectMiddleWare, thunk));
+// @ts-ignore
 const persistor = persistStore(store);
 
 export { store, persistor };

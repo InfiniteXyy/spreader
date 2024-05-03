@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useMemo } from 'react';
 import { Animated, TouchableOpacity, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ReaderFooterContainer } from './components';
 import { ReaderThemeContext } from './index';
@@ -25,6 +26,8 @@ export function ReaderFooter(props: IFooterProps) {
       useNativeDriver: true,
     }).start();
   }, [footerOpacity, visible]);
+
+  const { bottom } = useSafeAreaInsets();
 
   const prevChapterComponent = prevChapter ? (
     <TouchableOpacity onPress={() => onNavigate(prevChapter)} style={{ flex: 1 }}>
@@ -54,6 +57,7 @@ export function ReaderFooter(props: IFooterProps) {
   return (
     <ReaderFooterContainer
       style={{
+        paddingBottom: bottom,
         backgroundColor: readerTheme.bgColor,
         borderTopColor: readerTheme.mode === 'dark' ? colors.dividerColorLight : colors.dividerColor,
         opacity: footerOpacity,

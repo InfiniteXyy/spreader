@@ -32,9 +32,9 @@ export const Divider = styled.View`
 `;
 
 export const Ellipse = styled.View<{ size: number }>`
-  border-radius: ${(props) => props.size};
-  width: ${(props) => props.size};
-  height: ${(props) => props.size};
+  border-radius: ${(props) => props.size}px;
+  width: ${(props) => props.size}px;
+  height: ${(props) => props.size}px;
   background-color: black;
 `;
 

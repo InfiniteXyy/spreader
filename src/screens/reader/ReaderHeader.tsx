@@ -1,6 +1,7 @@
 import Icon from '@expo/vector-icons/Ionicons';
 import React, { useCallback, useContext, useEffect, useMemo } from 'react';
 import { Animated, StyleSheet } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ReaderThemeContext } from './index';
 import { HStack } from '../../components';
@@ -41,9 +42,12 @@ function ReaderHeader(props: IReaderHeaderProps) {
     />
   );
 
+  const { top } = useSafeAreaInsets();
+
   return (
     <Animated.View
       style={[
+        { paddingTop: top },
         styles.absoluteHeader,
         {
           opacity: headerOpacity,

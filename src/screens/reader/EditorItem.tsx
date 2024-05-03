@@ -1,6 +1,6 @@
 import Icon from '@expo/vector-icons/Feather';
 import React, { useContext, useMemo } from 'react';
-import { TouchableWithoutFeedback } from 'react-native';
+import { TouchableWithoutFeedback, View } from 'react-native';
 import { Slider } from 'react-native-awesome-slider';
 import { useSharedValue } from 'react-native-reanimated';
 
@@ -29,18 +29,12 @@ export function EditorSlider(props: IEditorSlider) {
   const maximumValue = useSharedValue(end);
 
   const slider = (
-    <Slider
-      progress={progress}
-      onSlidingComplete={onChange}
-      style={{ width: 170 }}
-      minimumValue={minimumValue}
-      maximumValue={maximumValue}
-    />
+    <Slider progress={progress} onSlidingComplete={onChange} minimumValue={minimumValue} maximumValue={maximumValue} />
   );
   return (
     <EditorItemContainer>
       <EditorItemTitle>{label}</EditorItemTitle>
-      {slider}
+      <View style={{ width: 170 }}>{slider}</View>
     </EditorItemContainer>
   );
 }

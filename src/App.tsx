@@ -1,4 +1,4 @@
-import { NavigationContainer } from '@react-navigation/native';
+import { DarkTheme, NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useCallback } from 'react';
 import { useColorScheme, View } from 'react-native';
@@ -36,10 +36,18 @@ function Root() {
   return (
     <ThemeProvider theme={{ ...getTheme(dark), top }}>
       <StatusBar style={dark ? 'light' : 'dark'} />
-      <View style={{ flexGrow: 1 }}>
+      <NavigationContainer theme={{ ...DarkTheme, colors: { ...DarkTheme.colors, background: 'red' } }}>
         <AppContainer />
-      </View>
+      </NavigationContainer>
     </ThemeProvider>
+  );
+}
+
+function MySafeAreaProvider({ children }: { children: React.ReactNode }) {
+  const dark = useSelector((state: IState) => state.appReducer.dark);
+
+  return (
+    <SafeAreaProvider style={{ flexGrow: 1, backgroundColor: dark ? 'black' : undefined }}>{children}</SafeAreaProvider>
   );
 }
 
@@ -47,13 +55,11 @@ function App() {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <NavigationContainer>
-          <SafeAreaProvider style={{ flexGrow: 1 }}>
-            <GestureHandlerRootView style={{ flexGrow: 1 }}>
-              <Root />
-            </GestureHandlerRootView>
-          </SafeAreaProvider>
-        </NavigationContainer>
+        <MySafeAreaProvider>
+          <GestureHandlerRootView style={{ flexGrow: 1 }}>
+            <Root />
+          </GestureHandlerRootView>
+        </MySafeAreaProvider>
       </PersistGate>
     </Provider>
   );

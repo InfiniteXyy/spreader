@@ -35,7 +35,9 @@
     "react-native-reanimated": "~3.6.2",
     "react-native-safe-area-context": "4.8.2",
     "react-native-screens": "~3.29.0",
+    "react-native-wheel-scrollview-picker": "^2.0.4",
     "react-redux": "^9.1.2",
+    "react-tracked": "^1.7.14",
     "react-use": "^17.5.0",
     "redux": "^5.0.1",
     "redux-persist": "^6.0.0",
@@ -54,7 +56,8 @@
   },
   "prettier": {
     "printWidth": 120,
-    "singleQuote": true
+    "singleQuote": true,
+    "endOfLine": "auto"
   },
   "private": true,
   "packageManager": "yarn@1.22.19+sha1.4ba7fc5c6e704fce2066ecbfb0b0d8976fe62447"

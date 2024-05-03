@@ -6,7 +6,6 @@ import { SavedChapter } from '../model/Chapter';
 
 export async function getList(method: GetListMethod) {
   const { query, url, reverse } = method;
-  console.log({ href: url });
   const [q, range] = query.split('|');
   const html = await agent.get(url);
   const $ = load(html);
@@ -16,7 +15,7 @@ export async function getList(method: GetListMethod) {
     const temp = $(element);
     links.push({
       title: temp.text(),
-      href: new URL(url, temp.attr('href')).toString(),
+      href: new URL(temp.attr('href') || '/', url).toString(),
       hasRead: false,
     });
   });
@@ -32,7 +31,6 @@ export async function getList(method: GetListMethod) {
 }
 
 export async function getContent(url: string, method: GetContentMethod) {
-  console.log({ url });
   const { query } = method;
 
   const html = await agent.get(url);
@@ -40,9 +38,8 @@ export async function getContent(url: string, method: GetContentMethod) {
 
   const contents: string[] = [];
   $(query).each((index, element) => {
-    if (index !== 0) {
-      contents.push($(element).text());
-    }
+    contents.push($(element).text());
   });
+
   return contents.map((i) => i.trim()).filter((i) => !!i);
 }

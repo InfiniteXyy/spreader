@@ -64,7 +64,8 @@ function _Reader(props: IDispatchProps) {
         setIsLoading(false);
       }
     });
-  }, [book, chapter, props]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- only trigger on mount
+  }, [chapter?.href]);
 
   if (chapter) {
     currentHref.current = chapter.href;
