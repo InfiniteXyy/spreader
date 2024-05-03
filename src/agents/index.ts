@@ -1,6 +1,4 @@
 import axios from 'axios';
-import fetch from 'cross-fetch';
-import iconv from 'iconv-lite';
 
 import { BookFeed } from '../model/Feed';
 

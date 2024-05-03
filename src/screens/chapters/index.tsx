@@ -1,31 +1,29 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { NativeScrollEvent, NativeSyntheticEvent } from 'react-native';
-import { connect, useSelector } from 'react-redux';
-import { ThunkDispatch } from 'redux-thunk';
+import { useDispatch } from 'react-redux';
 
 import { ChapterList } from './ChapterList';
 import { Container, Header, Spinner } from '../../components';
 import { SavedBook } from '../../model/Book';
-import { IState } from '../../reducers';
-import { BookAction, BookLoadChaptersAsync } from '../../reducers/book/book.action';
+import { BookLoadChaptersAsync } from '../../reducers/book/book.action';
+import { useTrackedSelector } from '../../store';
 
 interface IStateProps {
   book?: SavedBook;
 }
 
-interface IDispatchProps {
-  loadChapters(book: SavedBook): void;
-}
-
-function Chapters(props: IDispatchProps) {
+export function Chapters() {
   const navigation = useNavigation<any>();
   const { book } = useChapterState();
   const [titleVisible, setTitleVisible] = useState(false);
 
+  const dispatch = useDispatch<any>();
+  const loadChapters = useCallback((book: SavedBook) => dispatch(BookLoadChaptersAsync(book)), [dispatch]);
+
   useEffect(() => {
     if (book?.chapters.length === 0) {
-      props.loadChapters(book);
+      loadChapters(book);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps -- only call once on mounted
   }, []);
@@ -57,25 +55,16 @@ function Chapters(props: IDispatchProps) {
         goBack={() => navigation.goBack()}
         rightComponent={<Spinner loading={book.isFetching} />}
       />
-      <ChapterList onScroll={onScroll} book={book} onLoad={() => props.loadChapters(book)} />
+      <ChapterList onScroll={onScroll} book={book} onLoad={() => loadChapters(book)} />
     </Container>
   );
 }
 
 function useChapterState(): IStateProps {
   const route = useRoute<any>();
-  return useSelector((state: IState) => {
-    const bookId = route.params.bookId;
-    return {
-      book: state.bookReducer.books.find((i) => i.id === bookId),
-    };
-  });
+  const { books } = useTrackedSelector().bookReducer;
+  const bookId = route.params.bookId;
+  return useMemo(() => {
+    return { book: books.find((b) => b.id === bookId) };
+  }, [bookId, books]);
 }
-
-function mapDispatchToProps(dispatch: ThunkDispatch<IState, void, BookAction>): IDispatchProps {
-  return {
-    loadChapters: (book: SavedBook) => dispatch(BookLoadChaptersAsync(book)),
-  };
-}
-
-export default connect(() => null, mapDispatchToProps)(Chapters);

@@ -1,37 +1,29 @@
 import React from 'react';
 import { ScrollView, Switch } from 'react-native';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Dispatch } from 'redux';
 
 import { SettingItemContainer } from './components';
 import { Text } from '../../components';
-import { IState } from '../../reducers';
 import { AppAction, AppToggleMode, AppToggleModeFollowSystem } from '../../reducers/app/app.action';
+import { useTrackedSelector } from '../../store';
 
-interface IStateProps {
-  darkMode: boolean;
-  followSystem: boolean;
-}
-
-interface IDispatchProps {
-  onSetDarkMode(mode: boolean): void;
-  onSetFollowSystem(follow: boolean): void;
-}
-
-function _SettingList(props: IStateProps & IDispatchProps) {
+export function SettingList() {
+  const state = useReduxState();
+  const actions = useActions();
   return (
     <ScrollView>
       <SettingItemContainer>
         <Text variant="subtitle" bold>
           黑夜模式
         </Text>
-        <Switch disabled={props.followSystem} value={props.darkMode} onValueChange={props.onSetDarkMode} />
+        <Switch disabled={state.followSystem} value={state.darkMode} onValueChange={actions.onSetDarkMode} />
       </SettingItemContainer>
       <SettingItemContainer>
         <Text variant="subtitle" bold>
           跟随系统夜间模式
         </Text>
-        <Switch value={props.followSystem} onValueChange={props.onSetFollowSystem} />
+        <Switch value={state.followSystem} onValueChange={actions.onSetFollowSystem} />
       </SettingItemContainer>
       <SettingItemContainer>
         <Text variant="subtitle" bold>
@@ -43,14 +35,16 @@ function _SettingList(props: IStateProps & IDispatchProps) {
   );
 }
 
-function mapStateToProps(state: IState): IStateProps {
+function useReduxState() {
+  const { dark, modeFollowSystem } = useTrackedSelector().appReducer;
   return {
-    darkMode: state.appReducer.dark,
-    followSystem: state.appReducer.modeFollowSystem,
+    darkMode: dark,
+    followSystem: modeFollowSystem,
   };
 }
 
-function mapDispatchToProps(dispatch: Dispatch<AppAction>): IDispatchProps {
+function useActions() {
+  const dispatch = useDispatch<Dispatch<AppAction>>();
   return {
     onSetFollowSystem(follow: boolean): void {
       dispatch(new AppToggleModeFollowSystem(follow));
@@ -60,5 +54,3 @@ function mapDispatchToProps(dispatch: Dispatch<AppAction>): IDispatchProps {
     },
   };
 }
-
-export const SettingList = connect(mapStateToProps, mapDispatchToProps)(_SettingList);

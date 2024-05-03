@@ -1,35 +1,31 @@
 import { DarkTheme, NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useCallback } from 'react';
-import { useColorScheme, View } from 'react-native';
+import { useColorScheme } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Provider, useSelector, useDispatch } from 'react-redux';
+import { Provider, useDispatch } from 'react-redux';
 import { Action } from 'redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { ThemeProvider } from 'styled-components/native';
 
-import { IState } from './reducers';
 import { AppToggleMode } from './reducers/app/app.action';
 import { AppContainer } from './router';
-import { persistor, store } from './store';
+import { persistor, store, useTrackedSelector } from './store';
 import { getTheme } from './theme';
 
 function Root() {
-  const { dark, followSystem } = useSelector((state: IState) => ({
-    dark: state.appReducer.dark,
-    followSystem: state.appReducer.modeFollowSystem,
-  }));
+  const { dark, modeFollowSystem } = useTrackedSelector().appReducer;
   const dispatch = useDispatch();
   const toggleDark = useCallback((mode: boolean) => dispatch(new AppToggleMode(mode) as Action), [dispatch]);
 
   const colorScheme = useColorScheme();
 
   useEffect(() => {
-    if (followSystem) {
+    if (modeFollowSystem) {
       toggleDark(colorScheme === 'dark');
     }
-  }, [colorScheme, followSystem, toggleDark]);
+  }, [colorScheme, modeFollowSystem, toggleDark]);
 
   const { top } = useSafeAreaInsets();
 
@@ -44,10 +40,12 @@ function Root() {
 }
 
 function MySafeAreaProvider({ children }: { children: React.ReactNode }) {
-  const dark = useSelector((state: IState) => state.appReducer.dark);
+  const { dark } = useTrackedSelector().appReducer;
 
   return (
-    <SafeAreaProvider style={{ flexGrow: 1, backgroundColor: dark ? 'black' : undefined }}>{children}</SafeAreaProvider>
+    <SafeAreaProvider style={{ flexGrow: 1, backgroundColor: dark ? '#2C2D30' : undefined }}>
+      {children}
+    </SafeAreaProvider>
   );
 }
 

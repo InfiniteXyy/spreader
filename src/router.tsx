@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import Chapters from './screens/chapters';
+import { Chapters } from './screens/chapters';
 import { Home } from './screens/home';
 import { Reader } from './screens/reader';
 import { Search } from './screens/search/Search';

@@ -1,14 +1,12 @@
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { View } from 'react-native';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Dispatch } from 'redux';
 
 import { BannerContainer, BannerImg, BannerSubtitle, BannerTitle } from './components';
 import { Button, HStack, VStack, Text } from '../../components';
 import { SavedBook } from '../../model/Book';
-import { SavedChapter } from '../../model/Chapter';
-import { IState } from '../../reducers';
 import { BookAction, BookMarkAllAsRead } from '../../reducers/book/book.action';
 import { findNext } from '../../utils';
 
@@ -16,17 +14,23 @@ interface IBannerProps {
   book: SavedBook;
 }
 
-interface IStateProps {
-  nextChapter?: SavedChapter;
-}
-
-interface IDispatchProps {
-  markAllAsRead(book: SavedBook): void;
-}
-
-function _Banner(props: IBannerProps & IDispatchProps & IStateProps) {
-  const { book, markAllAsRead, nextChapter } = props;
+export function Banner(props: IBannerProps) {
+  const { book } = props;
   const navigation = useNavigation<any>();
+  const dispatch = useDispatch<Dispatch<BookAction>>();
+
+  const markAllAsRead = (book: SavedBook) => {
+    dispatch(new BookMarkAllAsRead(book));
+  };
+
+  const { nextChapter } = useMemo(() => {
+    const { chapters, lastRead } = book;
+    if (lastRead === undefined) {
+      return { nextChapter: chapters[0] };
+    } else {
+      return { nextChapter: findNext(chapters, (i) => i.href === lastRead.href) };
+    }
+  }, [book]);
 
   const onReadNext = () => {
     if (nextChapter === undefined) {
@@ -63,26 +67,3 @@ function _Banner(props: IBannerProps & IDispatchProps & IStateProps) {
     </BannerContainer>
   );
 }
-
-function mapStateToProps(state: IState, props: IBannerProps): IStateProps {
-  const { book } = props;
-  const { chapters, lastRead } = book;
-  if (lastRead === undefined) {
-    return {
-      nextChapter: chapters[0],
-    };
-  } else {
-    return {
-      nextChapter: findNext(chapters, (i) => i.href === lastRead.href),
-    };
-  }
-}
-
-function mapDispatchToProps(dispatch: Dispatch<BookAction>): IDispatchProps {
-  return {
-    markAllAsRead(book: SavedBook) {
-      dispatch(new BookMarkAllAsRead(book));
-    },
-  };
-}
-export const Banner = connect(mapStateToProps, mapDispatchToProps)(_Banner);

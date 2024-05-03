@@ -1,33 +1,25 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { ScrollView } from 'react-native';
-import { connect } from 'react-redux';
-import { ThunkDispatch } from 'redux-thunk';
+import { useDispatch } from 'react-redux';
 
 import { TagItem } from './TagItem';
 import { SectionContainer } from './components';
 import { Text } from '../../../components';
-import { BookTag } from '../../../model/BookTag';
-import { IState } from '../../../reducers';
-import { HubAction, HubLoadTagsAsync } from '../../../reducers/hub/hub.action';
+import { HubLoadTagsAsync } from '../../../reducers/hub/hub.action';
+import { useTrackedSelector } from '../../../store';
 
 interface ITopicListProps {}
 
-interface IStateProps {
-  isLoading: boolean;
-  data: BookTag[];
-}
-
-interface IDispatchProps {
-  onLoad(): void;
-}
-
-function _TagList(props: ITopicListProps & IStateProps & IDispatchProps) {
-  const { data, onLoad } = props;
+export function TagList(props: ITopicListProps) {
+  const data = useTrackedSelector().hubReducer.tagList.data;
   const navigation = useNavigation<any>();
+  const onLoad = useActions().onLoad;
+
   useEffect(() => {
     onLoad();
   }, [onLoad]);
+
   const onNavigateTopic = useCallback(() => {
     navigation.navigate('topic');
   }, [navigation]);
@@ -50,17 +42,11 @@ function _TagList(props: ITopicListProps & IStateProps & IDispatchProps) {
   );
 }
 
-function mapStateToProps(state: IState): IStateProps {
-  return {
-    isLoading: state.hubReducer.tagList.isLoading,
-    data: state.hubReducer.tagList.data,
-  };
+function useActions() {
+  const dispatch = useDispatch<any>();
+  return useMemo(() => {
+    return {
+      onLoad: () => dispatch(HubLoadTagsAsync()),
+    };
+  }, [dispatch]);
 }
-
-function mapDispatchToProps(dispatch: ThunkDispatch<IState, void, HubAction>): IDispatchProps {
-  return {
-    onLoad: () => dispatch(HubLoadTagsAsync()),
-  };
-}
-
-export const TagList = connect(mapStateToProps, mapDispatchToProps)(_TagList);

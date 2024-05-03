@@ -1,37 +1,37 @@
 import React from 'react';
 import { View } from 'react-native';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Dispatch } from 'redux';
 
 import { FeedItem } from './FeedItem';
-import { SavedBook } from '../../model/Book';
 import { BookFeed } from '../../model/Feed';
-import { IState } from '../../reducers';
 import { BookAction, BookAdd, BookRemove } from '../../reducers/book/book.action';
+import { useTrackedSelector } from '../../store';
 
 interface IFeedListProps {
   feeds: BookFeed[];
 }
 
-interface IStateProps {
-  books: SavedBook[];
-}
+export function FeedList(props: IFeedListProps) {
+  const { books } = useTrackedSelector().bookReducer;
+  const dispatch = useDispatch<Dispatch<BookAction>>();
 
-interface IDispatchProps {
-  onAddFeed(feed: BookFeed): void;
-  onRemoveFeed(feed: BookFeed): void;
-}
+  const onAddFeed = (feed: BookFeed) => {
+    dispatch(new BookAdd(feed));
+  };
+  const onRemoveFeed = (feed: BookFeed) => {
+    dispatch(new BookRemove(feed));
+  };
 
-function _FeedList(props: IFeedListProps & IStateProps & IDispatchProps) {
   return (
     <View style={{ marginTop: 20 }}>
       {props.feeds.map((i) => {
-        const isAdded = props.books.findIndex((k) => i.id === k.id) !== -1;
+        const isAdded = books.findIndex((k) => i.id === k.id) !== -1;
         return (
           <FeedItem
             key={i.id.toString()}
             isAdded={isAdded}
-            onPressToggle={isAdded ? props.onRemoveFeed : props.onAddFeed}
+            onPressToggle={isAdded ? onRemoveFeed : onAddFeed}
             feed={i}
           />
         );
@@ -39,22 +39,3 @@ function _FeedList(props: IFeedListProps & IStateProps & IDispatchProps) {
     </View>
   );
 }
-
-function mapStateToProps(state: IState): IStateProps {
-  return {
-    books: state.bookReducer.books,
-  };
-}
-
-function mapDispatchToProps(dispatch: Dispatch<BookAction>): IDispatchProps {
-  return {
-    onAddFeed(feed: BookFeed): void {
-      dispatch(new BookAdd(feed));
-    },
-    onRemoveFeed(feed: BookFeed): void {
-      dispatch(new BookRemove(feed));
-    },
-  };
-}
-
-export const FeedList = connect(mapStateToProps, mapDispatchToProps)(_FeedList);

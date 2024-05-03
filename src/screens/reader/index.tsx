@@ -2,7 +2,7 @@ import IconFeather from '@expo/vector-icons/Feather';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import React, { createContext, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { StatusBar, Text, TextStyle, View } from 'react-native';
-import { connect, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Dispatch } from 'redux';
 
 import { Editor } from './Editor';
@@ -15,9 +15,9 @@ import { Container } from '../../components';
 import { SavedBook } from '../../model/Book';
 import { SavedChapter } from '../../model/Chapter';
 import { DefaultReaderThemes, ReaderTheme } from '../../model/Theme';
-import { IState } from '../../reducers';
 import { BookAction, BookMarkAsRead } from '../../reducers/book/book.action';
 import { ReaderState } from '../../reducers/reader/reader.state';
+import { useTrackedSelector } from '../../store';
 import { colors } from '../../theme';
 
 interface IStateProps {
@@ -28,10 +28,6 @@ interface IStateProps {
   readerStyle: ReaderState;
 }
 
-interface IDispatchProps {
-  onReadChapter(book: SavedBook, chapter: SavedChapter): void;
-}
-
 const TOUCH_TIMEOUT = 150;
 
 function padWithTab(content: string) {
@@ -40,7 +36,7 @@ function padWithTab(content: string) {
 
 export const ReaderThemeContext = createContext<ReaderTheme>(DefaultReaderThemes[0]);
 
-function _Reader(props: IDispatchProps) {
+export function Reader() {
   const [contents, setContents] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [menuVisible, setMenuVisible] = useState(true);
@@ -48,6 +44,14 @@ function _Reader(props: IDispatchProps) {
   const { book, chapter, readerStyle, prevChapter, nextChapter } = useReaderState();
   const navigation = useNavigation<any>();
   const { lineHeightRatio, titleAlign, readerTheme, fontSize, titleSize, paragraphSpace } = readerStyle;
+
+  const dispatch = useDispatch<Dispatch<BookAction>>();
+  const onReadChapter = useCallback(
+    (book: SavedBook, chapter: SavedChapter) => {
+      dispatch(new BookMarkAsRead(book, chapter));
+    },
+    [dispatch],
+  );
 
   const currentHref = useRef<string>(chapter?.href || '');
   const lastPressHandler = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -60,7 +64,7 @@ function _Reader(props: IDispatchProps) {
     getContent(chapter.href, book.methods.getContent).then((result) => {
       if (chapter.href === currentHref.current) {
         setContents(result);
-        props.onReadChapter(book, chapter);
+        onReadChapter(book, chapter);
         setIsLoading(false);
       }
     });
@@ -184,12 +188,13 @@ function _Reader(props: IDispatchProps) {
 
 function useReaderState(): IStateProps {
   const route = useRoute<any>();
-  return useSelector((state: IState) => {
+  const { bookReducer, readerReducer } = useTrackedSelector();
+  return useMemo(() => {
     const bookId = route.params.bookId;
     const chapterHref = route.params.chapterHref;
-    const book = state.bookReducer.books.find((i) => i.id === bookId);
+    const book = bookReducer.books.find((i) => i.id === bookId);
     if (book === undefined) {
-      return { readerStyle: state.readerReducer };
+      return { readerStyle: readerReducer };
     }
     const chapterIndex = book.chapters.findIndex((i) => i.href === chapterHref);
     const chapter = chapterIndex !== -1 ? book.chapters[chapterIndex] : undefined;
@@ -200,17 +205,7 @@ function useReaderState(): IStateProps {
       chapter,
       prevChapter,
       nextChapter,
-      readerStyle: state.readerReducer,
+      readerStyle: readerReducer,
     };
-  });
+  }, [bookReducer.books, readerReducer, route.params.bookId, route.params.chapterHref]);
 }
-
-function mapDispatchToProps(dispatch: Dispatch<BookAction>): IDispatchProps {
-  return {
-    onReadChapter(book: SavedBook, chapter: SavedChapter) {
-      dispatch(new BookMarkAsRead(book, chapter));
-    },
-  };
-}
-
-export const Reader = connect(() => null, mapDispatchToProps)(_Reader);

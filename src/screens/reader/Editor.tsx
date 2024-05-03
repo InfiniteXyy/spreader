@@ -1,13 +1,12 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { View } from 'react-native';
 import Modal from 'react-native-modal';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Dispatch } from 'redux';
 
 import { AlignOptionContainer, EditorSlider, ThemeOptionContainer } from './EditorItem';
 import { Text } from '../../components';
 import { ReaderTheme } from '../../model/Theme';
-import { IState } from '../../reducers';
 import {
   ReaderAction,
   ReaderSetFontSize,
@@ -17,31 +16,18 @@ import {
   ReaderSetTitleAlign,
   ReaderSetTitleSize,
 } from '../../reducers/reader/reader.action';
-import { ReaderState, TitleAlign } from '../../reducers/reader/reader.state';
-
-interface IStateProps {
-  style: ReaderState;
-}
-
-interface IDispatchProps {
-  setFontSize(size: number): void;
-  setTitleSize(size: number): void;
-  setLineHeight(height: number): void;
-  setParaSpace(space: number): void;
-  setTitleAlign(align: TitleAlign): void;
-  setTheme(theme: ReaderTheme): void;
-}
+import { TitleAlign } from '../../reducers/reader/reader.state';
+import { useTrackedSelector } from '../../store';
 
 interface IEditorProps {
   visible: boolean;
   onClose(): void;
 }
 
-function _Editor(props: IStateProps & IDispatchProps & IEditorProps) {
-  const {
-    style,
-    style: { readerTheme },
-  } = props;
+export function Editor(props: IEditorProps) {
+  const style = useTrackedSelector().readerReducer;
+  const { readerTheme } = style;
+  const actions = useActions();
 
   return (
     <Modal
@@ -62,50 +48,45 @@ function _Editor(props: IStateProps & IDispatchProps & IEditorProps) {
           <Text variant="title" bold style={{ marginBottom: 10, color: readerTheme.fontColor }}>
             阅读器样式
           </Text>
-          <AlignOptionContainer value={style.titleAlign} onChange={props.setTitleAlign} label="标题对齐" />
-          <EditorSlider value={style.titleSize} onChange={props.setTitleSize} range={[18, 30]} label="标题大小" />
-          <EditorSlider value={style.fontSize} onChange={props.setFontSize} range={[12, 24]} label="字体大小" />
+          <AlignOptionContainer value={style.titleAlign} onChange={actions.setTitleAlign} label="标题对齐" />
+          <EditorSlider value={style.titleSize} onChange={actions.setTitleSize} range={[18, 30]} label="标题大小" />
+          <EditorSlider value={style.fontSize} onChange={actions.setFontSize} range={[12, 24]} label="字体大小" />
           <EditorSlider
             value={style.lineHeightRatio}
-            onChange={props.setLineHeight}
+            onChange={actions.setLineHeight}
             range={[1.1, 2.4]}
             label="行间距"
           />
-          <EditorSlider value={style.paragraphSpace} onChange={props.setParaSpace} range={[0, 1.5]} label="段间距" />
-          <ThemeOptionContainer value={style.readerTheme} onChange={props.setTheme} label="主题" />
+          <EditorSlider value={style.paragraphSpace} onChange={actions.setParaSpace} range={[0, 1.5]} label="段间距" />
+          <ThemeOptionContainer value={style.readerTheme} onChange={actions.setTheme} label="主题" />
         </View>
       </View>
     </Modal>
   );
 }
 
-function mapStateToProps(state: IState): IStateProps {
-  return {
-    style: state.readerReducer,
-  };
+function useActions() {
+  const dispatch = useDispatch<Dispatch<ReaderAction>>();
+  return useMemo(() => {
+    return {
+      setTheme(theme: ReaderTheme): void {
+        dispatch(new ReaderSetTheme(theme));
+      },
+      setFontSize(size: number): void {
+        dispatch(new ReaderSetFontSize(size));
+      },
+      setLineHeight(height: number): void {
+        dispatch(new ReaderSetLineHeight(height));
+      },
+      setParaSpace(space: number): void {
+        dispatch(new ReaderSetParaSpacing(space));
+      },
+      setTitleAlign(align: TitleAlign): void {
+        dispatch(new ReaderSetTitleAlign(align));
+      },
+      setTitleSize(size: number): void {
+        dispatch(new ReaderSetTitleSize(size));
+      },
+    };
+  }, [dispatch]);
 }
-
-function mapDispatchToProps(dispatch: Dispatch<ReaderAction>): IDispatchProps {
-  return {
-    setTheme(theme: ReaderTheme): void {
-      dispatch(new ReaderSetTheme(theme));
-    },
-    setFontSize(size: number): void {
-      dispatch(new ReaderSetFontSize(size));
-    },
-    setLineHeight(height: number): void {
-      dispatch(new ReaderSetLineHeight(height));
-    },
-    setParaSpace(space: number): void {
-      dispatch(new ReaderSetParaSpacing(space));
-    },
-    setTitleAlign(align: TitleAlign): void {
-      dispatch(new ReaderSetTitleAlign(align));
-    },
-    setTitleSize(size: number): void {
-      dispatch(new ReaderSetTitleSize(size));
-    },
-  };
-}
-
-export const Editor = connect(mapStateToProps, mapDispatchToProps)(_Editor);

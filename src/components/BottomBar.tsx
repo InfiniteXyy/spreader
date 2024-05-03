@@ -1,37 +1,23 @@
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import React from 'react';
-import { connect } from 'react-redux';
 
-import { IState } from '../reducers';
+import { useTrackedSelector } from '../store';
 import { colors } from '../theme';
-
-interface IStateProps {
-  dark: boolean;
-}
 
 const BottomTabBar = createMaterialBottomTabNavigator();
 
-function TabBarComponent(props: IStateProps & any) {
+export function BottomBar(props: any) {
+  const { dark } = useTrackedSelector().appReducer;
   return (
     <BottomTabBar.Navigator
       {...props}
       activeTintColor={colors.warning.pin}
       style={{
-        backgroundColor: props.dark ? colors.darkBg : colors.bg,
+        backgroundColor: dark ? colors.darkBg : colors.bg,
         borderTopWidth: 0.5,
-        borderTopColor: props.dark ? colors.dividerColorLight : colors.dividerColor,
+        borderTopColor: dark ? colors.dividerColorLight : colors.dividerColor,
         height: 60,
       }}
     />
   );
 }
-
-function mapStateToProps(state: IState): IStateProps {
-  return {
-    dark: state.appReducer.dark,
-  };
-}
-
-const BottomBar = connect(mapStateToProps)(TabBarComponent);
-
-export { BottomBar };

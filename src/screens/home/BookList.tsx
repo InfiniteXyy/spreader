@@ -1,20 +1,19 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import DraggableFlatList from 'react-native-draggable-flatlist';
-import { connect } from 'react-redux';
-import { ThunkDispatch } from 'redux-thunk';
+import { useDispatch } from 'react-redux';
+import { Dispatch } from 'redux';
 
 import { BookItem } from './BookItem';
 import BookListEmptyView from './BookListEmptyView';
-import { Book, SavedBook } from '../../model/Book';
+import { SavedBook } from '../../model/Book';
 import { SavedChapter } from '../../model/Chapter';
-import { IState } from '../../reducers';
 import {
-  BookAction,
   BookLoadChaptersAsync,
   BookMarkAllAsRead,
   BookRemove,
   BookSetSavedList,
 } from '../../reducers/book/book.action';
+import { useTrackedSelector } from '../../store';
 import { findNext } from '../../utils';
 
 interface IBookListProps {
@@ -23,19 +22,10 @@ interface IBookListProps {
   onNavigateChapter(book: SavedBook, chapter: SavedChapter): () => void;
 }
 
-interface IStateProps {
-  books: SavedBook[];
-}
-
-interface IDispatchProps {
-  updateBooks(books: Book[]): void;
-  setBookList(books: SavedBook[]): void;
-  removeBook(book: SavedBook): void;
-  markAllRead(book: SavedBook): void;
-}
-
-function _BookList(props: IBookListProps & IStateProps & IDispatchProps) {
-  const { onNavigate, books, updateBooks, setBookList, onNavigateSearch } = props;
+export function BookList(props: IBookListProps) {
+  const { books } = useTrackedSelector().bookReducer;
+  const { onNavigate, onNavigateChapter, onNavigateSearch } = props;
+  const { markAllRead, removeBook, setBookList, updateBooks } = useActions();
 
   return (
     <DraggableFlatList
@@ -51,9 +41,9 @@ function _BookList(props: IBookListProps & IStateProps & IDispatchProps) {
           nextChapter = findNext(item.chapters, (i) => href === i.href);
         }
         const menuActions = {
-          markAllRead: () => props.markAllRead(item),
-          continueRead: props.onNavigateChapter(item, nextChapter),
-          deleteBook: () => props.removeBook(item),
+          markAllRead: () => markAllRead(item),
+          continueRead: onNavigateChapter(item, nextChapter),
+          deleteBook: () => removeBook(item),
         };
         return <BookItem book={item} onPress={onNavigate(item)} onLongPress={drag} menuActions={menuActions} />;
       }}
@@ -66,29 +56,24 @@ function _BookList(props: IBookListProps & IStateProps & IDispatchProps) {
   );
 }
 
-function mapStateToProps(state: IState): IStateProps {
-  return {
-    books: state.bookReducer.books,
-  };
+function useActions() {
+  const dispatch = useDispatch<Dispatch<any>>();
+  return useMemo(() => {
+    return {
+      markAllRead(book: SavedBook): void {
+        dispatch(new BookMarkAllAsRead(book));
+      },
+      removeBook(book: SavedBook): void {
+        dispatch(new BookRemove(book));
+      },
+      updateBooks(books: SavedBook[]) {
+        for (const book of books) {
+          dispatch(BookLoadChaptersAsync(book));
+        }
+      },
+      setBookList(books: SavedBook[]) {
+        dispatch(new BookSetSavedList(books));
+      },
+    };
+  }, [dispatch]);
 }
-
-function mapDispatchToProps(dispatch: ThunkDispatch<IState, null, BookAction>): IDispatchProps {
-  return {
-    markAllRead(book: SavedBook): void {
-      dispatch(new BookMarkAllAsRead(book));
-    },
-    removeBook(book: SavedBook): void {
-      dispatch(new BookRemove(book));
-    },
-    updateBooks(books: SavedBook[]) {
-      for (const book of books) {
-        dispatch(BookLoadChaptersAsync(book));
-      }
-    },
-    setBookList(books: SavedBook[]) {
-      dispatch(new BookSetSavedList(books));
-    },
-  };
-}
-
-export const BookList = connect(mapStateToProps, mapDispatchToProps)(_BookList);
