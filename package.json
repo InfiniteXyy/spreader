@@ -38,7 +38,6 @@
     "react-native-wheel-scrollview-picker": "^2.0.4",
     "react-redux": "^9.1.2",
     "react-tracked": "^1.7.14",
-    "react-use": "^17.5.0",
     "redux": "^5.0.1",
     "redux-persist": "^6.0.0",
     "redux-thunk": "^3.1.0",
