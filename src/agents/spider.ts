@@ -1,20 +1,22 @@
 import { load } from 'cheerio';
 
-import agent from './index';
+import agent from '.';
 import { GetContentMethod, GetListMethod } from '../model/Book';
 import { SavedChapter } from '../model/Chapter';
 
 export async function getList(method: GetListMethod) {
-  const { query, url, href_prefix, reverse } = method;
+  const { query, url, reverse } = method;
+  console.log({ href: url });
   const [q, range] = query.split('|');
   const html = await agent.get(url);
   const $ = load(html);
   const links: SavedChapter[] = [];
+
   $(q).each((_index, element) => {
     const temp = $(element);
     links.push({
       title: temp.text(),
-      href: (href_prefix || '') + temp.attr('href'),
+      href: new URL(url, temp.attr('href')).toString(),
       hasRead: false,
     });
   });
@@ -25,10 +27,12 @@ export async function getList(method: GetListMethod) {
   if (reverse) {
     links.reverse();
   }
+
   return links;
 }
 
 export async function getContent(url: string, method: GetContentMethod) {
+  console.log({ url });
   const { query } = method;
 
   const html = await agent.get(url);

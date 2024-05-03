@@ -81,9 +81,14 @@ export class BookAdd implements Action {
 export function BookLoadChaptersAsync(book: SavedBook) {
   return async (dispatch: Dispatch<Action>) => {
     dispatch(new BookLoadChapters(book));
-    const chapters = await getList(book.methods.getList);
-    dispatch(new BookUpdateChapters(book, chapters));
-    return Promise.resolve(chapters.length);
+    try {
+      const chapters = await getList(book.methods.getList);
+      dispatch(new BookUpdateChapters(book, chapters));
+      return Promise.resolve(chapters.length);
+    } catch (e) {
+      console.error(e);
+      return Promise.resolve(0);
+    }
   };
 }
 

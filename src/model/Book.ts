@@ -28,6 +28,5 @@ export interface GetContentMethod {
 export interface GetListMethod {
   url: string;
   query: string;
-  href_prefix?: string;
   reverse?: boolean;
 }

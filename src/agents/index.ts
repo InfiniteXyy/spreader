@@ -20,18 +20,44 @@ const feed = {
     // FIXME:demo
     return [
       {
-        author: '火星引力',
-        title: '逆天邪神',
-        source: { name: '笔趣阁', url: 'https://www.xbiqugew.com/book/7138/' },
-        id: 0,
-        tags: [{ title: '奇幻' }],
-        methods: {
-          getContent: { query: '#content' },
-          getList: { query: '.box_con #list a', url: 'https://www.xbiqugew.com/book/7138/' },
-        },
-        coverImg: 'http://r.m.b520.cc/files/article/image/1/1789/1789s.jpg',
-        uploader: 'Xyy',
+        id: 1,
+        tags: [],
+        source: { name: '逆天邪神', url: 'https://www.nitiandu.com/nitianxieshen' },
+        uploader: 'InfiniteXyy',
+        lastUpdateChapter: undefined,
         chaptersCount: 1000,
+        title: '逆天邪神',
+        author: '火星引力',
+        coverImg: 'http://r.m.b520.cc/files/article/image/1/1789/1789s.jpg',
+        methods: {
+          getList: {
+            url: 'https://www.nitiandu.com/nitianxieshen',
+            query: '.container ul li a | 6',
+          },
+          getContent: {
+            query: '#content p',
+          },
+        },
+      },
+      {
+        id: 2,
+        tags: [],
+        source: { name: '逆天邪神', url: 'https://www.nitiandu.com/shengwu' },
+        uploader: 'InfiniteXyy',
+        title: '圣武星辰',
+        author: '乱世狂刀',
+        lastUpdateChapter: undefined,
+        chaptersCount: 1000,
+        coverImg: 'https://img.ting55.com/2019/08/13808.jpg%21300',
+        methods: {
+          getList: {
+            url: 'https://www.nitiandu.com/shengwu',
+            query: '.container ul li a | 6',
+          },
+          getContent: {
+            query: '#content p',
+          },
+        },
       },
     ];
     // return [{ author: "jiangnan",  }];
@@ -47,13 +73,18 @@ const tag = {
 };
 
 const agent = {
-  get: async (_url: string) => {
-    const buffer = await axios(_url, { responseType: 'arraybuffer' });
-    return iconv.decode(Buffer.from(buffer.data), 'gb2312'); // hard code for testing
-  },
-  getJSON: (_url: string) => fetch(_url).then((response) => response.json()),
   feed,
   tag,
+  async get(url: string): Promise<string> {
+    const { data: html } = await axios.get(url, {
+      responseType: 'text',
+      headers: {
+        'user-agent':
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+      },
+    });
+    return html;
+  },
 };
 
 export default agent;
