@@ -1,6 +1,7 @@
 import _ from 'lodash';
-import { bookInitialState, BookState } from './book.state';
+
 import { BookAction, BookActionType } from './book.action';
+import { bookInitialState, BookState } from './book.state';
 import { SavedBook } from '../../model/Book';
 
 export function bookReducer(state = bookInitialState, action: BookAction): BookState {
@@ -38,7 +39,7 @@ export function bookReducer(state = bookInitialState, action: BookAction): BookS
     }
 
     case BookActionType.UPDATE_CHAPTERS: {
-      let books = state.books.map((i) =>
+      const books = state.books.map((i) =>
         action.bookId === i.id
           ? {
               ...i,

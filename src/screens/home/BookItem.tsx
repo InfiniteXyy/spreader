@@ -1,11 +1,12 @@
 import React, { useMemo, useRef } from 'react';
 import { TouchableOpacityProps, View } from 'react-native';
+
+import { CardSubTitle, CardTitle, CardWrapper, CoverImg, MoreIcon } from './components';
 import { Dropdown, HStack, Text, VStack } from '../../components';
 import { DropdownDivider } from '../../components/Dropdown';
 import { SavedBook } from '../../model/Book';
 import { SavedChapter } from '../../model/Chapter';
 import { getLastAndPick, hofActions } from '../../utils';
-import { CardSubTitle, CardTitle, CardWrapper, CoverImg, MoreIcon } from './components';
 
 interface IBookItemProps extends TouchableOpacityProps {
   book: SavedBook;

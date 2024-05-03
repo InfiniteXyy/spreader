@@ -1,12 +1,13 @@
 import React from 'react';
 import { View } from 'react-native';
-import { FeedItem } from './FeedItem';
-import { BookFeed } from '../../model/Feed';
 import { connect } from 'react-redux';
-import { IState } from '../../reducers';
 import { Dispatch } from 'redux';
-import { BookAction, BookAdd, BookRemove } from '../../reducers/book/book.action';
+
+import { FeedItem } from './FeedItem';
 import { SavedBook } from '../../model/Book';
+import { BookFeed } from '../../model/Feed';
+import { IState } from '../../reducers';
+import { BookAction, BookAdd, BookRemove } from '../../reducers/book/book.action';
 
 interface IFeedListProps {
   feeds: BookFeed[];

@@ -1,4 +1,5 @@
 import { Action } from 'redux';
+
 import { TitleAlign } from './reader.state';
 import { ReaderTheme } from '../../model/Theme';
 

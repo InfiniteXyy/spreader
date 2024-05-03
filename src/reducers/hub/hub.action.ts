@@ -1,7 +1,8 @@
 import { Action, Dispatch } from 'redux';
-import { BookFeed } from '../../model/Feed';
-import { BookTag } from '../../model/BookTag';
+
 import agent from '../../agents';
+import { BookTag } from '../../model/BookTag';
+import { BookFeed } from '../../model/Feed';
 
 export enum HubActionType {
   UPDATE_TRENDING_LIST = '[hub] update trending list',

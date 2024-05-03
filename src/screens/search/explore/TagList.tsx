@@ -1,14 +1,15 @@
+import { useNavigation } from '@react-navigation/native';
 import React, { useCallback, useEffect } from 'react';
-import { Text } from '../../../components';
-import { SectionContainer } from './components';
 import { ScrollView } from 'react-native';
 import { connect } from 'react-redux';
-import { IState } from '../../../reducers';
 import { ThunkDispatch } from 'redux-thunk';
-import { HubAction, HubLoadTagsAsync } from '../../../reducers/hub/hub.action';
-import { BookTag } from '../../../model/BookTag';
+
 import { TagItem } from './TagItem';
-import { useNavigation } from '@react-navigation/native';
+import { SectionContainer } from './components';
+import { Text } from '../../../components';
+import { BookTag } from '../../../model/BookTag';
+import { IState } from '../../../reducers';
+import { HubAction, HubLoadTagsAsync } from '../../../reducers/hub/hub.action';
 
 interface ITopicListProps {}
 

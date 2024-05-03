@@ -1,6 +1,7 @@
-import { TouchableOpacity } from 'react-native';
 import Icon from '@expo/vector-icons/Feather';
+import { TouchableOpacity } from 'react-native';
 import styled from 'styled-components/native';
+
 import { Text } from '../../components';
 
 export const CardWrapper = styled(TouchableOpacity)`

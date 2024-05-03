@@ -1,11 +1,13 @@
 import React from 'react';
-import { IState } from '../../reducers';
-import { connect } from 'react-redux';
-import { ReaderState, TitleAlign } from '../../reducers/reader/reader.state';
-import { Dispatch } from 'redux';
+import { View } from 'react-native';
 import Modal from 'react-native-modal';
-import { Text } from '../../components';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 
+import { AlignOptionContainer, EditorSlider, ThemeOptionContainer } from './EditorItem';
+import { Text } from '../../components';
+import { ReaderTheme } from '../../model/Theme';
+import { IState } from '../../reducers';
 import {
   ReaderAction,
   ReaderSetFontSize,
@@ -15,9 +17,7 @@ import {
   ReaderSetTitleAlign,
   ReaderSetTitleSize,
 } from '../../reducers/reader/reader.action';
-import { AlignOptionContainer, EditorSlider, ThemeOptionContainer } from './EditorItem';
-import { View } from 'react-native';
-import { ReaderTheme } from '../../model/Theme';
+import { ReaderState, TitleAlign } from '../../reducers/reader/reader.state';
 
 interface IStateProps {
   style: ReaderState;

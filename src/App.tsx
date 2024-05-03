@@ -1,19 +1,19 @@
-import { useEffect } from 'react';
-import { ThemeProvider } from 'styled-components/native';
-import { AppContainer } from './router';
+import { NavigationContainer } from '@react-navigation/native';
+import { StatusBar } from 'expo-status-bar';
+import { useEffect, useCallback } from 'react';
+import { useColorScheme, View } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Provider, useSelector, useDispatch } from 'react-redux';
+import { Action } from 'redux';
+import { PersistGate } from 'redux-persist/integration/react';
+import { ThemeProvider } from 'styled-components/native';
+
+import { IState } from './reducers';
+import { AppToggleMode } from './reducers/app/app.action';
+import { AppContainer } from './router';
 import { persistor, store } from './store';
 import { getTheme } from './theme';
-import { IState } from './reducers';
-import { useColorScheme, View } from 'react-native';
-import { PersistGate } from 'redux-persist/integration/react';
-import { AppToggleMode } from './reducers/app/app.action';
-import { NavigationContainer } from '@react-navigation/native';
-import { useCallback } from 'react';
-import { Action } from 'redux';
-import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
-import { StatusBar } from 'expo-status-bar';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 function Root() {
   const { dark, followSystem } = useSelector((state: IState) => ({

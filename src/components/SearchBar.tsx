@@ -1,8 +1,9 @@
-import React, { useContext } from 'react';
-import { Text } from './Text';
-import styled, { ThemeContext } from 'styled-components/native';
 import Icon from '@expo/vector-icons/Feather';
+import React, { useContext } from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
+import styled, { ThemeContext } from 'styled-components/native';
+
+import { Text } from './Text';
 
 interface ISearchBarProps {
   onPress?(): void;

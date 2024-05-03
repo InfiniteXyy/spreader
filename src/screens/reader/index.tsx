@@ -1,9 +1,15 @@
+import IconFeather from '@expo/vector-icons/Feather';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import React, { createContext, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { StatusBar, Text, TextStyle, View } from 'react-native';
-import IconFeather from '@expo/vector-icons/Feather';
 import { connect, useSelector } from 'react-redux';
 import { Dispatch } from 'redux';
+
+import { Editor } from './Editor';
+import { ReaderFooter } from './ReaderFooter';
+import { ReaderHeader } from './ReaderHeader';
+import { Skeleton } from './Skeleton';
+import { ReaderScroll } from './components';
 import { getContent } from '../../agents/spider';
 import { Container } from '../../components';
 import { SavedBook } from '../../model/Book';
@@ -13,11 +19,6 @@ import { IState } from '../../reducers';
 import { BookAction, BookMarkAsRead } from '../../reducers/book/book.action';
 import { ReaderState } from '../../reducers/reader/reader.state';
 import { colors } from '../../theme';
-import { ReaderScroll } from './components';
-import { Editor } from './Editor';
-import { ReaderFooter } from './ReaderFooter';
-import { ReaderHeader } from './ReaderHeader';
-import { Skeleton } from './Skeleton';
 
 interface IStateProps {
   book?: SavedBook;
@@ -84,7 +85,7 @@ function _Reader(props: IDispatchProps) {
 
   const textStyle = useMemo(
     () => ({
-      fontSize: fontSize,
+      fontSize,
       lineHeight: Math.round(lineHeightRatio * fontSize),
       color: readerTheme.fontColor,
       marginTop: Math.round(paragraphSpace * fontSize),

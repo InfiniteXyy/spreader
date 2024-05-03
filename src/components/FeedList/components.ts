@@ -1,6 +1,7 @@
-import styled from 'styled-components/native';
-import { HStack } from '../index';
 import Icon from '@expo/vector-icons/Feather';
+import styled from 'styled-components/native';
+
+import { HStack } from '../index';
 
 export const FeedItemContainer = styled(HStack)`
   height: 90px;

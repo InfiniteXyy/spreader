@@ -1,10 +1,11 @@
 import React, { useContext, useEffect, useMemo } from 'react';
 import { Animated, TouchableOpacity, View } from 'react-native';
-import { HStack, Text } from '../../components';
+
 import { ReaderFooterContainer } from './components';
-import { colors } from '../../theme';
 import { ReaderThemeContext } from './index';
+import { HStack, Text } from '../../components';
 import { SavedChapter } from '../../model/Chapter';
+import { colors } from '../../theme';
 
 interface IFooterProps {
   visible: boolean;
@@ -56,7 +57,8 @@ export function ReaderFooter(props: IFooterProps) {
         backgroundColor: readerTheme.bgColor,
         borderTopColor: readerTheme.mode === 'dark' ? colors.dividerColorLight : colors.dividerColor,
         opacity: footerOpacity,
-      }}>
+      }}
+    >
       <HStack center expand>
         {prevChapterComponent}
         {nextChapterComponent}

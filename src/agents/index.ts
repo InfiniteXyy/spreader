@@ -1,7 +1,8 @@
-import fetch from 'cross-fetch';
-import { BookFeed } from '../model/Feed';
 import axios from 'axios';
+import fetch from 'cross-fetch';
 import iconv from 'iconv-lite';
+
+import { BookFeed } from '../model/Feed';
 
 /** FIXME */
 // const url = 'http://49.235.51.174:8080';
@@ -15,7 +16,7 @@ import iconv from 'iconv-lite';
 // }
 
 const feed = {
-  getTrending: async function (): Promise<BookFeed[]> {
+  async getTrending(): Promise<BookFeed[]> {
     // FIXME:demo
     return [
       {
@@ -39,7 +40,7 @@ const feed = {
 };
 
 const tag = {
-  getList: async function (): Promise<[]> {
+  async getList(): Promise<[]> {
     return [];
     // return await visit('tags');
   },

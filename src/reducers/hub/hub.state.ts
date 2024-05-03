@@ -1,5 +1,5 @@
-import { BookFeed } from '../../model/Feed';
 import { BookTag } from '../../model/BookTag';
+import { BookFeed } from '../../model/Feed';
 
 export interface HubState {
   trendingList: {

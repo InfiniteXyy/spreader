@@ -1,8 +1,9 @@
-import styled from 'styled-components/native';
-import { HStack, Text } from '../../components';
 import React, { useContext } from 'react';
-import { ReaderThemeContext } from './index';
 import { Animated } from 'react-native';
+import styled from 'styled-components/native';
+
+import { ReaderThemeContext } from './index';
+import { HStack, Text } from '../../components';
 
 export const ReaderScroll = styled.ScrollView`
   padding: 0 20px;

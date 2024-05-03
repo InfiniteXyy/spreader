@@ -1,17 +1,18 @@
-import React, { useCallback } from 'react';
-import { SavedChapter } from '../../model/Chapter';
-import { FlatList, NativeScrollEvent, NativeSyntheticEvent, Platform } from 'react-native';
-import { HStack, Text } from '../../components';
-import { SavedBook } from '../../model/Book';
-import { Banner } from './Banner';
-import { createPageItems } from '../../utils';
-import { ChapterPicker } from './ChapterPicker';
-import { BookChangeIndex } from '../../reducers/book/book.action';
 import { useNavigation } from '@react-navigation/native';
-import { ChapterListItemContainer, ChapterListItemDot } from './components';
-import { Loader } from 'rn-placeholder';
+import React, { useCallback } from 'react';
+import { FlatList, NativeScrollEvent, NativeSyntheticEvent, Platform } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { Action } from 'redux';
+import { Loader } from 'rn-placeholder';
+
+import { Banner } from './Banner';
+import { ChapterPicker } from './ChapterPicker';
+import { ChapterListItemContainer, ChapterListItemDot } from './components';
+import { HStack, Text } from '../../components';
+import { SavedBook } from '../../model/Book';
+import { SavedChapter } from '../../model/Chapter';
+import { BookChangeIndex } from '../../reducers/book/book.action';
+import { createPageItems } from '../../utils';
 
 interface IChapterListProps {
   book: SavedBook;

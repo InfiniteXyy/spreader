@@ -1,7 +1,8 @@
 import { load } from 'cheerio';
+
+import agent from './index';
 import { GetContentMethod, GetListMethod } from '../model/Book';
 import { SavedChapter } from '../model/Chapter';
-import agent from './index';
 
 export async function getList(method: GetListMethod) {
   const { query, url, href_prefix, reverse } = method;
@@ -10,7 +11,7 @@ export async function getList(method: GetListMethod) {
   const $ = load(html);
   const links: SavedChapter[] = [];
   $(q).each((_index, element) => {
-    let temp = $(element);
+    const temp = $(element);
     links.push({
       title: temp.text(),
       href: (href_prefix || '') + temp.attr('href'),
@@ -30,7 +31,7 @@ export async function getList(method: GetListMethod) {
 export async function getContent(url: string, method: GetContentMethod) {
   const { query } = method;
 
-  let html = await agent.get(url);
+  const html = await agent.get(url);
   const $ = load(html);
 
   const contents: string[] = [];

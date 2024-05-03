@@ -1,11 +1,12 @@
 import React from 'react';
-import { IState } from '../../reducers';
-import { Dispatch } from 'redux';
-import { AppAction, AppToggleMode, AppToggleModeFollowSystem } from '../../reducers/app/app.action';
-import { connect } from 'react-redux';
 import { ScrollView, Switch } from 'react-native';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
+
 import { SettingItemContainer } from './components';
 import { Text } from '../../components';
+import { IState } from '../../reducers';
+import { AppAction, AppToggleMode, AppToggleModeFollowSystem } from '../../reducers/app/app.action';
 
 interface IStateProps {
   darkMode: boolean;

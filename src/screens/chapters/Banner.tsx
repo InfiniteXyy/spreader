@@ -1,14 +1,15 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { SavedBook } from '../../model/Book';
-import { BannerContainer, BannerImg, BannerSubtitle, BannerTitle } from './components';
 import { View } from 'react-native';
-import { Button, HStack, VStack, Text } from '../../components';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { BookAction, BookMarkAllAsRead } from '../../reducers/book/book.action';
-import { IState } from '../../reducers';
+
+import { BannerContainer, BannerImg, BannerSubtitle, BannerTitle } from './components';
+import { Button, HStack, VStack, Text } from '../../components';
+import { SavedBook } from '../../model/Book';
 import { SavedChapter } from '../../model/Chapter';
-import { useNavigation } from '@react-navigation/native';
+import { IState } from '../../reducers';
+import { BookAction, BookMarkAllAsRead } from '../../reducers/book/book.action';
 import { findNext } from '../../utils';
 
 interface IBannerProps {

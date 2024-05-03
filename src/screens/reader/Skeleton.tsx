@@ -1,5 +1,5 @@
-import { Fade, Placeholder, PlaceholderLine } from 'rn-placeholder';
 import React from 'react';
+import { Fade, Placeholder, PlaceholderLine } from 'rn-placeholder';
 
 export function Skeleton(props: { dark: boolean }) {
   return (

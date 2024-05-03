@@ -2,6 +2,9 @@ import React from 'react';
 import DraggableFlatList from 'react-native-draggable-flatlist';
 import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
+
+import { BookItem } from './BookItem';
+import BookListEmptyView from './BookListEmptyView';
 import { Book, SavedBook } from '../../model/Book';
 import { SavedChapter } from '../../model/Chapter';
 import { IState } from '../../reducers';
@@ -13,8 +16,6 @@ import {
   BookSetSavedList,
 } from '../../reducers/book/book.action';
 import { findNext } from '../../utils';
-import { BookItem } from './BookItem';
-import BookListEmptyView from './BookListEmptyView';
 
 interface IBookListProps {
   onNavigate(book: SavedBook): () => void;
@@ -80,7 +81,7 @@ function mapDispatchToProps(dispatch: ThunkDispatch<IState, null, BookAction>): 
       dispatch(new BookRemove(book));
     },
     updateBooks(books: SavedBook[]) {
-      for (let book of books) {
+      for (const book of books) {
         dispatch(BookLoadChaptersAsync(book));
       }
     },

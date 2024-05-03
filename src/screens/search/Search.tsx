@@ -1,11 +1,12 @@
-import React, { useContext, useRef, useState } from 'react';
-import { Container, HStack, Text } from '../../components';
 import Icon from '@expo/vector-icons/Feather';
-import { ThemeContext } from 'styled-components/native';
-import { SearchBarInput, SearchBarWrapper } from './components';
-import { Platform, ScrollView, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import React, { useContext, useRef, useState } from 'react';
+import { Platform, ScrollView, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { ThemeContext } from 'styled-components/native';
+
+import { SearchBarInput, SearchBarWrapper } from './components';
 import { Explore } from './explore/Explore';
+import { Container, HStack, Text } from '../../components';
 
 export function Search() {
   const navigation = useNavigation<any>();

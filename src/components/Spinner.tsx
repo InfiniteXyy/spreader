@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
-import { ThemeContext } from 'styled-components/native';
 import { ActivityIndicator, View } from 'react-native';
+import { ThemeContext } from 'styled-components/native';
 
 interface ISpinnerProps {
   loading: boolean;

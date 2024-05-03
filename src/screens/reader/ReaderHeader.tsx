@@ -1,9 +1,10 @@
-import React, { useCallback, useContext, useEffect, useMemo } from 'react';
-import { Animated, Platform, StyleSheet } from 'react-native';
 import Icon from '@expo/vector-icons/Ionicons';
-import { colors } from '../../theme';
-import { HStack } from '../../components';
+import React, { useCallback, useContext, useEffect, useMemo } from 'react';
+import { Animated, StyleSheet } from 'react-native';
+
 import { ReaderThemeContext } from './index';
+import { HStack } from '../../components';
+import { colors } from '../../theme';
 
 interface IReaderHeaderProps {
   goBack(): void;

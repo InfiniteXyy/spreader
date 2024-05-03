@@ -1,9 +1,10 @@
-import React, { useContext } from 'react';
-import { Container, HStack, Title } from '../../components';
-import { SettingList } from './SettingList';
 import Icon from '@expo/vector-icons/Ionicons';
-import { ThemeContext } from 'styled-components/native';
 import { useNavigation } from '@react-navigation/native';
+import React, { useContext } from 'react';
+import { ThemeContext } from 'styled-components/native';
+
+import { SettingList } from './SettingList';
+import { Container, HStack, Title } from '../../components';
 
 export function Setting() {
   const navigation = useNavigation();

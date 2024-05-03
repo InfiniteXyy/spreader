@@ -1,8 +1,9 @@
 import React from 'react';
+import { TouchableOpacity } from 'react-native';
+
+import { FeedListIcon, FeedItemContainer, FeedItemImage } from './components';
 import { BookFeed } from '../../model/Feed';
 import { HStack, Tag, Text, VStack } from '../index';
-import { FeedListIcon, FeedItemContainer, FeedItemImage } from './components';
-import { TouchableOpacity } from 'react-native';
 
 interface IFeedItemProps {
   feed: BookFeed;

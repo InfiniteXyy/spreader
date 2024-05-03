@@ -1,9 +1,10 @@
-import { BookTag } from '../../../model/BookTag';
-import { TouchableOpacity } from 'react-native';
-import { Text } from '../../../components';
-import React from 'react';
-import { TopicCardContainer } from './components';
 import { LinearGradient } from 'expo-linear-gradient';
+import React from 'react';
+import { TouchableOpacity } from 'react-native';
+
+import { TopicCardContainer } from './components';
+import { Text } from '../../../components';
+import { BookTag } from '../../../model/BookTag';
 
 interface ITagItem {
   item: BookTag;

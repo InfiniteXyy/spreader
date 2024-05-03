@@ -1,6 +1,7 @@
-import React from 'react';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import React from 'react';
 import { connect } from 'react-redux';
+
 import { IState } from '../reducers';
 import { colors } from '../theme';
 

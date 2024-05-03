@@ -13,7 +13,7 @@ export function range(start: number, stop?: number, step?: number) {
     return [];
   }
 
-  let result = [];
+  const result = [];
   for (let i = start; step > 0 ? i < stop : i > stop; i += step) {
     result.push(i);
   }
@@ -40,7 +40,7 @@ export function getLast<T>(array: T[]): T | undefined {
 }
 
 export const getPageTitle = (pageIndex: number, pageSize: number, maxLength: number, reversed: boolean) => {
-  let [start, end] = getPageRange(pageIndex, pageSize, maxLength);
+  const [start, end] = getPageRange(pageIndex, pageSize, maxLength);
   let startIndex, endIndex;
   if (!reversed) {
     startIndex = start + 1;
@@ -79,8 +79,8 @@ export function createPageItems<T>(
 }
 
 export function hofActions<T extends { [K: string]: () => void }>(prevFunctions: T, injectedFunction: () => void) {
-  let result: T = { ...prevFunctions };
-  for (const k of Object.keys(prevFunctions) as Array<keyof T>) {
+  const result: T = { ...prevFunctions };
+  for (const k of Object.keys(prevFunctions) as (keyof T)[]) {
     (result[k] as any) = () => {
       injectedFunction();
       prevFunctions[k]();

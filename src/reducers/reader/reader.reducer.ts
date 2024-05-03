@@ -1,5 +1,5 @@
-import { readerInitialState, ReaderState } from './reader.state';
 import { ReaderAction, ReaderActionType } from './reader.action';
+import { readerInitialState, ReaderState } from './reader.state';
 
 export function readerReducer(state = readerInitialState, action: ReaderAction): ReaderState {
   switch (action.type) {

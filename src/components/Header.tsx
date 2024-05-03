@@ -1,8 +1,9 @@
+import Icon from '@expo/vector-icons/Ionicons';
 import React, { useContext, useEffect, useMemo } from 'react';
 import { Animated, StyleSheet, View } from 'react-native';
-import Icon from '@expo/vector-icons/Ionicons';
-import { HStack, Text } from './index';
 import { ThemeContext } from 'styled-components';
+
+import { HStack, Text } from './index';
 import { colors } from '../theme';
 
 interface IHeaderProps {

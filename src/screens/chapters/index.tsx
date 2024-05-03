@@ -3,11 +3,12 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { NativeScrollEvent, NativeSyntheticEvent } from 'react-native';
 import { connect, useSelector } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
+
+import { ChapterList } from './ChapterList';
 import { Container, Header, Spinner } from '../../components';
 import { SavedBook } from '../../model/Book';
 import { IState } from '../../reducers';
 import { BookAction, BookLoadChaptersAsync } from '../../reducers/book/book.action';
-import { ChapterList } from './ChapterList';
 
 interface IStateProps {
   book?: SavedBook;
@@ -26,6 +27,7 @@ function Chapters(props: IDispatchProps) {
     if (book?.chapters.length === 0) {
       props.loadChapters(book);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- only call once on mounted
   }, []);
 
   const onScroll = useCallback(

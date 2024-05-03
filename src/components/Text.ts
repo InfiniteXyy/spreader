@@ -1,4 +1,5 @@
 import styled from 'styled-components/native';
+
 import { colors } from '../theme';
 
 type TextVariant = 'title' | 'subtitle' | 'body' | 'tip';

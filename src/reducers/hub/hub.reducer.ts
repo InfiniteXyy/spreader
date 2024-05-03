@@ -1,5 +1,5 @@
-import { hubInitialState, HubState } from './hub.state';
 import { HubAction, HubActionType } from './hub.action';
+import { hubInitialState, HubState } from './hub.state';
 
 export function hubReducer(state = hubInitialState, action: HubAction): HubState {
   switch (action.type) {

@@ -1,7 +1,8 @@
-import React, { useContext } from 'react';
-import { Button, Text, VStack } from '../../components';
 import Icon from '@expo/vector-icons/Entypo';
+import React, { useContext } from 'react';
 import { ThemeContext } from 'styled-components/native';
+
+import { Button, Text, VStack } from '../../components';
 
 export default function (props: { onPress(): void }) {
   const theme = useContext(ThemeContext);

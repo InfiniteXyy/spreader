@@ -1,12 +1,13 @@
 import { combineReducers } from 'redux';
+
 import { appReducer } from './app/app.reducer';
-import { bookReducer } from './book/book.reducer';
-import { readerReducer } from './reader/reader.reducer';
-import { hubReducer } from './hub/hub.reducer';
 import { AppState } from './app/app.state';
+import { bookReducer } from './book/book.reducer';
 import { BookState } from './book/book.state';
-import { ReaderState } from './reader/reader.state';
+import { hubReducer } from './hub/hub.reducer';
 import { HubState } from './hub/hub.state';
+import { readerReducer } from './reader/reader.reducer';
+import { ReaderState } from './reader/reader.state';
 
 const reducer = combineReducers({
   appReducer,

@@ -1,18 +1,19 @@
-import React, { useCallback, useContext, useMemo, useState } from 'react';
-import Modal from 'react-native-modal';
-import { Platform, StyleSheet, View } from 'react-native';
-import { getPageTitle, getReversedListIndex, PAGE_LENGTH, range } from '../../utils';
-import { ThemeContext } from 'styled-components';
-import { SavedBook } from '../../model/Book';
-import { HStack, Text } from '../../components';
 import Icon from '@expo/vector-icons/AntDesign';
+import React, { useCallback, useContext, useMemo, useState } from 'react';
+import { Platform, StyleSheet, View } from 'react-native';
+import Modal from 'react-native-modal';
+import { ThemeContext } from 'styled-components';
+
 import {
   ChapterPickerContainer,
   ChapterPickerDropDown,
   ChapterPickerSmallBtn,
   ChapterPickerSmallBtnText,
 } from './components';
+import { HStack, Text } from '../../components';
 import { ScrollPicker } from '../../components/WheelPicker';
+import { SavedBook } from '../../model/Book';
+import { getPageTitle, getReversedListIndex, PAGE_LENGTH, range } from '../../utils';
 
 interface IChapterPickerProps {
   book: SavedBook;

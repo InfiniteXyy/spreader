@@ -1,4 +1,5 @@
 import { FlexAlignType } from 'react-native';
+
 import { DefaultReaderThemes, ReaderTheme } from '../../model/Theme';
 
 export type TitleAlign = FlexAlignType;

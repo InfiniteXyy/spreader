@@ -1,7 +1,8 @@
 import { Action, Dispatch } from 'redux';
+
+import { getList } from '../../agents/spider';
 import { Book, SavedBook } from '../../model/Book';
 import { SavedChapter } from '../../model/Chapter';
-import { getList } from '../../agents/spider';
 
 export enum BookActionType {
   LOAD_CHAPTERS = '[Book] load chapters',

@@ -1,6 +1,5 @@
-import React, { useContext } from 'react';
-import { Platform, View } from 'react-native';
 import { Picker, PickerProps } from '@react-native-picker/picker';
+import React, { useContext } from 'react';
 import { ThemeContext } from 'styled-components/native';
 
 interface IScrollPicker<T extends string | number> extends PickerProps {

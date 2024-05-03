@@ -1,10 +1,11 @@
+import Icon from '@expo/vector-icons/Feather';
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import Icon from '@expo/vector-icons/Feather';
+
+import { BookList } from './BookList';
 import { Container, HStack, SearchBar, Title } from '../../components';
 import { SavedBook } from '../../model/Book';
 import { SavedChapter } from '../../model/Chapter';
-import { BookList } from './BookList';
 
 export function Home() {
   const navigation = useNavigation<any>();

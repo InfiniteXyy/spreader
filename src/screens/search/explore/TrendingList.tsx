@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react';
+import { View } from 'react-native';
+import { connect } from 'react-redux';
+import { ThunkDispatch } from 'redux-thunk';
+
 import { SectionContainer } from './components';
 import { Text } from '../../../components';
 import { FeedList } from '../../../components/FeedList';
-import { View } from 'react-native';
 import { BookFeed } from '../../../model/Feed';
-import { connect } from 'react-redux';
 import { IState } from '../../../reducers';
-import { ThunkDispatch } from 'redux-thunk';
 import { HubAction, HubLoadTrendingAsync } from '../../../reducers/hub/hub.action';
 
 interface IFeedListProps {}
