@@ -29,7 +29,10 @@ export class BookLoadChapters extends BaseBookAction implements Action {
 export class BookMarkAsRead extends BaseBookAction implements Action {
   readonly type = BookActionType.MARK_READ;
 
-  constructor(book: SavedBook, public chapter: SavedChapter) {
+  constructor(
+    book: SavedBook,
+    public chapter: SavedChapter,
+  ) {
     super(book);
   }
 }
@@ -49,14 +52,21 @@ export class BookSetSavedList implements Action {
 
 export class BookChangeIndex extends BaseBookAction implements Action {
   readonly type = BookActionType.TOGGLE_BOOK_MENU_INDEX;
-  constructor(book: SavedBook, public index: number, public reversed: boolean) {
+  constructor(
+    book: SavedBook,
+    public index: number,
+    public reversed: boolean,
+  ) {
     super(book);
   }
 }
 
 export class BookUpdateChapters extends BaseBookAction implements Action {
   readonly type = BookActionType.UPDATE_CHAPTERS;
-  constructor(book: SavedBook, public chapters: SavedChapter[]) {
+  constructor(
+    book: SavedBook,
+    public chapters: SavedChapter[],
+  ) {
     super(book);
   }
 }
@@ -68,7 +78,7 @@ export class BookAdd implements Action {
 }
 
 export function BookLoadChaptersAsync(book: SavedBook) {
-  return async (dispatch: Dispatch) => {
+  return async (dispatch: Dispatch<Action>) => {
     dispatch(new BookLoadChapters(book));
     const chapters = await getList(book.methods.getList);
     dispatch(new BookUpdateChapters(book, chapters));

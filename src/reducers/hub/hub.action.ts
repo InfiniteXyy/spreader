@@ -29,7 +29,7 @@ export class HubLoadTag implements Action {
 }
 
 export function HubLoadTrendingAsync() {
-  return async (dispatch: Dispatch) => {
+  return async (dispatch: Dispatch<Action>) => {
     dispatch(new HubLoadTrending());
     const trendingList = await agent.feed.getTrending();
     dispatch(new HubUpdateTrendingList(trendingList));
@@ -37,7 +37,7 @@ export function HubLoadTrendingAsync() {
 }
 
 export function HubLoadTagsAsync() {
-  return async (dispatch: Dispatch) => {
+  return async (dispatch: Dispatch<Action>) => {
     dispatch(new HubLoadTag());
     const tagList = await agent.tag.getList();
     dispatch(new HubUpdateTagList(tagList));

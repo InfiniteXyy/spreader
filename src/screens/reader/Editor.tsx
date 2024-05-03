@@ -18,7 +18,6 @@ import {
 import { AlignOptionContainer, EditorSlider, ThemeOptionContainer } from './EditorItem';
 import { View } from 'react-native';
 import { ReaderTheme } from '../../model/Theme';
-import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 
 interface IStateProps {
   style: ReaderState;
@@ -56,8 +55,9 @@ function _Editor(props: IStateProps & IDispatchProps & IEditorProps) {
         margin: 0,
         flexDirection: 'row',
         justifyContent: 'flex-end',
-      }}>
-      <View style={{ backgroundColor: readerTheme.bgColor, width: 280, paddingTop: getStatusBarHeight(true) }}>
+      }}
+    >
+      <View style={{ backgroundColor: readerTheme.bgColor, width: 280 }}>
         <View style={{ marginHorizontal: 20, marginVertical: 10 }}>
           <Text variant="title" bold style={{ marginBottom: 10, color: readerTheme.fontColor }}>
             阅读器样式

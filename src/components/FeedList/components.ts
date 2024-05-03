@@ -1,6 +1,6 @@
 import styled from 'styled-components/native';
 import { HStack } from '../index';
-import Icon from 'react-native-vector-icons/Feather';
+import Icon from '@expo/vector-icons/Feather';
 
 export const FeedItemContainer = styled(HStack)`
   height: 90px;

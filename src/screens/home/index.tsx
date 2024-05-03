@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import Icon from 'react-native-vector-icons/Feather';
+import Icon from '@expo/vector-icons/Feather';
 import { Container, HStack, SearchBar, Title } from '../../components';
 import { SavedBook } from '../../model/Book';
 import { SavedChapter } from '../../model/Chapter';

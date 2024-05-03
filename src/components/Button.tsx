@@ -11,8 +11,8 @@ interface IButtonProps extends TouchableOpacityProps {
 const SimpleButtonWrapper = styled.TouchableOpacity`
   border-radius: 4px;
   padding: 7px 6px;
-  border: 0.5px solid ${(props) => props.theme.tintColor};
   background-color: ${(props) => props.theme.containerColor};
+  opacity: 0.8;
   margin-right: 10px;
   align-items: center;
   justify-content: center;

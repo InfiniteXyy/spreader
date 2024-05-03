@@ -1,7 +1,6 @@
 import React, { useCallback, useContext, useEffect, useMemo } from 'react';
 import { Animated, Platform, StyleSheet } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
-import { getStatusBarHeight } from 'react-native-iphone-x-helper';
+import Icon from '@expo/vector-icons/Ionicons';
 import { colors } from '../../theme';
 import { HStack } from '../../components';
 import { ReaderThemeContext } from './index';
@@ -36,7 +35,7 @@ function ReaderHeader(props: IReaderHeaderProps) {
   const leftComponent = (
     <Icon
       onPress={onBack}
-      name="ios-arrow-back"
+      name="arrow-back"
       style={[styles.icon, { color: darkMode ? colors.tintColorLight : colors.tintColor }]}
     />
   );
@@ -50,7 +49,8 @@ function ReaderHeader(props: IReaderHeaderProps) {
           backgroundColor: theme.bgColor,
           borderBottomColor: darkMode ? colors.dividerColorLight : colors.dividerColor,
         },
-      ]}>
+      ]}
+    >
       <HStack center expand style={{ paddingHorizontal: 10 }}>
         {leftComponent}
         {rightComponent}
@@ -65,7 +65,6 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    paddingTop: Platform.OS === 'ios' ? getStatusBarHeight(true) : 0,
     borderBottomWidth: 0.5,
   },
   icon: {

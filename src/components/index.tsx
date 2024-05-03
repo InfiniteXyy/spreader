@@ -1,6 +1,4 @@
 import styled from 'styled-components/native';
-import { getStatusBarHeight } from 'react-native-iphone-x-helper';
-import { Platform } from 'react-native';
 
 // common
 export const Title = styled.Text`
@@ -11,15 +9,10 @@ export const Title = styled.Text`
 `;
 
 export const Container = styled.View`
-  padding-top: ${Platform.OS === 'ios' ? getStatusBarHeight(true) : 0}px;
   flex: 1;
   background-color: ${(props) => props.theme.bgColor};
+  padding-top: ${(props) => props.theme.top}px;
 `;
-
-export const StatusBar = styled.StatusBar.attrs((props) => ({
-  barStyle: props.theme.dark ? 'light-content' : 'dark-content',
-  backgroundColor: props.theme.bgColor,
-}))``;
 
 export const HStack = styled.View<{ expand?: boolean; center?: boolean }>`
   flex-direction: row;

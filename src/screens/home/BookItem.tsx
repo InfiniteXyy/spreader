@@ -32,7 +32,7 @@ export function BookItem(props: IBookItemProps) {
   const menuActions = hofActions(props.menuActions, () => menuRef.current.hide());
   const dropdown = (
     <Dropdown
-      buttonElement={<MoreIcon name="more-horizontal" onPress={() => menuRef.current.show()} />}
+      buttonElement={({ showMenu }) => <MoreIcon name="more-horizontal" onPress={showMenu} />}
       menuRef={menuRef}
       menuItems={[
         { label: '继续阅读', onPress: menuActions.continueRead },

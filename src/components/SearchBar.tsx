@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Text } from './Text';
 import styled, { ThemeContext } from 'styled-components/native';
-import Icon from 'react-native-vector-icons/Feather';
+import Icon from '@expo/vector-icons/Feather';
 import { TouchableWithoutFeedback } from 'react-native';
 
 interface ISearchBarProps {
@@ -23,7 +23,7 @@ export function SearchBar(props: ISearchBarProps) {
   return (
     <TouchableWithoutFeedback onPress={props.onPress}>
       <SearchBarWrapper>
-        <Icon name="search" style={{ fontSize: 16, marginRight: 8, color: theme.tintColor }} />
+        <Icon name="search" style={{ fontSize: 16, marginRight: 8, color: theme?.tintColor }} />
         <Text secondary variant="subtitle">
           搜索书名/作者/类型
         </Text>

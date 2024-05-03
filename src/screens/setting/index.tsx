@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Container, HStack, Title } from '../../components';
 import { SettingList } from './SettingList';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from '@expo/vector-icons/Ionicons';
 import { ThemeContext } from 'styled-components/native';
 import { useNavigation } from '@react-navigation/native';
 
@@ -13,10 +13,10 @@ export function Setting() {
       <HStack center expand>
         <Title>设置</Title>
         <Icon
-          name="ios-arrow-back"
+          name="arrow-back"
           size={20}
           style={{ padding: 20 }}
-          color={theme.tintColor}
+          color={theme?.tintColor}
           onPress={() => navigation.goBack()}
         />
       </HStack>

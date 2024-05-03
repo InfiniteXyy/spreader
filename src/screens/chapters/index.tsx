@@ -26,7 +26,7 @@ function Chapters(props: IDispatchProps) {
     if (book?.chapters.length === 0) {
       props.loadChapters(book);
     }
-  }, [book, props]);
+  }, []);
 
   const onScroll = useCallback(
     (event: NativeSyntheticEvent<NativeScrollEvent>) => {

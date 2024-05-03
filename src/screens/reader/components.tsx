@@ -3,7 +3,6 @@ import { HStack, Text } from '../../components';
 import React, { useContext } from 'react';
 import { ReaderThemeContext } from './index';
 import { Animated } from 'react-native';
-import { getBottomSpace } from 'react-native-iphone-x-helper';
 
 export const ReaderScroll = styled.ScrollView`
   padding: 0 20px;
@@ -29,5 +28,5 @@ export const ReaderFooterContainer = styled(Animated.View)`
   right: 0;
   width: 100%;
   border-top-width: 0.5px;
-  padding: 20px 20px ${getBottomSpace() + 20}px 20px;
+  padding: 20px 20px 0px 20px;
 `;

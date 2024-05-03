@@ -1,5 +1,7 @@
 import fetch from 'cross-fetch';
 import { BookFeed } from '../model/Feed';
+import axios from 'axios';
+import iconv from 'iconv-lite';
 
 /** FIXME */
 // const url = 'http://49.235.51.174:8080';
@@ -19,12 +21,12 @@ const feed = {
       {
         author: '火星引力',
         title: '逆天邪神',
-        source: { name: '笔趣阁', url: 'https://www.b520.cc/1_1789/' },
+        source: { name: '笔趣阁', url: 'https://www.xbiqugew.com/book/7138/' },
         id: 0,
         tags: [{ title: '奇幻' }],
         methods: {
-          getContent: { query: '#content p' },
-          getList: { query: '.box_con #list a', url: 'http://www.b520.cc/1_1789/' },
+          getContent: { query: '#content' },
+          getList: { query: '.box_con #list a', url: 'https://www.xbiqugew.com/book/7138/' },
         },
         coverImg: 'http://r.m.b520.cc/files/article/image/1/1789/1789s.jpg',
         uploader: 'Xyy',
@@ -45,8 +47,8 @@ const tag = {
 
 const agent = {
   get: async (_url: string) => {
-    const result = await fetch(_url).then((response) => response.text());
-    return result;
+    const buffer = await axios(_url, { responseType: 'arraybuffer' });
+    return iconv.decode(Buffer.from(buffer.data), 'gb2312'); // hard code for testing
   },
   getJSON: (_url: string) => fetch(_url).then((response) => response.json()),
   feed,

@@ -1,7 +1,7 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
 import React, { createContext, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { StatusBar, Text, TextStyle, View } from 'react-native';
-import IconFeather from 'react-native-vector-icons/Feather';
+import IconFeather from '@expo/vector-icons/Feather';
 import { connect, useSelector } from 'react-redux';
 import { Dispatch } from 'redux';
 import { getContent } from '../../agents/spider';

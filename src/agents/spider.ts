@@ -1,4 +1,4 @@
-import cheerio from 'react-native-cheerio';
+import { load } from 'cheerio';
 import { GetContentMethod, GetListMethod } from '../model/Book';
 import { SavedChapter } from '../model/Chapter';
 import agent from './index';
@@ -7,7 +7,7 @@ export async function getList(method: GetListMethod) {
   const { query, url, href_prefix, reverse } = method;
   const [q, range] = query.split('|');
   const html = await agent.get(url);
-  const $ = cheerio.load(html);
+  const $ = load(html);
   const links: SavedChapter[] = [];
   $(q).each((_index, element) => {
     let temp = $(element);
@@ -31,7 +31,7 @@ export async function getContent(url: string, method: GetContentMethod) {
   const { query } = method;
 
   let html = await agent.get(url);
-  const $ = cheerio.load(html);
+  const $ = load(html);
 
   const contents: string[] = [];
   $(query).each((index, element) => {

@@ -11,6 +11,7 @@ import { useNavigation } from '@react-navigation/native';
 import { ChapterListItemContainer, ChapterListItemDot } from './components';
 import { Loader } from 'rn-placeholder';
 import { useDispatch } from 'react-redux';
+import { Action } from 'redux';
 
 interface IChapterListProps {
   book: SavedBook;
@@ -37,7 +38,7 @@ export function ChapterList(props: IChapterListProps) {
 
   const onChangePage = useCallback(
     (_book: SavedBook, index: number, reversed: boolean) => {
-      dispatch(new BookChangeIndex(_book, index, reversed));
+      dispatch(new BookChangeIndex(_book, index, reversed) as Action);
     },
     [dispatch],
   );

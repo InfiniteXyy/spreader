@@ -17,9 +17,9 @@ const AppContainer = function MyStack() {
       {/* 设置 */}
       <Stack.Screen name="setting" component={Setting} />
       {/* 章节列表 */}
-      <Stack.Screen name="chapters" component={Chapters} />
+      <Stack.Screen name="chapters" component={Chapters as unknown as () => JSX.Element} />
       {/* 阅读器 */}
-      <Stack.Screen name="reader" component={Reader} />
+      <Stack.Screen name="reader" component={Reader as unknown as () => JSX.Element} />
       {/* 搜索 */}
       <Stack.Screen name="search" component={Search} />
       {/* 标签列表 */}

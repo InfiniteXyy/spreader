@@ -1,4 +1,4 @@
-import merge from 'lodash.merge';
+import _ from 'lodash';
 import { bookInitialState, BookState } from './book.state';
 import { BookAction, BookActionType } from './book.action';
 import { SavedBook } from '../../model/Book';
@@ -43,7 +43,7 @@ export function bookReducer(state = bookInitialState, action: BookAction): BookS
           ? {
               ...i,
               isFetching: false,
-              chapters: merge(action.chapters, i.chapters),
+              chapters: _.merge(action.chapters, i.chapters),
             }
           : i,
       );

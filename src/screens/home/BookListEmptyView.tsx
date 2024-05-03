@@ -1,13 +1,13 @@
 import React, { useContext } from 'react';
 import { Button, Text, VStack } from '../../components';
-import Icon from 'react-native-vector-icons/Entypo';
+import Icon from '@expo/vector-icons/Entypo';
 import { ThemeContext } from 'styled-components/native';
 
 export default function (props: { onPress(): void }) {
   const theme = useContext(ThemeContext);
   return (
     <VStack center style={{ padding: 40 }}>
-      <Icon name="dropbox" size={130} color={theme.dividerColor} />
+      <Icon name="dropbox" size={130} color={theme?.dividerColor} />
       <Text variant="subtitle" bold>
         空空如也
       </Text>

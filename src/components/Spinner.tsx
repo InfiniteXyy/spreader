@@ -8,5 +8,5 @@ interface ISpinnerProps {
 
 export function Spinner(props: ISpinnerProps) {
   const theme = useContext(ThemeContext);
-  return <View>{props.loading && <ActivityIndicator size="small" color={theme.tintColor} />}</View>;
+  return <View>{props.loading && <ActivityIndicator size="small" color={theme?.tintColor} />}</View>;
 }

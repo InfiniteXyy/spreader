@@ -1,5 +1,5 @@
 import { TouchableOpacity } from 'react-native';
-import Icon from 'react-native-vector-icons/Feather';
+import Icon from '@expo/vector-icons/Feather';
 import styled from 'styled-components/native';
 import { Text } from '../../components';
 

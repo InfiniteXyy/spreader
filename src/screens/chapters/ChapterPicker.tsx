@@ -5,7 +5,7 @@ import { getPageTitle, getReversedListIndex, PAGE_LENGTH, range } from '../../ut
 import { ThemeContext } from 'styled-components';
 import { SavedBook } from '../../model/Book';
 import { HStack, Text } from '../../components';
-import Icon from 'react-native-vector-icons/AntDesign';
+import Icon from '@expo/vector-icons/AntDesign';
 import {
   ChapterPickerContainer,
   ChapterPickerDropDown,
@@ -75,7 +75,7 @@ export function ChapterPicker(props: IChapterPickerProps) {
           justifyContent: 'flex-end',
         }}
       >
-        <View style={[styles.picker, { backgroundColor: theme.bgColor }]}>
+        <View style={[styles.picker, { backgroundColor: theme?.bgColor }]}>
           <ScrollPicker
             data={pickerList}
             onValueChange={(pageIndex) => onChangePage(book, Number(pageIndex), !!book.reverse)}

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useMemo } from 'react';
 import { Animated, StyleSheet, View } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from '@expo/vector-icons/Ionicons';
 import { HStack, Text } from './index';
 import { ThemeContext } from 'styled-components';
 import { colors } from '../theme';
@@ -37,8 +37,8 @@ function Header(props: IHeaderProps) {
   const leftComponent = (
     <Icon
       onPress={goBack}
-      name="ios-arrow-back"
-      style={[styles.icon, { color: theme.dark ? colors.tintColorLight : colors.tintColor }]}
+      name="arrow-back"
+      style={[styles.icon, { color: theme?.dark ? colors.tintColorLight : colors.tintColor }]}
     />
   );
 
@@ -53,8 +53,8 @@ function Header(props: IHeaderProps) {
   return (
     <View
       style={{
-        backgroundColor: theme.dark ? colors.darkBg : 'white',
-        borderBottomColor: theme.dark ? colors.dividerColorLight : colors.dividerColor,
+        backgroundColor: theme?.dark ? colors.darkBg : 'white',
+        borderBottomColor: theme?.dark ? colors.dividerColorLight : colors.dividerColor,
       }}
     >
       <HStack center expand style={{ paddingHorizontal: 10 }}>

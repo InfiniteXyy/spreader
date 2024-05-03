@@ -1,23 +1,3 @@
-import { DefaultTheme } from 'styled-components';
-
-declare module 'styled-components' {
-  export interface DefaultTheme {
-    dark: boolean;
-
-    bgColor: string;
-    primaryText: string;
-    secondaryText: string;
-    tintColor: string;
-    dividerColor: string;
-
-    containerColor: string;
-
-    primaryColor: string;
-    warningColor: string;
-    successColor: string;
-  }
-}
-
 // based on slack theme
 const colors = {
   bg: '#FFFFFF',
@@ -59,7 +39,7 @@ const colors = {
   green: '#29A979',
 };
 
-function getTheme(darkMode: boolean): DefaultTheme {
+function getTheme(darkMode: boolean) {
   const defaultMode = !darkMode;
   return {
     dark: darkMode,
@@ -75,6 +55,8 @@ function getTheme(darkMode: boolean): DefaultTheme {
     primaryColor: colors.primary.default,
     warningColor: defaultMode ? colors.warning.default : colors.warning.pin,
     successColor: colors.green,
+
+    top: 0,
   };
 }
 export { colors, getTheme };

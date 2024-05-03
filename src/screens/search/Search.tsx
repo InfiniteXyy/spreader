@@ -1,6 +1,6 @@
 import React, { useContext, useRef, useState } from 'react';
 import { Container, HStack, Text } from '../../components';
-import Icon from 'react-native-vector-icons/Feather';
+import Icon from '@expo/vector-icons/Feather';
 import { ThemeContext } from 'styled-components/native';
 import { SearchBarInput, SearchBarWrapper } from './components';
 import { Platform, ScrollView, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
@@ -16,18 +16,18 @@ export function Search() {
     <Container>
       <HStack center style={{ marginHorizontal: 20 }}>
         <SearchBarWrapper>
-          <Icon name="search" style={{ fontSize: 16, marginRight: 8, color: theme.tintColor }} />
+          <Icon name="search" style={{ fontSize: 16, marginRight: 8, color: theme?.tintColor }} />
           <SearchBarInput
             placeholder="搜索书名/作者/类型"
             numberOfLines={1}
             style={styles.searchBarInput}
-            placeholderTextColor={theme.secondaryText}
+            placeholderTextColor={theme?.secondaryText}
             value={input}
             onChangeText={setInput}
             returnKeyType="search"
             ref={inputRef}
             autoFocus
-            keyboardAppearance={theme.dark ? 'dark' : 'default'}
+            keyboardAppearance={theme?.dark ? 'dark' : 'default'}
           />
         </SearchBarWrapper>
         <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -39,7 +39,8 @@ export function Search() {
           if (inputRef.current) {
             inputRef.current.blur();
           }
-        }}>
+        }}
+      >
         <Explore />
       </ScrollView>
     </Container>

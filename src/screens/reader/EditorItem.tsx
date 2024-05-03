@@ -1,11 +1,13 @@
-import { Slider, TouchableWithoutFeedback } from 'react-native';
+import { TouchableWithoutFeedback } from 'react-native';
+import { Slider } from 'react-native-awesome-slider';
 import { TitleAlign } from '../../reducers/reader/reader.state';
 import React, { useContext, useMemo } from 'react';
 import { Ellipse, HStack } from '../../components';
-import Icon from 'react-native-vector-icons/Feather';
+import Icon from '@expo/vector-icons/Feather';
 import { DefaultReaderThemes, ReaderTheme } from '../../model/Theme';
 import { EditorItemContainer, EditorItemTitle } from './components';
 import { ReaderThemeContext } from './index';
+import { useSharedValue } from 'react-native-reanimated';
 
 interface IEditorItem<T> {
   label: string;
@@ -21,16 +23,18 @@ export function EditorSlider(props: IEditorSlider) {
   const { range, label, onChange, value } = props;
   const [start, end] = range;
 
+  const progress = useSharedValue(value);
+  const minimumValue = useSharedValue(start);
+  const maximumValue = useSharedValue(end);
+
   const slider = useMemo(
     () => (
       <Slider
-        value={value}
+        progress={progress}
         onSlidingComplete={onChange}
         style={{ width: 170 }}
-        minimumValue={start}
-        maximumValue={end}
-        minimumTrackTintColor="rgba(160,160,160,0.3)"
-        maximumTrackTintColor="rgba(160,160,160,0.1)"
+        minimumValue={minimumValue}
+        maximumValue={maximumValue}
       />
     ),
     [end, onChange, start, value],
@@ -43,7 +47,7 @@ export function EditorSlider(props: IEditorSlider) {
   );
 }
 
-type AlignOption = { iconName: string; type: TitleAlign };
+type AlignOption = { iconName: React.ComponentProps<typeof Icon>['name']; type: TitleAlign };
 const AlignOptions: AlignOption[] = [
   {
     type: 'flex-start',
